@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { connect } from 'react-redux'
 import Constants from 'expo-constants'
 import {
   StyleSheet,
@@ -6,41 +7,38 @@ import {
   Text,
   TextInput,
   TouchableNativeFeedback,
-  StatusBar,
-  ToastAndroid
+  StatusBar
 } from 'react-native'
 
 import { login } from '../libs/request'
+import { updatePhoneNumber } from '../store/actions/user'
 
-const doLogin = async (phoneNumber, navigation, setError) => {
-  try {
-    const response = await login(phoneNumber)
+function Login (props) {
+  const { navigation, updatePhoneNumber, user } = props
 
-    ToastAndroid.showWithGravity(
-      response.status,
-      ToastAndroid.LONG,
-      ToastAndroid.CENTER
-    )
-  } catch (error) {
-    const { response: { data } } = error
-
-    if (data.isJoi) {
-      setError(true)
-    } else {
-      setError(false)
-      navigation.navigate('Username')
-    }
-  }
-}
-
-export default function Login (props) {
-  const { navigation } = props
+  console.log(user)
 
   const [phoneNumber, setPhoneNumber] = useState('')
   const [isError, setError] = useState(false)
 
-  const handleRef = ref => {
+  const handleRef = function (ref) {
     if (ref && isError) ref.focus()
+  }
+
+  const doLogin = async function () {
+    try {
+      await login(phoneNumber)
+    } catch (error) {
+      const { response: { data } } = error
+
+      if (data.isJoi) {
+        setError(true)
+      } else {
+        setError(false)
+        updatePhoneNumber(phoneNumber)
+        navigation.navigate('Username')
+      }
+    }
   }
 
   return (
@@ -69,7 +67,7 @@ export default function Login (props) {
           ref={handleRef}
         />
         <TouchableNativeFeedback
-          onPress={() => doLogin(phoneNumber, navigation, setError)}
+          onPress={() => doLogin()}
         >
           <View style={styles.button}>
             <Text style={styles.buttonText}>Masuk</Text>
@@ -87,6 +85,22 @@ export default function Login (props) {
     </View>
   )
 }
+
+function mapStateToProps (state) {
+  return {
+    user: state.user
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    updatePhoneNumber: (newPhoneNumber) => {
+      dispatch(updatePhoneNumber(newPhoneNumber))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
 
 const styles = StyleSheet.create({
   container: {

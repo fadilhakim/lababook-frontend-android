@@ -11,15 +11,11 @@ import {
 
 const inputName = (username, setError, navigation) => {
   if (username === '') setError(true)
-  else toBookname(navigation)
-}
-const toBookname = (navigation) => {
-  navigation.navigate('Bookname')
+  else navigation.navigate('OTPRegister')
 }
 
-export default function Username (props) {
+export default function Bookname (props) {
   const { navigation } = props
-
   const [username, setUsername] = useState('')
   const [isError, setError] = useState(false)
 
@@ -35,12 +31,12 @@ export default function Username (props) {
           Pengguna Baru
         </Text>
         <Text style={styles.phoneLabel}>
-          Masukkan Nama Anda
+          Masukkan Nama Buku Anda
         </Text>
         {
           isError && (
             <Text style={styles.errorPhone}>
-              Harap masukkan nama Anda
+              Harap masukkan nama buku Anda
             </Text>
           )
         }
