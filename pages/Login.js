@@ -10,11 +10,10 @@ import {
   StatusBar
 } from 'react-native'
 
-import { login } from '../libs/request'
-import { updatePhoneNumber } from '../store/actions/user'
+import { updatePhoneNumber, loginUser } from '../store/actions/user'
 
 function Login (props) {
-  const { navigation, updatePhoneNumber } = props
+  const { navigation, updatePhoneNumber, login } = props
   const [phoneNumber, setPhoneNumber] = useState('')
   const [errMsg, setErrMsg] = useState('')
   const [isError, setError] = useState(false)
@@ -29,20 +28,24 @@ function Login (props) {
   }
 
   const doLogin = async () => {
-    try {
-      await login(phoneNumber)
-    } catch (error) {
-      const { response: { data } } = error
+    login(
+      phoneNumber,
+      () => {
+        navigation.navigate('OTPLogin')
+      },
+      (error) => {
+        const { response: { data } } = error
 
-      if (data.isJoi) {
-        setError(true)
-        setErrMsg(data.message)
-      } else {
-        setError(false)
-        updatePhoneNumber(phoneNumber)
-        navigation.navigate('Username')
+        if (data.isJoi) {
+          setError(true)
+          setErrMsg(data.message)
+        } else {
+          setError(false)
+          updatePhoneNumber(phoneNumber)
+          navigation.navigate('Username')
+        }
       }
-    }
+    )
   }
 
   return (
@@ -94,6 +97,9 @@ function mapDispatchToProps (dispatch) {
   return {
     updatePhoneNumber: (newPhoneNumber) => {
       dispatch(updatePhoneNumber(newPhoneNumber))
+    },
+    login: (phoneNumber, errCb) => {
+      dispatch(loginUser(phoneNumber, errCb))
     }
   }
 }

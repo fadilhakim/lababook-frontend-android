@@ -3,7 +3,9 @@ import {
   UPDATE_USER_NAME,
   UPDATE_BOOK_NAME,
   USER_REGISTERED,
-  USER_ACTIVATED
+  USER_ACTIVATED,
+  USER_LOGIN,
+  USER_CONFIRMED
 } from '../actionTypes/user'
 
 const initialStates = {
@@ -30,10 +32,9 @@ export default function user (state = initialStates, action) {
         ...state,
         bookName: action.bookName
       }
+    case USER_LOGIN:
     case USER_REGISTERED: {
       const { user } = action
-
-      console.log(user)
       return {
         ...state,
         userName: user.name,
@@ -42,6 +43,7 @@ export default function user (state = initialStates, action) {
       }
     }
     case USER_ACTIVATED:
+    case USER_CONFIRMED:
       return {
         ...state,
         token: action.token

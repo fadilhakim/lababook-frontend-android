@@ -3,10 +3,16 @@ import {
   UPDATE_USER_NAME,
   UPDATE_BOOK_NAME,
   USER_REGISTERED,
-  USER_ACTIVATED
+  USER_ACTIVATED,
+  USER_LOGIN,
+  USER_CONFIRMED
 } from '../actionTypes/user'
-
-import { register, otpRegister } from '../../libs/request'
+import {
+  register,
+  otpRegister,
+  otpLogin,
+  login
+} from '../../libs/request'
 import { showErrorBottom } from '../../libs/errorHandler'
 
 export function updatePhoneNumber (newPhoneNumber) {
@@ -52,6 +58,38 @@ export function confirmRegister (phoneNumber, otp) {
       .then(data => {
         dispatch({
           type: USER_ACTIVATED,
+          token: data.token
+        })
+      })
+      .catch(error => {
+        console.log(error.response.data)
+        showErrorBottom(error.response.data.message || 'server error')
+      })
+  }
+}
+
+export function loginUser (phoneNumber, cb, errCb) {
+  return function (dispatch) {
+    login(phoneNumber)
+      .then(data => {
+        dispatch({
+          type: USER_LOGIN,
+          user: data.user
+        })
+        cb()
+      })
+      .catch(error => {
+        errCb(error)
+      })
+  }
+}
+
+export function confirmLogin (phoneNumber, otp) {
+  return function (dispatch) {
+    otpLogin(phoneNumber, otp)
+      .then(data => {
+        dispatch({
+          type: USER_CONFIRMED,
           token: data.token
         })
       })

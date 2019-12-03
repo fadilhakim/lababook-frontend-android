@@ -10,6 +10,7 @@ import Login from './pages/Login'
 import Username from './pages/Username'
 import Bookname from './pages/Bookname'
 import OTPRegister from './pages/OTPRegister'
+import OTPLogin from './pages/OTPLogin'
 
 import store from './store'
 
@@ -31,6 +32,9 @@ const AppNavigator = createStackNavigator(
     },
     OTPRegister: {
       screen: OTPRegister
+    },
+    OTPLogin: {
+      screen: OTPLogin
     }
   },
   {

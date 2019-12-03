@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Constants from 'expo-constants'
 import { connect } from 'react-redux'
 import {
@@ -10,13 +10,14 @@ import {
   Keyboard
 } from 'react-native'
 
-import { confirmRegister } from '../store/actions/user'
+import { confirmLogin } from '../store/actions/user'
 
-function OTPRegister (props) {
+function OTPLogin (props) {
   const { user, confirmOtp } = props
-  const [isError, setError] = useState(false)
   const refs = new Array(4).fill(null)
   const otp = new Array(4).fill(0)
+
+  console.log(user)
 
   const phoneNumber = user.phoneNumber
     .replace(
@@ -61,13 +62,6 @@ function OTPRegister (props) {
         <Text style={styles.phoneLabelBottom}>
           ke <Text style={{ color: '#222' }}>{phoneNumber}</Text>
         </Text>
-        {
-          isError && (
-            <Text style={styles.errorPhone}>
-              Harap masukkan nama buku Anda
-            </Text>
-          )
-        }
         <View style={styles.otpView}>
           {
             new Array(4).fill(0).map((val, index) => {
@@ -107,11 +101,11 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    confirmOtp: (phoneNumber, otp) => dispatch(confirmRegister(phoneNumber, otp))
+    confirmOtp: (phoneNumber, otp) => dispatch(confirmLogin(phoneNumber, otp))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(OTPRegister)
+export default connect(mapStateToProps, mapDispatchToProps)(OTPLogin)
 
 const styles = StyleSheet.create({
   container: {
