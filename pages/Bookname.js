@@ -9,18 +9,21 @@ import {
   StatusBar
 } from 'react-native'
 
-const inputName = (username, setError, navigation) => {
-  if (username === '') setError(true)
-  else navigation.navigate('OTPRegister')
-}
-
 export default function Bookname (props) {
   const { navigation } = props
-  const [username, setUsername] = useState('')
+  const [bookName, setBookName] = useState('')
   const [isError, setError] = useState(false)
+  const [errMsg, setErrMsg] = useState('')
 
   const handleRef = ref => {
     if (ref & isError) ref.focus()
+  }
+
+  const inputName = () => {
+    if (bookName.length < 4) {
+      setError(true)
+      setErrMsg('Nama buku minimal 4 karakter')
+    } else navigation.navigate('OTPRegister')
   }
 
   return (
@@ -36,7 +39,7 @@ export default function Bookname (props) {
         {
           isError && (
             <Text style={styles.errorPhone}>
-              Harap masukkan nama buku Anda
+              {errMsg}
             </Text>
           )
         }
@@ -44,12 +47,12 @@ export default function Bookname (props) {
           autoFocus
           keyboardAppearance='default'
           keyboardType='name-phone-pad'
-          onChangeText={text => setUsername(text)}
+          onChangeText={text => setBookName(text)}
           style={!isError ? styles.phone : styles.phoneError}
           ref={handleRef}
         />
         <TouchableNativeFeedback
-          onPress={() => inputName(username, setError, navigation)}
+          onPress={() => inputName(bookName, setError, navigation)}
         >
           <View style={styles.button}>
             <Text style={styles.buttonText}>Masuk</Text>

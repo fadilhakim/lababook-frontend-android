@@ -14,18 +14,22 @@ import { login } from '../libs/request'
 import { updatePhoneNumber } from '../store/actions/user'
 
 function Login (props) {
-  const { navigation, updatePhoneNumber, user } = props
-
-  console.log(user)
+  const { navigation, updatePhoneNumber } = props
 
   const [phoneNumber, setPhoneNumber] = useState('')
+  const [errMsg, setErrMsg] = useState('')
   const [isError, setError] = useState(false)
 
-  const handleRef = function (ref) {
+  const handleRef = (ref) => {
     if (ref && isError) ref.focus()
   }
 
-  const doLogin = async function () {
+  const handleChangeText = (text) => {
+    setPhoneNumber(text)
+    setError(false)
+  }
+
+  const doLogin = async () => {
     try {
       await login(phoneNumber)
     } catch (error) {
@@ -33,6 +37,7 @@ function Login (props) {
 
       if (data.isJoi) {
         setError(true)
+        setErrMsg(data.message)
       } else {
         setError(false)
         updatePhoneNumber(phoneNumber)
@@ -54,7 +59,7 @@ function Login (props) {
         {
           isError && (
             <Text style={styles.errorPhone}>
-              Harap masukkan nomor handphone
+              {errMsg}
             </Text>
           )
         }
@@ -62,7 +67,7 @@ function Login (props) {
           autoFocus
           keyboardAppearance='default'
           keyboardType='number-pad'
-          onChangeText={text => setPhoneNumber(text)}
+          onChangeText={text => handleChangeText(text)}
           style={!isError ? styles.phone : styles.phoneError}
           ref={handleRef}
         />
@@ -86,12 +91,6 @@ function Login (props) {
   )
 }
 
-function mapStateToProps (state) {
-  return {
-    user: state.user
-  }
-}
-
 function mapDispatchToProps (dispatch) {
   return {
     updatePhoneNumber: (newPhoneNumber) => {
@@ -100,7 +99,7 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default connect(null, mapDispatchToProps)(Login)
 
 const styles = StyleSheet.create({
   container: {

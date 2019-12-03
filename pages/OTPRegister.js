@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Constants from 'expo-constants'
+import { connect } from 'react-redux'
 import {
   StyleSheet,
   View,
@@ -9,32 +10,38 @@ import {
   Keyboard
 } from 'react-native'
 
-const refs = new Array(4).fill(null)
+function OTPRegister (props) {
+  const { user } = props
+  const [isError, setError] = useState(false)
+  const refs = new Array(4).fill(null)
 
-const handleChangeOtp = (text, index) => {
-  if (text) {
-    if (index + 1 < refs.length) {
-      setTimeout(
-        () => refs[index + 1].focus(),
-        200
-      )
+  const phoneNumber = user.phoneNumber
+    .replace(
+      /(^0|^\+\w{2})(\w{3})(\w{4})(\w{2,4})/,
+      '+62-$2-$3-$4'
+    )
+
+  const handleChangeOtp = (text, index) => {
+    if (text) {
+      if (index + 1 < refs.length) {
+        setTimeout(
+          () => refs[index + 1].focus(),
+          200
+        )
+      } else {
+        setTimeout(
+          () => Keyboard.dismiss(),
+          200
+        )
+      }
     } else {
-      setTimeout(
-        () => Keyboard.dismiss(),
-        200
-      )
-    }
-  } else {
-    if (index - 1 >= 0) {
-      refs[index - 1].focus()
-    } else {
-      refs[0].focus()
+      if (index - 1 >= 0) {
+        refs[index - 1].focus()
+      } else {
+        refs[0].focus()
+      }
     }
   }
-}
-
-export default function OTPRegister () {
-  const [isError, setError] = useState(false)
 
   return (
     <View style={styles.container}>
@@ -44,7 +51,7 @@ export default function OTPRegister () {
           Masukkan OTP 4 digit yang dikirimkan
         </Text>
         <Text style={styles.phoneLabelBottom}>
-          ke <Text style={{ color: '#222' }}>+62 852 1060 1470</Text>
+          ke <Text style={{ color: '#222' }}>{phoneNumber}</Text>
         </Text>
         {
           isError && (
@@ -83,6 +90,14 @@ export default function OTPRegister () {
     </View>
   )
 }
+
+function mapStateToProps (state) {
+  return {
+    user: state.user
+  }
+}
+
+export default connect(mapStateToProps)(OTPRegister)
 
 const styles = StyleSheet.create({
   container: {
