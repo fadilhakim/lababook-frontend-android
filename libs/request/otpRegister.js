@@ -2,11 +2,13 @@ import Axios from 'axios'
 
 import { api } from '../../config/url'
 
-export default async (phoneNumber) => {
+export default async (phoneNumber, otp) => {
+  console.log(phoneNumber, otp)
   const response = await Axios.post(
-    `${api}/login`,
+    `${api}/check-otp-register`,
     {
-      phoneNumber
+      phoneNumber,
+      otp
     },
     {
       headers: {

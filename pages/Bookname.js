@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Constants from 'expo-constants'
+import { connect } from 'react-redux'
 import {
   StyleSheet,
   View,
@@ -9,8 +10,10 @@ import {
   StatusBar
 } from 'react-native'
 
-export default function Bookname (props) {
-  const { navigation } = props
+import { updateBookName, registerUser } from '../store/actions/user'
+
+function Bookname (props) {
+  const { navigation, user, updateBookName, register } = props
   const [bookName, setBookName] = useState('')
   const [isError, setError] = useState(false)
   const [errMsg, setErrMsg] = useState('')
@@ -19,11 +22,20 @@ export default function Bookname (props) {
     if (ref & isError) ref.focus()
   }
 
-  const inputName = () => {
+  const handleChangeText = text => {
+    setBookName(text)
+    updateBookName(text)
+    setError(false)
+  }
+
+  const registerUser = () => {
     if (bookName.length < 4) {
       setError(true)
       setErrMsg('Nama buku minimal 4 karakter')
-    } else navigation.navigate('OTPRegister')
+    } else {
+      register(user)
+      navigation.navigate('OTPRegister')
+    }
   }
 
   return (
@@ -47,12 +59,12 @@ export default function Bookname (props) {
           autoFocus
           keyboardAppearance='default'
           keyboardType='name-phone-pad'
-          onChangeText={text => setBookName(text)}
+          onChangeText={text => handleChangeText(text)}
           style={!isError ? styles.phone : styles.phoneError}
           ref={handleRef}
         />
         <TouchableNativeFeedback
-          onPress={() => inputName(bookName, setError, navigation)}
+          onPress={() => registerUser()}
         >
           <View style={styles.button}>
             <Text style={styles.buttonText}>Masuk</Text>
@@ -62,6 +74,21 @@ export default function Bookname (props) {
     </View>
   )
 }
+
+function mapStateToProps (state) {
+  return {
+    user: state.user
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    updateBookName: (bookName) => dispatch(updateBookName(bookName)),
+    register: (user) => dispatch(registerUser(user))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Bookname)
 
 const styles = StyleSheet.create({
   container: {

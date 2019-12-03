@@ -15,7 +15,6 @@ import { updatePhoneNumber } from '../store/actions/user'
 
 function Login (props) {
   const { navigation, updatePhoneNumber } = props
-
   const [phoneNumber, setPhoneNumber] = useState('')
   const [errMsg, setErrMsg] = useState('')
   const [isError, setError] = useState(false)
@@ -64,7 +63,7 @@ function Login (props) {
           )
         }
         <TextInput
-          autoFocus
+          autoFocus={true}
           keyboardAppearance='default'
           keyboardType='number-pad'
           onChangeText={text => handleChangeText(text)}

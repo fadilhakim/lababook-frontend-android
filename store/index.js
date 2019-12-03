@@ -4,6 +4,7 @@ import {
   compose,
   applyMiddleware
 } from 'redux'
+import thunk from 'redux-thunk'
 
 import user from './reducers/user'
 
@@ -15,5 +16,5 @@ const newCompose = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 export default createStore(
   reducers,
-  newCompose(applyMiddleware(...[]))
+  newCompose(applyMiddleware(thunk))
 )

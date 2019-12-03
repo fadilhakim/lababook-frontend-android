@@ -10,18 +10,25 @@ import {
   Keyboard
 } from 'react-native'
 
+import { confirmRegister } from '../store/actions/user'
+
 function OTPRegister (props) {
-  const { user } = props
+  const { user, confirmOtp } = props
   const [isError, setError] = useState(false)
   const refs = new Array(4).fill(null)
+  const otp = new Array(4).fill(0)
+
+  console.log(user)
 
   const phoneNumber = user.phoneNumber
     .replace(
-      /(^0|^\+\w{2})(\w{3})(\w{4})(\w{2,4})/,
-      '+62-$2-$3-$4'
+      /(\w{3})(\w{4})(\w{2,4})/,
+      '+62-$1-$2-$3'
     )
 
   const handleChangeOtp = (text, index) => {
+    otp[index] = text
+
     if (text) {
       if (index + 1 < refs.length) {
         setTimeout(
@@ -30,7 +37,10 @@ function OTPRegister (props) {
         )
       } else {
         setTimeout(
-          () => Keyboard.dismiss(),
+          () => {
+            Keyboard.dismiss()
+            confirmOtp(user.phoneNumber, otp.join(''))
+          },
           200
         )
       }
@@ -97,7 +107,13 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps)(OTPRegister)
+function mapDispatchToProps (dispatch) {
+  return {
+    confirmOtp: (phoneNumber, otp) => dispatch(confirmRegister(phoneNumber, otp))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(OTPRegister)
 
 const styles = StyleSheet.create({
   container: {

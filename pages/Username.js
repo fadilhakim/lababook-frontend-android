@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Constants from 'expo-constants'
+import { connect } from 'react-redux'
 import {
   StyleSheet,
   View,
@@ -9,9 +10,10 @@ import {
   StatusBar
 } from 'react-native'
 
-export default function Username (props) {
-  const { navigation } = props
+import { updateUserName } from '../store/actions/user'
 
+function Username (props) {
+  const { navigation, updateUserName } = props
   const [username, setUsername] = useState('')
   const [isError, setError] = useState(false)
   const [errMsg, setErrMsg] = useState('')
@@ -29,7 +31,10 @@ export default function Username (props) {
     if (username.length < 4) {
       setError(true)
       setErrMsg('Nama minimal 4 karakter')
-    } else toBookname()
+    } else {
+      updateUserName(username)
+      toBookname()
+    }
   }
 
   const toBookname = () => {
@@ -72,6 +77,20 @@ export default function Username (props) {
     </View>
   )
 }
+
+function mapStateToProps (state) {
+  return {
+    user: state.user
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    updateUserName: (userName) => dispatch(updateUserName(userName))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Username)
 
 const styles = StyleSheet.create({
   container: {

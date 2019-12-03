@@ -2,11 +2,13 @@ import Axios from 'axios'
 
 import { api } from '../../config/url'
 
-export default async (phoneNumber) => {
+export default async (user) => {
   const response = await Axios.post(
-    `${api}/login`,
+    `${api}/register`,
     {
-      phoneNumber
+      name: user.userName,
+      phoneNumber: user.phoneNumber,
+      bookName: user.bookName
     },
     {
       headers: {
