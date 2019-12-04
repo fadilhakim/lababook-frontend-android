@@ -7,13 +7,20 @@ import {
   Text,
   TextInput,
   TouchableNativeFeedback,
-  StatusBar
+  StatusBar,
+  Image
 } from 'react-native'
 
 import { updateBookName, registerUser } from '../store/actions/user'
 
 function Bookname (props) {
-  const { navigation, user, updateBookName, register } = props
+  const {
+    navigation,
+    user,
+    updateBookName,
+    register,
+    loading
+  } = props
   const [bookName, setBookName] = useState('')
   const [isError, setError] = useState(false)
   const [errMsg, setErrMsg] = useState('')
@@ -63,6 +70,15 @@ function Bookname (props) {
           style={!isError ? styles.phone : styles.phoneError}
           ref={handleRef}
         />
+        {
+          loading && <View style={{ flexDirection: 'row', marginTop: 10 }}>
+            <Image
+              source={require('../assets/loading-roll.gif')}
+              style={{ height: 20, width: 20, marginRight: 5 }}
+            />
+            <Text>Membuatkan akun Anda</Text>
+          </View>
+        }
         <TouchableNativeFeedback
           onPress={() => registerUser()}
         >
@@ -77,7 +93,8 @@ function Bookname (props) {
 
 function mapStateToProps (state) {
   return {
-    user: state.user
+    user: state.user,
+    loading: state.loading
   }
 }
 

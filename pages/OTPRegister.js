@@ -7,13 +7,14 @@ import {
   Text,
   TextInput,
   StatusBar,
-  Keyboard
+  Keyboard,
+  Image
 } from 'react-native'
 
 import { confirmRegister } from '../store/actions/user'
 
 function OTPRegister (props) {
-  const { user, confirmOtp } = props
+  const { user, confirmOtp, loading, navigation } = props
   const [isError, setError] = useState(false)
   const refs = new Array(4).fill(null)
   const otp = new Array(4).fill(0)
@@ -37,7 +38,13 @@ function OTPRegister (props) {
         setTimeout(
           () => {
             Keyboard.dismiss()
-            confirmOtp(user.phoneNumber, otp.join(''))
+            confirmOtp(
+              user.phoneNumber,
+              otp.join(''),
+              () => {
+                navigation.navigate('AuthLoading')
+              }
+            )
           },
           200
         )
@@ -94,6 +101,15 @@ function OTPRegister (props) {
             Minta kode baru
           </Text>
         </View>
+        {
+          loading && <View style={{ flexDirection: 'row', marginTop: 10 }}>
+            <Image
+              source={require('../assets/loading-roll.gif')}
+              style={{ height: 20, width: 20, marginRight: 5 }}
+            />
+            <Text>Mengonfirmasi OTP</Text>
+          </View>
+        }
       </View>
     </View>
   )
@@ -101,13 +117,14 @@ function OTPRegister (props) {
 
 function mapStateToProps (state) {
   return {
-    user: state.user
+    user: state.user,
+    loading: state.loading
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    confirmOtp: (phoneNumber, otp) => dispatch(confirmRegister(phoneNumber, otp))
+    confirmOtp: (phoneNumber, otp, cb) => dispatch(confirmRegister(phoneNumber, otp, cb))
   }
 }
 

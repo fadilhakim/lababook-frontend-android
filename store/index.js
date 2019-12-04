@@ -7,9 +7,11 @@ import {
 import thunk from 'redux-thunk'
 
 import user from './reducers/user'
+import loading from './reducers/loading'
 
 const reducers = combineReducers({
-  user
+  user,
+  loading
 })
 
 const newCompose = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

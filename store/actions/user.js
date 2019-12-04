@@ -1,3 +1,5 @@
+import { AsyncStorage } from 'react-native'
+
 import {
   UPDATE_PHONE_NUMBER,
   UPDATE_USER_NAME,
@@ -7,6 +9,7 @@ import {
   USER_LOGIN,
   USER_CONFIRMED
 } from '../actionTypes/user'
+import { SHOW_LOADING, HIDE_LOADING } from '../actionTypes/loading'
 import {
   register,
   otpRegister,
@@ -52,16 +55,29 @@ export function registerUser (user) {
   }
 }
 
-export function confirmRegister (phoneNumber, otp) {
+export function confirmRegister (phoneNumber, otp, cb) {
   return function (dispatch) {
+    dispatch({
+      type: SHOW_LOADING
+    })
     otpRegister(phoneNumber, otp)
       .then(data => {
-        dispatch({
-          type: USER_ACTIVATED,
-          token: data.token
-        })
+        AsyncStorage.setItem('userToken', data.token)
+          .then(() => {
+            dispatch({
+              type: USER_ACTIVATED,
+              token: data.token
+            })
+            dispatch({
+              type: HIDE_LOADING
+            })
+            cb()
+          })
       })
       .catch(error => {
+        dispatch({
+          type: HIDE_LOADING
+        })
         console.log(error.response.data)
         showErrorBottom(error.response.data.message || 'server error')
       })
@@ -70,30 +86,52 @@ export function confirmRegister (phoneNumber, otp) {
 
 export function loginUser (phoneNumber, cb, errCb) {
   return function (dispatch) {
+    dispatch({
+      type: SHOW_LOADING
+    })
     login(phoneNumber)
       .then(data => {
         dispatch({
           type: USER_LOGIN,
           user: data.user
         })
+        dispatch({
+          type: HIDE_LOADING
+        })
         cb()
       })
       .catch(error => {
+        dispatch({
+          type: HIDE_LOADING
+        })
         errCb(error)
       })
   }
 }
 
-export function confirmLogin (phoneNumber, otp) {
+export function confirmLogin (phoneNumber, otp, cb) {
   return function (dispatch) {
+    dispatch({
+      type: SHOW_LOADING
+    })
     otpLogin(phoneNumber, otp)
       .then(data => {
-        dispatch({
-          type: USER_CONFIRMED,
-          token: data.token
-        })
+        AsyncStorage.setItem('userToken', data.token)
+          .then(() => {
+            dispatch({
+              type: USER_CONFIRMED,
+              token: data.token
+            })
+            dispatch({
+              type: HIDE_LOADING
+            })
+            cb()
+          })
       })
       .catch(error => {
+        dispatch({
+          type: HIDE_LOADING
+        })
         console.log(error.response.data)
         showErrorBottom(error.response.data.message || 'server error')
       })

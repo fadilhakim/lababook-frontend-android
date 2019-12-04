@@ -7,13 +7,14 @@ import {
   Text,
   TextInput,
   TouchableNativeFeedback,
-  StatusBar
+  StatusBar,
+  Image
 } from 'react-native'
 
 import { updatePhoneNumber, loginUser } from '../store/actions/user'
 
 function Login (props) {
-  const { navigation, updatePhoneNumber, login } = props
+  const { navigation, updatePhoneNumber, login, loading } = props
   const [phoneNumber, setPhoneNumber] = useState('')
   const [errMsg, setErrMsg] = useState('')
   const [isError, setError] = useState(false)
@@ -73,6 +74,15 @@ function Login (props) {
           style={!isError ? styles.phone : styles.phoneError}
           ref={handleRef}
         />
+        {
+          loading && <View style={{ flexDirection: 'row', marginTop: 10 }}>
+            <Image
+              source={require('../assets/loading-roll.gif')}
+              style={{ height: 20, width: 20, marginRight: 5 }}
+            />
+            <Text>Mengecek nomor handphone</Text>
+          </View>
+        }
         <TouchableNativeFeedback
           onPress={() => doLogin()}
         >
@@ -93,18 +103,24 @@ function Login (props) {
   )
 }
 
+function mapStateToProps (state) {
+  return {
+    loading: state.loading
+  }
+}
+
 function mapDispatchToProps (dispatch) {
   return {
     updatePhoneNumber: (newPhoneNumber) => {
       dispatch(updatePhoneNumber(newPhoneNumber))
     },
-    login: (phoneNumber, errCb) => {
-      dispatch(loginUser(phoneNumber, errCb))
+    login: (phoneNumber, cb, errCb) => {
+      dispatch(loginUser(phoneNumber, cb, errCb))
     }
   }
 }
 
-export default connect(null, mapDispatchToProps)(Login)
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
 
 const styles = StyleSheet.create({
   container: {
