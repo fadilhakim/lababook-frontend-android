@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import Constants from 'expo-constants'
+import * as Network from 'expo-network'
 import {
   StyleSheet,
   View,
@@ -8,7 +9,9 @@ import {
   TextInput,
   TouchableNativeFeedback,
   StatusBar,
-  Image
+  Image,
+  ToastAndroid,
+  Keyboard
 } from 'react-native'
 
 import { updatePhoneNumber, loginUser } from '../store/actions/user'
@@ -28,25 +31,45 @@ function Login (props) {
     setError(false)
   }
 
-  const doLogin = async () => {
-    login(
-      phoneNumber,
-      () => {
-        navigation.navigate('OTPLogin')
-      },
-      (error) => {
-        const { response: { data } } = error
+  const doLogin = () => {
+    Keyboard.dismiss()
 
-        if (data.isJoi) {
-          setError(true)
-          setErrMsg(data.message)
+    Network.getNetworkStateAsync()
+      .then(stat => {
+        if (stat.isInternetReachable) {
+          login(
+            phoneNumber,
+            () => {
+              navigation.navigate('OTPLogin')
+            },
+            (error) => {
+              const { response: { data } } = error
+
+              if (data.isJoi) {
+                setError(true)
+                setErrMsg(data.message)
+              } else {
+                setError(false)
+                updatePhoneNumber(phoneNumber)
+                navigation.navigate('Username')
+              }
+            }
+          )
         } else {
-          setError(false)
-          updatePhoneNumber(phoneNumber)
-          navigation.navigate('Username')
+          ToastAndroid.showWithGravity(
+            'Anda tidak terhubung ke Internet',
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM
+          )
         }
-      }
-    )
+      })
+      .catch(error => {
+        ToastAndroid.showWithGravity(
+          error.message,
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM
+        )
+      })
   }
 
   return (

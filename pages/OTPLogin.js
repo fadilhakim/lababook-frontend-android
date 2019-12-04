@@ -33,7 +33,7 @@ function OTPLogin (props) {
       if (index + 1 < refs.length) {
         setTimeout(
           () => refs[index + 1].focus(),
-          200
+          100
         )
       } else {
         setTimeout(
@@ -47,7 +47,7 @@ function OTPLogin (props) {
               }
             )
           },
-          200
+          100
         )
       }
     } else {

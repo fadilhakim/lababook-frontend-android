@@ -32,7 +32,7 @@ function OTPRegister (props) {
       if (index + 1 < refs.length) {
         setTimeout(
           () => refs[index + 1].focus(),
-          200
+          100
         )
       } else {
         setTimeout(
@@ -46,7 +46,7 @@ function OTPRegister (props) {
               }
             )
           },
-          200
+          100
         )
       }
     } else {
