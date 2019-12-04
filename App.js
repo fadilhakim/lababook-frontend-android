@@ -1,16 +1,9 @@
-import React, { useEffect } from 'react'
-import {
-  View,
-  ActivityIndicator,
-  StatusBar,
-  AsyncStorage,
-  Text,
-  Button
-} from 'react-native'
+import React from 'react'
 import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 import { useScreens } from 'react-native-screens'
 import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
 
 import Welcome from './pages/Welcome'
 import Login from './pages/Login'
@@ -18,48 +11,12 @@ import Username from './pages/Username'
 import Bookname from './pages/Bookname'
 import OTPRegister from './pages/OTPRegister'
 import OTPLogin from './pages/OTPLogin'
+import Home from './pages/Home'
+import AuthLoading from './pages/AuthLoading'
 
-import store from './store'
+import { store, persistor } from './store'
 
 useScreens()
-
-function AuthLoading (props) {
-  const { navigation } = props
-
-  useEffect(() => {
-    AsyncStorage.getItem('userToken')
-      .then(userToken => {
-        console.log(userToken)
-        navigation.navigate(userToken ? 'App' : 'Auth')
-      })
-  })
-
-  return (
-    <View>
-      <ActivityIndicator />
-      <StatusBar barStyle="default" />
-    </View>
-  )
-}
-
-function AppScreen (props) {
-  const { navigation } = props
-
-  const _signOut = async () => {
-    await AsyncStorage.removeItem('userToken')
-    navigation.navigate('AuthLoading')
-  }
-
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>CIAAAA LOGIN CIAAAAAAAAA</Text>
-      <Button
-        title='LOG OUT'
-        onPress={() => _signOut()}
-      />
-    </View>
-  )
-}
 
 const AuthNavigator = createStackNavigator(
   {
@@ -91,7 +48,7 @@ const AuthNavigator = createStackNavigator(
 const AppNavigator = createStackNavigator(
   {
     Home: {
-      screen: AppScreen
+      screen: Home
     }
   },
   {
@@ -100,7 +57,7 @@ const AppNavigator = createStackNavigator(
   }
 )
 
-const Router = createAppContainer(
+const Root = createAppContainer(
   createSwitchNavigator(
     {
       AuthLoading: AuthLoading,
@@ -116,7 +73,9 @@ const Router = createAppContainer(
 export default function App () {
   return (
     <Provider store={store}>
-      <Router/>
+      <PersistGate loading={null} persistor={persistor}>
+        <Root/>
+      </PersistGate>
     </Provider>
   )
 }
