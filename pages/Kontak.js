@@ -202,7 +202,7 @@ function Kontak () {
             }}
           >
             <Text style={{ color: 'green' }}>
-              Anda berikan
+              Anda dapatkan
             </Text>
             <Text style={{ fontSize: 18, color: 'green' }}>
               Rp. 2.000.000
