@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   StatusBar
 } from 'react-native'
+import Constants from 'expo-constants'
 
 function AuthLoading (props) {
   const { navigation } = props
@@ -17,7 +18,12 @@ function AuthLoading (props) {
   })
 
   return (
-    <View>
+    <View style={{
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: Constants.statusBarHeight
+    }}>
       <ActivityIndicator />
       <StatusBar barStyle="default" />
     </View>

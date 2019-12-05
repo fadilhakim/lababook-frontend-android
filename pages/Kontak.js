@@ -3,7 +3,8 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableNativeFeedback
+  TouchableWithoutFeedback,
+  FlatList
 } from 'react-native'
 import {
   MaterialIcons,
@@ -33,215 +34,179 @@ async function showContact () {
   }
 }
 
+function ContactCard (props) {
+  const {
+    contactName,
+    contactInitial,
+    trxValue,
+    trxType,
+    updatedAt
+  } = props
+
+  return (
+    <View style={styles.contact}>
+      <View style={styles.contactLeft}>
+        <View style={styles.nameLetter}>
+          <Text style={styles.nameLetterText}>
+            {contactInitial}
+          </Text>
+        </View>
+
+        <View style={styles.contactLeftText}>
+          <View>
+            <Text style={styles.contactLeftTopText}>
+              {contactName}
+            </Text>
+          </View>
+          <View style={styles.contactLeftBottom}>
+            <AntDesign name='clockcircleo' size={12} style={{ marginTop: 3 }}/>
+            <Text> {updatedAt}</Text>
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.contactRight}>
+        <Text style={trxType === 'debit' ? styles.contactRightTopLent : styles.contactRightTopPaid}>
+          {
+            trxType === 'debit'
+              ? 'Anda berikan'
+              : 'Anda dapatkan'
+          }
+        </Text>
+        <Text style={trxType === 'debit' ? styles.contactRightBottomLent : styles.contactRightBottomPaid}>
+          Rp. {trxValue}
+        </Text>
+      </View>
+    </View>
+  )
+}
+
 function Kontak () {
+  const data = [
+    {
+      id: '1',
+      contactName: 'Aan Siguna',
+      contactInitial: 'A',
+      trxType: 'debit',
+      trxValue: '2.000.000',
+      updatedAt: '3 hari lalu'
+    },
+    {
+      id: '2',
+      contactName: 'Sibutar Butar',
+      contactInitial: 'S',
+      trxType: 'credit',
+      trxValue: '3.000.000',
+      updatedAt: '4 hari lalu'
+    },
+    {
+      id: '3',
+      contactName: 'Aan Siguna',
+      contactInitial: 'A',
+      trxType: 'debit',
+      trxValue: '2.000.000',
+      updatedAt: '3 hari lalu'
+    },
+    {
+      id: '4',
+      contactName: 'Sibutar Butar',
+      contactInitial: 'S',
+      trxType: 'credit',
+      trxValue: '3.000.000',
+      updatedAt: '4 hari lalu'
+    },
+    {
+      id: '5',
+      contactName: 'Aan Siguna',
+      contactInitial: 'A',
+      trxType: 'debit',
+      trxValue: '2.000.000',
+      updatedAt: '3 hari lalu'
+    },
+    {
+      id: '6',
+      contactName: 'Sibutar Butar',
+      contactInitial: 'S',
+      trxType: 'credit',
+      trxValue: '3.000.000',
+      updatedAt: '4 hari lalu'
+    },
+    {
+      id: '7',
+      contactName: 'Aan Siguna',
+      contactInitial: 'A',
+      trxType: 'debit',
+      trxValue: '2.000.000',
+      updatedAt: '3 hari lalu'
+    },
+    {
+      id: '8',
+      contactName: 'Sibutar Butar',
+      contactInitial: 'S',
+      trxType: 'credit',
+      trxValue: '3.000.000',
+      updatedAt: '4 hari lalu'
+    },
+    {
+      id: '9',
+      contactName: 'Aan Siguna',
+      contactInitial: 'A',
+      trxType: 'debit',
+      trxValue: '2.000.000',
+      updatedAt: '3 hari lalu'
+    },
+    {
+      id: '10',
+      contactName: 'Sibutar Butar',
+      contactInitial: 'S',
+      trxType: 'credit',
+      trxValue: '3.000.000',
+      updatedAt: '4 hari lalu'
+    }
+  ]
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.topBar}>
-        <View style={styles.personBg}>
-          <MaterialIcons
-            name='person'
-            size={32}
-            color='white'
-          />
+        <View style={styles.topBarLeft}>
+          <View style={styles.personBg}>
+            <MaterialIcons name='person' size={32} color='white'/>
+          </View>
+          <Text style={{ fontSize: 16 }}>
+            Anda Berikan: <Text style={{ color: 'red' }}>Rp. 2.000.000</Text>
+            {'\n'}
+            Anda Dapatkan: <Text style={{ color: 'green' }}>Rp. 3.000.000</Text>
+          </Text>
         </View>
-        <Text style={{ fontSize: 16 }}>
-          Anda Berikan: <Text style={{ color: 'red' }}>Rp. 2.000.000</Text>
-          {'\n'}
-          Anda Dapatkan: <Text style={{ color: 'green' }}>Rp. 3.000.000</Text>
-        </Text>
-        <TouchableNativeFeedback
-          onPress={() => console.log('filter')}
-        >
-          <MaterialIcons
-            name='filter-list'
-            size={32}
-            color='#444'
-            style={styles.filter}
-          />
-        </TouchableNativeFeedback>
-        <TouchableNativeFeedback
-          onPress={() => console.log('pdf')}
-        >
-          <AntDesign
-            name='pdffile1'
-            size={32}
-            color='#444'
-            style={styles.pdf}
-          />
-        </TouchableNativeFeedback>
-      </View>
-      <View>
-        <View
-          style={{
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            width: '100%'
-          }}
-        >
-          <View
-            style={{
-              flexDirection: 'row'
-            }}
-          >
-            <View
-              style={{
-                backgroundColor: '#aaa',
-                paddingLeft: 14,
-                paddingRight: 14,
-                paddingBottom: 3,
-                margin: 5,
-                marginLeft: 15,
-                marginRight: 10,
-                borderRadius: 100
-              }}
-            >
-              <Text
-                style={{
-                  color: 'white',
-                  fontSize: 36
-                }}
-              >
-                A
-              </Text>
-            </View>
 
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center'
-              }}
-            >
-              <View>
-                <Text style={{ fontSize: 18 }}>Aan Siguna</Text>
-              </View>
-              <View style={{ flexDirection: 'row' }}>
-                <AntDesign
-                  name='clockcircleo'
-                  size={12}
-                  style={{ marginTop: 3 }}
-                />
-                <Text> 3 Hari lalu</Text>
-              </View>
+        <View style={styles.topBarRight}>
+          <TouchableWithoutFeedback>
+            <View style={styles.topBarRightFilter}>
+              <MaterialIcons name='filter-list' size={32} color='#444' style={styles.filter} />
             </View>
-          </View>
-
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'flex-end',
-              paddingRight: 20
-            }}
-          >
-            <Text style={{ color: 'red' }}>
-              Anda berikan
-            </Text>
-            <Text style={{ fontSize: 18, color: 'red' }}>
-              Rp. 2.000.000
-            </Text>
-          </View>
-        </View>
-        <View
-          style={{
-            justifyContent: 'space-between',
-            flexDirection: 'row',
-            width: '100%'
-          }}
-        >
-          <View
-            style={{
-              flexDirection: 'row'
-            }}
-          >
-            <View
-              style={{
-                backgroundColor: '#aaa',
-                paddingLeft: 14,
-                paddingRight: 14,
-                paddingBottom: 3,
-                margin: 5,
-                marginLeft: 15,
-                marginRight: 10,
-                borderRadius: 100
-              }}
-            >
-              <Text
-                style={{
-                  color: 'white',
-                  fontSize: 36
-                }}
-              >
-                S
-              </Text>
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback>
+            <View style={styles.topBarRightPdf}>
+              <AntDesign name='pdffile1' size={32} color='#444' style={styles.pdf} />
             </View>
-
-            <View
-              style={{
-                flexDirection: 'column',
-                justifyContent: 'center'
-              }}
-            >
-              <View>
-                <Text style={{ fontSize: 18 }}>Sibutar butar</Text>
-              </View>
-              <View style={{ flexDirection: 'row' }}>
-                <AntDesign
-                  name='clockcircleo'
-                  size={12}
-                  style={{ marginTop: 3 }}
-                />
-                <Text> 4 Hari lalu</Text>
-              </View>
-            </View>
-          </View>
-
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'flex-end',
-              paddingRight: 20
-            }}
-          >
-            <Text style={{ color: 'green' }}>
-              Anda dapatkan
-            </Text>
-            <Text style={{ fontSize: 18, color: 'green' }}>
-              Rp. 2.000.000
-            </Text>
-          </View>
+          </TouchableWithoutFeedback>
         </View>
       </View>
 
-      <TouchableNativeFeedback
-        onPress={() => showContact()}
-      >
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            position: 'absolute',
-            zIndex: 999,
-            right: 25,
-            bottom: 25,
-            borderWidth: 3,
-            borderColor: '#444',
-            borderRadius: 50,
-            padding: 8
-          }}
-        >
-          <AntDesign
-            name='plus'
-            size={22}
-          />
-          <Text
-            style={{
-              fontSize: 20
-            }}
-          >
+      <FlatList
+        data={data}
+        scrollEnabled={true}
+        renderItem={({ item, index }) => <ContactCard {...item} key={index}/>}
+        keyExtractor={item => item.id}
+      />
+
+      <TouchableWithoutFeedback onPress={() => showContact()}>
+        <View style={styles.addContactBtn}>
+          <AntDesign name='plus'size={22}/>
+          <Text style={styles.addContactBtnText}>
             Tambah Kontak
           </Text>
         </View>
-      </TouchableNativeFeedback>
+      </TouchableWithoutFeedback>
     </View>
   )
 }
@@ -251,10 +216,29 @@ export default Kontak
 const styles = StyleSheet.create({
   topBar: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     width: '100%',
     borderBottomWidth: 10,
     borderBottomColor: '#bbb',
     paddingBottom: 6
+  },
+  topBarLeft: {
+    flexDirection: 'row'
+  },
+  topBarRight: {
+    flexDirection: 'row'
+  },
+  topBarRightFilter: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 5,
+    marginRight: 5
+  },
+  topBarRightPdf: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 10,
+    marginRight: 15
   },
   personBg: {
     backgroundColor: '#444',
@@ -263,14 +247,78 @@ const styles = StyleSheet.create({
     marginLeft: 13,
     marginRight: 8
   },
+  contact: {
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    width: '100%'
+  },
+  contactLeft: {
+    flexDirection: 'row'
+  },
+  contactLeftText: {
+    flexDirection: 'column',
+    justifyContent: 'center'
+  },
+  contactLeftTopText: {
+    fontSize: 18
+  },
+  contactLeftBottom: {
+    flexDirection: 'row'
+  },
+  contactRight: {
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingRight: 20
+  },
+  contactRightTopPaid: {
+    color: 'green'
+  },
+  contactRightTopLent: {
+    color: 'red'
+  },
+  contactRightBottomPaid: {
+    fontSize: 18,
+    color: 'green'
+  },
+  contactRightBottomLent: {
+    fontSize: 18,
+    color: 'red'
+  },
   filter: {
-    position: 'absolute',
-    right: 65,
-    top: 5
+    color: '#444'
   },
   pdf: {
+    color: '#444'
+  },
+  nameLetter: {
+    backgroundColor: '#aaa',
+    paddingLeft: 14,
+    paddingRight: 14,
+    paddingBottom: 3,
+    margin: 5,
+    marginLeft: 15,
+    marginRight: 10,
+    borderRadius: 100
+  },
+  nameLetterText: {
+    color: 'white',
+    fontSize: 36
+  },
+  addContactBtn: {
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     position: 'absolute',
-    right: 20,
-    top: 5
+    zIndex: 999,
+    right: 25,
+    bottom: 25,
+    borderWidth: 3,
+    borderColor: '#444',
+    borderRadius: 50,
+    padding: 8
+  },
+  addContactBtnText: {
+    fontSize: 20
   }
 })

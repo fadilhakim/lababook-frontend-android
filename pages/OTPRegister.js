@@ -8,7 +8,7 @@ import {
   TextInput,
   StatusBar,
   Keyboard,
-  Image
+  ActivityIndicator
 } from 'react-native'
 
 import { confirmRegister } from '../store/actions/user'
@@ -103,11 +103,8 @@ function OTPRegister (props) {
         </View>
         {
           loading && <View style={{ flexDirection: 'row', marginTop: 10 }}>
-            <Image
-              source={require('../assets/loading-roll.gif')}
-              style={{ height: 20, width: 20, marginRight: 5 }}
-            />
-            <Text>Mengonfirmasi OTP</Text>
+            <ActivityIndicator color='#444' size={16}/>
+            <Text> Mengonfirmasi OTP</Text>
           </View>
         }
       </View>

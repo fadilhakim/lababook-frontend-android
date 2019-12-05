@@ -9,9 +9,9 @@ import {
   TextInput,
   TouchableNativeFeedback,
   StatusBar,
-  Image,
   ToastAndroid,
-  Keyboard
+  Keyboard,
+  ActivityIndicator
 } from 'react-native'
 
 import { updatePhoneNumber, loginUser } from '../store/actions/user'
@@ -99,11 +99,8 @@ function Login (props) {
         />
         {
           loading && <View style={{ flexDirection: 'row', marginTop: 10 }}>
-            <Image
-              source={require('../assets/loading-roll.gif')}
-              style={{ height: 20, width: 20, marginRight: 5 }}
-            />
-            <Text>Mengecek nomor handphone</Text>
+            <ActivityIndicator color='#444' size={16}/>
+            <Text> Mengecek nomor handphone</Text>
           </View>
         }
         <TouchableNativeFeedback

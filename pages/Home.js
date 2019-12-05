@@ -7,11 +7,7 @@ import {
   TouchableNativeFeedback,
   AsyncStorage
 } from 'react-native'
-import {
-  Ionicons,
-  SimpleLineIcons,
-  Foundation
-} from '@expo/vector-icons'
+import { Ionicons, Foundation } from '@expo/vector-icons'
 import { connect } from 'react-redux'
 import { createAppContainer } from 'react-navigation'
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs'
@@ -67,46 +63,58 @@ const Tabs = createAppContainer(
 function Home (props) {
   const { user, navigation } = props
 
+  const signOut = () => {
+    AsyncStorage.removeItem('userToken')
+      .then(() => {
+        navigation.navigate('AuthLoading')
+      })
+  }
+
   return (
     <View style={{ flex: 1 }}>
+
       <StatusBar barStyle='dark-content'/>
+
       <View style={styles.topBar}>
-        <Foundation
-          name='book'
-          size={32}
-          color='#444'
-          style={styles.bookLogo}
-        />
-        <Text style={styles.bookName}>
-          {user.bookName}
-        </Text>
-        <TouchableNativeFeedback
-          onPress={() => console.log('search')}
-        >
-          <Ionicons
-            name='md-search'
+        <View style={styles.topBarLeft}>
+          <Foundation
+            name='book'
             size={32}
             color='#444'
-            style={styles.searchLogo}
+            style={styles.bookLogo}
           />
-        </TouchableNativeFeedback>
-        <TouchableNativeFeedback
-          onPress={() => {
-            AsyncStorage.removeItem('userToken')
-              .then(() => {
-                navigation.navigate('AuthLoading')
-              })
-          }}
-        >
-          <Ionicons
-            name='ios-log-out'
-            size={32}
-            color='#444'
-            style={styles.optionLogo}
-          />
-        </TouchableNativeFeedback>
+          <Text style={styles.bookName}>
+            {user.bookName}
+          </Text>
+        </View>
+
+        <View style={styles.topBarRight}>
+          <TouchableNativeFeedback>
+            <View style={styles.logo}>
+              <Ionicons
+                name='md-search'
+                size={32}
+                color='#444'
+                style={styles.searchLogo}
+              />
+            </View>
+          </TouchableNativeFeedback>
+
+          <TouchableNativeFeedback onPress={() => signOut()}>
+            <View style={styles.logo}>
+              <Ionicons
+                name='ios-log-out'
+                size={32}
+                color='#444'
+                style={styles.optionLogo}
+              />
+            </View>
+          </TouchableNativeFeedback>
+        </View>
       </View>
+
       <Tabs user={user}/>
+
     </View>
   )
 }
@@ -128,8 +136,15 @@ const styles = StyleSheet.create({
   },
   topBar: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     width: '100%',
     marginTop: Constanst.statusBarHeight
+  },
+  topBarRight: {
+    flexDirection: 'row'
+  },
+  topBarLeft: {
+    flexDirection: 'row'
   },
   bookName: {
     color: '#444',
@@ -138,19 +153,22 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold'
   },
+  logo: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   bookLogo: {
     marginTop: 13,
     marginLeft: 13,
     marginRight: 13
   },
   searchLogo: {
-    position: 'absolute',
-    right: 55,
-    top: 13
+    color: '#444',
+    marginLeft: 13,
+    marginRight: 13
   },
   optionLogo: {
-    position: 'absolute',
-    right: 10,
-    top: 13
+    marginLeft: 13,
+    marginRight: 13
   }
 })
