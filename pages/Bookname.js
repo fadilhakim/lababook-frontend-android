@@ -41,7 +41,10 @@ function Bookname (props) {
       setErrMsg('Nama buku minimal 4 karakter')
     } else {
       register(user)
-      navigation.navigate('OTPRegister')
+      setTimeout(
+        () => navigation.navigate('OTPRegister'),
+        300
+      )
     }
   }
 

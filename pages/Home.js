@@ -4,7 +4,8 @@ import {
   Text,
   StyleSheet,
   StatusBar,
-  TouchableNativeFeedback
+  TouchableNativeFeedback,
+  AsyncStorage
 } from 'react-native'
 import {
   Ionicons,
@@ -64,7 +65,7 @@ const Tabs = createAppContainer(
 )
 
 function Home (props) {
-  const { user } = props
+  const { user, navigation } = props
 
   return (
     <View style={{ flex: 1 }}>
@@ -90,10 +91,15 @@ function Home (props) {
           />
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
-          onPress={() => console.log('option')}
+          onPress={() => {
+            AsyncStorage.removeItem('userToken')
+              .then(() => {
+                navigation.navigate('AuthLoading')
+              })
+          }}
         >
-          <SimpleLineIcons
-            name='options-vertical'
+          <Ionicons
+            name='ios-log-out'
             size={32}
             color='#444'
             style={styles.optionLogo}
