@@ -21,11 +21,11 @@ const styles = StyleSheet.create({
     maxWidth: 60,
     marginLeft: 10,
     marginRight: 10,
-
-    paddingLeft: 13,
-    paddingRight: 13,
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingBottom: 2,
     backgroundColor: '#aaa',
-    borderRadius: 100,
+    borderRadius: 150,
     alignItems: 'center',
     justifyContent: 'center'
   },

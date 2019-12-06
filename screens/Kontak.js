@@ -13,8 +13,96 @@ import {
 import * as Permissions from 'expo-permissions'
 import * as Contacts from 'expo-contacts'
 
-import NameIcon from '../components/NameIcon'
-import { textExtraProps as tProps } from '../config/system'
+import ContactCard from '../components/ContactCard'
+
+const data = [
+  {
+    id: '1',
+    contactName: 'Aan Siguna',
+    contactInitial: 'A',
+    trxType: 'debit',
+    trxValue: '2.000.000',
+    updatedAt: '3 hari lalu'
+  },
+  {
+    id: '2',
+    contactName: 'Sibutar Butar',
+    contactInitial: 'S',
+    trxType: 'credit',
+    trxValue: '3.000.000',
+    updatedAt: '4 hari lalu'
+  },
+  {
+    id: '3',
+    contactName: 'Aan Siguna',
+    contactInitial: 'A',
+    trxType: 'debit',
+    trxValue: '2.000.000',
+    updatedAt: '3 hari lalu'
+  },
+  {
+    id: '4',
+    contactName: 'Sibutar Butar',
+    contactInitial: 'S',
+    trxType: 'credit',
+    trxValue: '3.000.000',
+    updatedAt: '4 hari lalu'
+  },
+  {
+    id: '5',
+    contactName: 'Aan Siguna',
+    contactInitial: 'A',
+    trxType: 'debit',
+    trxValue: '2.000.000',
+    updatedAt: '3 hari lalu'
+  },
+  {
+    id: '6',
+    contactName: 'Sibutar Butar',
+    contactInitial: 'S',
+    trxType: 'credit',
+    trxValue: '3.000.000',
+    updatedAt: '4 hari lalu'
+  },
+  {
+    id: '7',
+    contactName: 'Aan Siguna',
+    contactInitial: 'A',
+    trxType: 'debit',
+    trxValue: '2.000.000',
+    updatedAt: '3 hari lalu'
+  },
+  {
+    id: '8',
+    contactName: 'Sibutar Butar',
+    contactInitial: 'S',
+    trxType: 'credit',
+    trxValue: '3.000.000',
+    updatedAt: '4 hari lalu'
+  },
+  {
+    id: '9',
+    contactName: 'Aan Siguna',
+    contactInitial: 'A',
+    trxType: 'debit',
+    trxValue: '2.000.000',
+    updatedAt: '3 hari lalu'
+  },
+  {
+    id: '10',
+    contactName: 'Sibutar Butar',
+    contactInitial: 'S',
+    trxType: 'credit',
+    trxValue: '3.000.000',
+    updatedAt: '4 hari lalu'
+  },
+  {
+    id: '999'
+  },
+  {
+    id: '9999'
+  }
+]
 
 async function showContact () {
   try {
@@ -37,138 +125,7 @@ async function showContact () {
   }
 }
 
-function ContactCard (props) {
-  const {
-    contactName,
-    contactInitial,
-    trxValue,
-    trxType,
-    updatedAt
-  } = props
-
-  return (
-    <View style={styles.contact}>
-      <View style={styles.contactLeft}>
-        {/* <View style={styles.nameLetter}>
-          <Text {...tProps} style={styles.nameLetterText}>
-            {contactInitial}
-          </Text>
-        </View> */}
-
-        <NameIcon contactInitial={contactInitial}/>
-
-        <View style={styles.contactLeftText}>
-          <View>
-            <Text {...tProps} style={styles.contactLeftTopText}>
-              {contactName}
-            </Text>
-          </View>
-          <View style={styles.contactLeftBottom}>
-            <AntDesign name='clockcircleo' size={12} style={{ marginTop: 3 }}/>
-            <Text {...tProps}> {updatedAt}</Text>
-          </View>
-        </View>
-      </View>
-
-      <View style={styles.contactRight}>
-        <Text {...tProps} style={trxType === 'debit' ? styles.contactRightTopLent : styles.contactRightTopPaid}>
-          {
-            trxType === 'debit'
-              ? 'Anda berikan'
-              : 'Anda dapatkan'
-          }
-        </Text>
-        <Text {...tProps} style={trxType === 'debit' ? styles.contactRightBottomLent : styles.contactRightBottomPaid}>
-          Rp. {trxValue}
-        </Text>
-      </View>
-    </View>
-  )
-}
-
 function Kontak () {
-  const data = [
-    {
-      id: '1',
-      contactName: 'Aan Siguna',
-      contactInitial: 'A',
-      trxType: 'debit',
-      trxValue: '2.000.000',
-      updatedAt: '3 hari lalu'
-    },
-    {
-      id: '2',
-      contactName: 'Sibutar Butar',
-      contactInitial: 'S',
-      trxType: 'credit',
-      trxValue: '3.000.000',
-      updatedAt: '4 hari lalu'
-    },
-    {
-      id: '3',
-      contactName: 'Aan Siguna',
-      contactInitial: 'A',
-      trxType: 'debit',
-      trxValue: '2.000.000',
-      updatedAt: '3 hari lalu'
-    },
-    {
-      id: '4',
-      contactName: 'Sibutar Butar',
-      contactInitial: 'S',
-      trxType: 'credit',
-      trxValue: '3.000.000',
-      updatedAt: '4 hari lalu'
-    },
-    {
-      id: '5',
-      contactName: 'Aan Siguna',
-      contactInitial: 'A',
-      trxType: 'debit',
-      trxValue: '2.000.000',
-      updatedAt: '3 hari lalu'
-    },
-    {
-      id: '6',
-      contactName: 'Sibutar Butar',
-      contactInitial: 'S',
-      trxType: 'credit',
-      trxValue: '3.000.000',
-      updatedAt: '4 hari lalu'
-    },
-    {
-      id: '7',
-      contactName: 'Aan Siguna',
-      contactInitial: 'A',
-      trxType: 'debit',
-      trxValue: '2.000.000',
-      updatedAt: '3 hari lalu'
-    },
-    {
-      id: '8',
-      contactName: 'Sibutar Butar',
-      contactInitial: 'S',
-      trxType: 'credit',
-      trxValue: '3.000.000',
-      updatedAt: '4 hari lalu'
-    },
-    {
-      id: '9',
-      contactName: 'Aan Siguna',
-      contactInitial: 'A',
-      trxType: 'debit',
-      trxValue: '2.000.000',
-      updatedAt: '3 hari lalu'
-    },
-    {
-      id: '10',
-      contactName: 'Sibutar Butar',
-      contactInitial: 'S',
-      trxType: 'credit',
-      trxValue: '3.000.000',
-      updatedAt: '4 hari lalu'
-    }
-  ]
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.topBar}>
@@ -202,6 +159,7 @@ function Kontak () {
         scrollEnabled={true}
         renderItem={({ item, index }) => <ContactCard {...item} key={index}/>}
         keyExtractor={item => item.id}
+        style={styles.contactList}
       />
 
       <TouchableWithoutFeedback onPress={() => showContact()}>
@@ -252,64 +210,11 @@ const styles = StyleSheet.create({
     marginLeft: 13,
     marginRight: 8
   },
-  contact: {
-    paddingBottom: 5,
-    paddingTop: 3,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    width: '100%'
-  },
-  contactLeft: {
-    flexDirection: 'row'
-  },
-  contactLeftText: {
-    flexDirection: 'column',
-    justifyContent: 'center'
-  },
-  contactLeftTopText: {
-    fontSize: 18
-  },
-  contactLeftBottom: {
-    flexDirection: 'row'
-  },
-  contactRight: {
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    paddingRight: 20
-  },
-  contactRightTopPaid: {
-    color: 'green'
-  },
-  contactRightTopLent: {
-    color: 'red'
-  },
-  contactRightBottomPaid: {
-    fontSize: 18,
-    color: 'green'
-  },
-  contactRightBottomLent: {
-    fontSize: 18,
-    color: 'red'
-  },
   filter: {
     color: '#444'
   },
   pdf: {
     color: '#444'
-  },
-  nameLetter: {
-    backgroundColor: '#aaa',
-    paddingLeft: 14,
-    paddingRight: 14,
-    paddingBottom: 3,
-    margin: 5,
-    marginLeft: 15,
-    marginRight: 10,
-    borderRadius: 100
-  },
-  nameLetterText: {
-    color: 'white',
-    fontSize: 36
   },
   addContactBtn: {
     backgroundColor: 'white',
@@ -324,6 +229,10 @@ const styles = StyleSheet.create({
     borderColor: '#444',
     borderRadius: 50,
     padding: 8
+  },
+  contactList: {
+    marginTop: 5,
+    paddingBottom: 100
   },
   addContactBtnText: {
     fontSize: 20
