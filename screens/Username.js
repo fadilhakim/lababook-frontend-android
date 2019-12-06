@@ -10,6 +10,7 @@ import {
   StatusBar
 } from 'react-native'
 
+import { textExtraProps as tProps } from '../config/system'
 import { updateUserName } from '../store/actions/user'
 
 function Username (props) {
@@ -45,15 +46,15 @@ function Username (props) {
     <View style={styles.container}>
       <StatusBar barStyle='dark-content' style={styles.statusBar}/>
       <View style={{ width: '100%' }}>
-        <Text style={styles.title}>
+        <Text {...tProps} style={styles.title}>
           Pengguna Baru
         </Text>
-        <Text style={styles.phoneLabel}>
+        <Text {...tProps} style={styles.phoneLabel}>
           Masukkan Nama Anda
         </Text>
         {
           isError && (
-            <Text style={styles.errorPhone}>
+            <Text {...tProps} style={styles.errorPhone}>
               {errMsg}
             </Text>
           )
@@ -70,7 +71,7 @@ function Username (props) {
           onPress={() => inputName()}
         >
           <View style={styles.button}>
-            <Text style={styles.buttonText}>Masuk</Text>
+            <Text {...tProps} style={styles.buttonText}>Masuk</Text>
           </View>
         </TouchableNativeFeedback>
       </View>

@@ -13,6 +13,8 @@ import {
 import * as Permissions from 'expo-permissions'
 import * as Contacts from 'expo-contacts'
 
+import { textExtraProps as tProps } from '../config/system'
+
 async function showContact () {
   try {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS)
@@ -47,33 +49,33 @@ function ContactCard (props) {
     <View style={styles.contact}>
       <View style={styles.contactLeft}>
         <View style={styles.nameLetter}>
-          <Text style={styles.nameLetterText}>
+          <Text {...tProps} style={styles.nameLetterText}>
             {contactInitial}
           </Text>
         </View>
 
         <View style={styles.contactLeftText}>
           <View>
-            <Text style={styles.contactLeftTopText}>
+            <Text {...tProps} style={styles.contactLeftTopText}>
               {contactName}
             </Text>
           </View>
           <View style={styles.contactLeftBottom}>
             <AntDesign name='clockcircleo' size={12} style={{ marginTop: 3 }}/>
-            <Text> {updatedAt}</Text>
+            <Text {...tProps}> {updatedAt}</Text>
           </View>
         </View>
       </View>
 
       <View style={styles.contactRight}>
-        <Text style={trxType === 'debit' ? styles.contactRightTopLent : styles.contactRightTopPaid}>
+        <Text {...tProps} style={trxType === 'debit' ? styles.contactRightTopLent : styles.contactRightTopPaid}>
           {
             trxType === 'debit'
               ? 'Anda berikan'
               : 'Anda dapatkan'
           }
         </Text>
-        <Text style={trxType === 'debit' ? styles.contactRightBottomLent : styles.contactRightBottomPaid}>
+        <Text {...tProps} style={trxType === 'debit' ? styles.contactRightBottomLent : styles.contactRightBottomPaid}>
           Rp. {trxValue}
         </Text>
       </View>

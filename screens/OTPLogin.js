@@ -11,6 +11,7 @@ import {
   ActivityIndicator
 } from 'react-native'
 
+import { textExtraProps as tProps } from '../config/system'
 import { confirmLogin } from '../store/actions/user'
 
 function OTPLogin (props) {
@@ -63,11 +64,11 @@ function OTPLogin (props) {
     <View style={styles.container}>
       <StatusBar barStyle='dark-content' style={styles.statusBar}/>
       <View style={{ width: '100%', alignItems: 'center' }}>
-        <Text style={styles.phoneLabelTop}>
+        <Text {...tProps} style={styles.phoneLabelTop}>
           Masukkan OTP 4 digit yang dikirimkan
         </Text>
-        <Text style={styles.phoneLabelBottom}>
-          ke <Text style={{ color: '#222' }}>{phoneNumber}</Text>
+        <Text {...tProps} style={styles.phoneLabelBottom}>
+          ke <Text {...tProps} style={{ color: '#222' }}>{phoneNumber}</Text>
         </Text>
         <View style={styles.otpView}>
           {
@@ -88,17 +89,17 @@ function OTPLogin (props) {
           }
         </View>
         <View style={styles.info}>
-          <Text style={styles.infoText}>
+          <Text {...tProps} style={styles.infoText}>
             Nomor ponsel salah?
           </Text>
-          <Text style={styles.infoLink}>
+          <Text {...tProps} style={styles.infoLink}>
             Minta kode baru
           </Text>
         </View>
         {
           loading && <View style={{ flexDirection: 'row', marginTop: 10 }}>
             <ActivityIndicator color='#444' size={16}/>
-            <Text> Mengonfirmasi OTP</Text>
+            <Text {...tProps}> Mengonfirmasi OTP</Text>
           </View>
         }
       </View>

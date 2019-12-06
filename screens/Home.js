@@ -13,6 +13,8 @@ import { createAppContainer } from 'react-navigation'
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs'
 import Constanst from 'expo-constants'
 
+import { textExtraProps as tProps } from '../config/system'
+
 import Kontak from './Kontak'
 import Aktifitas from './Aktifitas'
 import Pengingat from './Pengingat'
@@ -83,7 +85,7 @@ function Home (props) {
             color='#444'
             style={styles.bookLogo}
           />
-          <Text style={styles.bookName}>
+          <Text {...tProps} style={styles.bookName}>
             {user.bookName}
           </Text>
         </View>

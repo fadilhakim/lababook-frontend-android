@@ -8,6 +8,8 @@ import {
   StatusBar
 } from 'react-native'
 
+import { textExtraProps as tProps } from '../config/system'
+
 const toLogin = (navigation) => {
   navigation.navigate('Login')
 }
@@ -19,20 +21,20 @@ export default function Welcome (props) {
     <View style={styles.container}>
       <StatusBar barStyle='dark-content' style={styles.statusBar}/>
       <View style={{ width: '100%' }}>
-        <Text style={styles.title}>
+        <Text {...tProps} style={styles.title}>
           Lababook
         </Text>
-        <Text style={styles.welcome}>
+        <Text {...tProps} style={styles.welcome}>
           Selamat datang
         </Text>
-        <Text style={styles.welcome}>
+        <Text {...tProps} style={styles.welcome}>
           di Aplikasi ini.
         </Text>
         <TouchableNativeFeedback
           onPress={() => toLogin(navigation)}
         >
           <View style={styles.button}>
-            <Text style={styles.buttonText}>Masuk</Text>
+            <Text {...tProps} style={styles.buttonText}>Masuk</Text>
           </View>
         </TouchableNativeFeedback>
       </View>
