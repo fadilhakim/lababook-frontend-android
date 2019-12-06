@@ -7,7 +7,7 @@ import {
   TouchableNativeFeedback,
   AsyncStorage
 } from 'react-native'
-import { Ionicons, Foundation } from '@expo/vector-icons'
+import { Ionicons, Foundation, SimpleLineIcons } from '@expo/vector-icons'
 import { connect } from 'react-redux'
 import { createAppContainer } from 'react-navigation'
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs'
@@ -104,8 +104,8 @@ function Home (props) {
 
           <TouchableNativeFeedback onPress={() => signOut()}>
             <View style={styles.logo}>
-              <Ionicons
-                name='ios-log-out'
+              <SimpleLineIcons
+                name='options-vertical'
                 size={32}
                 color='#444'
                 style={styles.optionLogo}

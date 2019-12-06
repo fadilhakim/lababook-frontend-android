@@ -4,6 +4,7 @@ import { createStackNavigator } from 'react-navigation-stack'
 import { useScreens } from 'react-native-screens'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
+import * as Font from 'expo-font'
 
 import Welcome from './screens/Welcome'
 import Login from './screens/Login'
@@ -15,6 +16,12 @@ import Home from './screens/Home'
 import AuthLoading from './screens/AuthLoading'
 
 import { store, persistor } from './store'
+
+Font.loadAsync({
+  NexaBold: require('./assets/fonts/NexaBold.otf'),
+  NexaLight: require('./assets/fonts/NexaLight.otf'),
+  RobotoMonoLight: require('./assets/fonts/RobotoMono-Light.ttf')
+})
 
 useScreens()
 

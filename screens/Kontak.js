@@ -13,6 +13,7 @@ import {
 import * as Permissions from 'expo-permissions'
 import * as Contacts from 'expo-contacts'
 
+import NameIcon from '../components/NameIcon'
 import { textExtraProps as tProps } from '../config/system'
 
 async function showContact () {
@@ -48,11 +49,13 @@ function ContactCard (props) {
   return (
     <View style={styles.contact}>
       <View style={styles.contactLeft}>
-        <View style={styles.nameLetter}>
+        {/* <View style={styles.nameLetter}>
           <Text {...tProps} style={styles.nameLetterText}>
             {contactInitial}
           </Text>
-        </View>
+        </View> */}
+
+        <NameIcon contactInitial={contactInitial}/>
 
         <View style={styles.contactLeftText}>
           <View>
@@ -250,6 +253,8 @@ const styles = StyleSheet.create({
     marginRight: 8
   },
   contact: {
+    paddingBottom: 5,
+    paddingTop: 3,
     justifyContent: 'space-between',
     flexDirection: 'row',
     width: '100%'
