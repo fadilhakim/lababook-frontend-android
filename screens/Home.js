@@ -4,8 +4,7 @@ import {
   Text,
   StyleSheet,
   StatusBar,
-  TouchableNativeFeedback,
-  AsyncStorage
+  TouchableNativeFeedback
 } from 'react-native'
 import { Ionicons, Foundation, SimpleLineIcons } from '@expo/vector-icons'
 import { connect } from 'react-redux'
@@ -65,11 +64,8 @@ const Tabs = createAppContainer(
 function Home (props) {
   const { user, navigation } = props
 
-  const signOut = () => {
-    AsyncStorage.removeItem('userToken')
-      .then(() => {
-        navigation.navigate('AuthLoading')
-      })
+  const toSettings = () => {
+    navigation.navigate('Settings')
   }
 
   return (
@@ -102,7 +98,7 @@ function Home (props) {
             </View>
           </TouchableNativeFeedback>
 
-          <TouchableNativeFeedback onPress={() => signOut()}>
+          <TouchableNativeFeedback onPress={() => toSettings()}>
             <View style={styles.logo}>
               <SimpleLineIcons
                 name='options-vertical'

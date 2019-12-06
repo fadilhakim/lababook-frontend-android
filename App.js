@@ -14,6 +14,7 @@ import OTPRegister from './screens/OTPRegister'
 import OTPLogin from './screens/OTPLogin'
 import Home from './screens/Home'
 import AuthLoading from './screens/AuthLoading'
+import Settings from './screens/Settings'
 
 import { store, persistor } from './store'
 
@@ -55,12 +56,30 @@ const AuthNavigator = createStackNavigator(
 const AppNavigator = createStackNavigator(
   {
     Home: {
-      screen: Home
+      screen: Home,
+      navigationOptions: {
+        headerShown: false
+      }
+    },
+    Settings: {
+      screen: Settings,
+      navigationOptions: {
+        headerBackTitleVisible: true,
+        headerTitle: 'Settings',
+        headerTitleStyle: {
+          color: '#444',
+          paddingTop: 10,
+          paddingBottom: 10,
+          fontSize: 28,
+          fontWeight: 'bold',
+          marginLeft: -5
+        }
+      }
     }
   },
   {
     initialRouteName: 'Home',
-    headerMode: 'none'
+    headerMode: 'screen'
   }
 )
 
