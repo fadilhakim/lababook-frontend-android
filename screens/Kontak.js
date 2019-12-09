@@ -143,12 +143,12 @@ function Kontak () {
         <View style={styles.topBarRight}>
           <TouchableWithoutFeedback>
             <View style={styles.topBarRightFilter}>
-              <MaterialIcons name='filter-list' size={32} color='#444' style={styles.filter} />
+              <MaterialIcons name='filter-list' size={27} color='#444' style={styles.filter} />
             </View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback>
             <View style={styles.topBarRightPdf}>
-              <AntDesign name='pdffile1' size={32} color='#444' style={styles.pdf} />
+              <AntDesign name='pdffile1' size={27} color='#444' style={styles.pdf} />
             </View>
           </TouchableWithoutFeedback>
         </View>
@@ -164,7 +164,7 @@ function Kontak () {
 
       <TouchableWithoutFeedback onPress={() => showContact()}>
         <View style={styles.addContactBtn}>
-          <AntDesign name='plus'size={22}/>
+          <AntDesign name='plus' size={22} style={{color:'#fff'}}/>
           <Text style={styles.addContactBtnText}>
             Tambah Kontak
           </Text>
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    borderBottomWidth: 10,
+    borderBottomWidth: 5,
     borderBottomColor: '#bbb',
     paddingBottom: 6
   },
@@ -225,16 +225,18 @@ const styles = StyleSheet.create({
     zIndex: 999,
     right: 25,
     bottom: 25,
-    borderWidth: 3,
-    borderColor: '#444',
-    borderRadius: 50,
-    padding: 8
+    borderWidth: 2,
+    borderColor: '#5844ed',
+    borderRadius: 20,
+    padding: 8,
+    backgroundColor: '#5844ed'
   },
   contactList: {
     marginTop: 5,
     paddingBottom: 100
   },
   addContactBtnText: {
-    fontSize: 20
+    fontSize: 18,
+    color:'#fff'
   }
 })

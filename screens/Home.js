@@ -29,29 +29,31 @@ const HomeTabs = createMaterialTopTabNavigator(
     swipeEnabled: true,
     lazy: true,
     tabBarOptions: {
-      activeTintColor: '#444',
+      activeTintColor: '#fff',
       pressColor: '#ddd',
       upperCaseLabel: false,
       style: {
-        height: 40,
-        marginBottom: 15,
-        backgroundColor: 'white'
+        height: 50,
+        marginBottom: 10,
+        backgroundColor: '#5844ed'
       },
       tabStyle: {
         alignItems: 'center',
         justifyContent: 'flex-start'
       },
       labelStyle: {
-        color: '#444',
-        fontSize: 18,
-        fontWeight: 'bold',
+        color: '#fff',
+        fontSize: 15,
+        fontWeight: 'normal',
         fontFamily: 'sans-serif'
       },
       indicatorStyle: {
-        borderBottomWidth: 7,
-        borderBottomColor: '#444',
-        backgroundColor: '#444',
-        marginBottom: -7
+        borderBottomWidth: 5,
+        borderBottomColor: '#fff',
+        backgroundColor: '#fff',
+        marginBottom: -1,
+        borderTopLeftRadius:3,
+        borderTopRightRadius:3
       }
     }
   }
@@ -91,7 +93,7 @@ function Home (props) {
             <View style={styles.logo}>
               <Ionicons
                 name='md-search'
-                size={32}
+                size={25}
                 color='#444'
                 style={styles.searchLogo}
               />
@@ -102,7 +104,7 @@ function Home (props) {
             <View style={styles.logo}>
               <SimpleLineIcons
                 name='options-vertical'
-                size={32}
+                size={25}
                 color='#444'
                 style={styles.optionLogo}
               />
@@ -136,7 +138,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    marginTop: Constanst.statusBarHeight
+    marginTop: Constanst.statusBarHeight,
+    backgroundColor: '#5844ed'
   },
   topBarRight: {
     flexDirection: 'row'
@@ -145,7 +148,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   bookName: {
-    color: '#444',
+    color: '#fff',
     paddingTop: 10,
     paddingBottom: 10,
     fontSize: 28,
@@ -158,15 +161,17 @@ const styles = StyleSheet.create({
   bookLogo: {
     marginTop: 13,
     marginLeft: 13,
-    marginRight: 13
+    marginRight: 13,
+    color:'#fff'
   },
   searchLogo: {
-    color: '#444',
+    color: '#fff',
     marginLeft: 13,
     marginRight: 13
   },
   optionLogo: {
     marginLeft: 13,
-    marginRight: 13
+    marginRight: 13,
+    color: '#fff'
   }
 })
