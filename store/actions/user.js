@@ -1,22 +1,19 @@
-import { AsyncStorage } from 'react-native'
-
 import {
   UPDATE_PHONE_NUMBER,
   UPDATE_USER_NAME,
   UPDATE_BOOK_NAME,
   USER_REGISTERED,
-  USER_ACTIVATED,
   USER_LOGIN,
   USER_CONFIRMED
 } from '../actionTypes/user'
 import { SHOW_LOADING, HIDE_LOADING } from '../actionTypes/loading'
 import {
   register,
-  otpRegister,
-  otpLogin,
+  checkOtp,
   login
 } from '../../libs/request'
 import { showErrorBottom } from '../../libs/errorHandler'
+import syncActions from '../../libs/syncActions'
 
 export function updatePhoneNumber (newPhoneNumber) {
   return {
@@ -55,42 +52,13 @@ export function registerUser (user) {
   }
 }
 
-export function confirmRegister (phoneNumber, otp, cb) {
-  return function (dispatch) {
-    dispatch({
-      type: SHOW_LOADING
-    })
-    otpRegister(phoneNumber, otp)
-      .then(data => {
-        AsyncStorage.setItem('userToken', data.token)
-          .then(() => {
-            dispatch({
-              type: USER_ACTIVATED,
-              token: data.token
-            })
-            dispatch({
-              type: HIDE_LOADING
-            })
-            cb()
-          })
-      })
-      .catch(error => {
-        dispatch({
-          type: HIDE_LOADING
-        })
-        console.log(error.response.data)
-        showErrorBottom(error.response.data.message || 'server error')
-      })
-  }
-}
-
-export function loginUser (phoneNumber, cb, errCb) {
+export function loginUser (phoneNumber, cb) {
   return function (dispatch) {
     dispatch({
       type: SHOW_LOADING
     })
     login(phoneNumber)
-      .then(data => {
+      .then(async data => {
         dispatch({
           type: USER_LOGIN,
           user: data.user
@@ -104,35 +72,34 @@ export function loginUser (phoneNumber, cb, errCb) {
         dispatch({
           type: HIDE_LOADING
         })
-        errCb(error)
+        showErrorBottom(error.response.data.message || 'server error')
       })
   }
 }
 
-export function confirmLogin (phoneNumber, otp, cb) {
+export function confirmOTP (phoneNumber, otp, cb) {
   return function (dispatch) {
     dispatch({
       type: SHOW_LOADING
     })
-    otpLogin(phoneNumber, otp)
+    checkOtp(phoneNumber, otp)
       .then(data => {
-        AsyncStorage.setItem('userToken', data.token)
-          .then(() => {
-            dispatch({
-              type: USER_CONFIRMED,
-              token: data.token
-            })
-            dispatch({
-              type: HIDE_LOADING
-            })
-            cb()
-          })
+        syncActions([
+          () => dispatch({
+            type: USER_CONFIRMED,
+            token: data.token,
+            isNew: data.isNew
+          }),
+          () => dispatch({
+            type: HIDE_LOADING
+          }),
+          () => cb()
+        ])
       })
       .catch(error => {
         dispatch({
           type: HIDE_LOADING
         })
-        console.log(error.response.data)
         showErrorBottom(error.response.data.message || 'server error')
       })
   }

@@ -38,24 +38,9 @@ function Login (props) {
     Network.getNetworkStateAsync()
       .then(stat => {
         if (stat.isInternetReachable) {
-          login(
-            phoneNumber,
-            () => {
-              navigation.navigate('OTPLogin')
-            },
-            (error) => {
-              const { response: { data } } = error
-
-              if (data.isJoi) {
-                setError(true)
-                setErrMsg(data.message)
-              } else {
-                setError(false)
-                updatePhoneNumber(phoneNumber)
-                navigation.navigate('Username')
-              }
-            }
-          )
+          login(phoneNumber, () => {
+            navigation.navigate('OTP')
+          })
         } else {
           ToastAndroid.showWithGravity(
             'Anda tidak terhubung ke Internet',
@@ -135,8 +120,8 @@ function mapDispatchToProps (dispatch) {
     updatePhoneNumber: (newPhoneNumber) => {
       dispatch(updatePhoneNumber(newPhoneNumber))
     },
-    login: (phoneNumber, cb, errCb) => {
-      dispatch(loginUser(phoneNumber, cb, errCb))
+    login: (phoneNumber, cb) => {
+      dispatch(loginUser(phoneNumber, cb))
     }
   }
 }
