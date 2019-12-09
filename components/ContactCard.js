@@ -72,10 +72,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   contactLeftTopText: {
-    fontSize: 18
+    fontSize: 15,
+    color:'#000',
+    fontWeight:'bold'
+
   },
   contactLeftBottom: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    fontSize:13,
+    color:'#ddd'
   },
   contactRight: {
     justifyContent: 'center',
@@ -89,11 +94,11 @@ const styles = StyleSheet.create({
     color: 'red'
   },
   contactRightBottomPaid: {
-    fontSize: 18,
+    fontSize: 15,
     color: 'green'
   },
   contactRightBottomLent: {
-    fontSize: 18,
+    fontSize: 15,
     color: 'red'
   }
 })

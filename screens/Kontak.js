@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     paddingBottom: 100
   },
   addContactBtnText: {
-    fontSize: 18,
+    fontSize: 16,
     color:'#fff'
   }
 })
