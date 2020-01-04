@@ -44,6 +44,9 @@ export default function user (state = initialStates, action) {
       }
     }
     case USER_ACTIVATED:
+      return {
+        
+      }
     case USER_CONFIRMED:
       return {
         ...state,

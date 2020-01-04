@@ -37,19 +37,21 @@ function OTP (props) {
           100
         )
       } else {
-        setTimeout(
-          () => {
-            Keyboard.dismiss()
-            confirmOtp(
-              user.phoneNumber,
-              otp.join(''),
-              () => {
-                navigation.navigate('AuthLoading')
-              }
-            )
-          },
-          100
-        )
+        navigation.navigate('Home')
+        // setTimeout(
+        //   () => {
+        //     Keyboard.dismiss()
+        //     confirmOtp(
+        //       user.phoneNumber,
+        //       otp.join(''),
+        //       () => {
+        //         // navigation.navigate('AuthLoading')
+        //         navigation.navigate('Home')
+        //       }
+        //     )
+        //   },
+        //   100
+        // )
       }
     } else {
       if (index - 1 >= 0) {

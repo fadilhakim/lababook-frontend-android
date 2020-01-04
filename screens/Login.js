@@ -35,7 +35,7 @@ function Login (props) {
   const doLogin = () => {
     Keyboard.dismiss()
 
-    navigation.navigate('Home')
+    navigation.navigate('OTP')
     // Network.getNetworkStateAsync()
     //   .then(stat => {
     //     if (stat.isInternetReachable) {
