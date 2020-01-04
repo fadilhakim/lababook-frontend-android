@@ -34,73 +34,19 @@ const data = [
   },
   {
     id: '3',
-    contactName: 'Aan Siguna',
-    contactInitial: 'A',
+    contactName: 'Dimas Arya',
+    contactInitial: 'D',
     trxType: 'debit',
-    trxValue: '2.000.000',
-    updatedAt: '3 hari lalu'
+    trxValue: '700.000',
+    updatedAt: '1 hari lalu'
   },
   {
     id: '4',
-    contactName: 'Sibutar Butar',
+    contactName: 'Shasa',
     contactInitial: 'S',
     trxType: 'credit',
-    trxValue: '3.000.000',
-    updatedAt: '4 hari lalu'
-  },
-  {
-    id: '5',
-    contactName: 'Aan Siguna',
-    contactInitial: 'A',
-    trxType: 'debit',
-    trxValue: '2.000.000',
+    trxValue: '300.000',
     updatedAt: '3 hari lalu'
-  },
-  {
-    id: '6',
-    contactName: 'Sibutar Butar',
-    contactInitial: 'S',
-    trxType: 'credit',
-    trxValue: '3.000.000',
-    updatedAt: '4 hari lalu'
-  },
-  {
-    id: '7',
-    contactName: 'Aan Siguna',
-    contactInitial: 'A',
-    trxType: 'debit',
-    trxValue: '2.000.000',
-    updatedAt: '3 hari lalu'
-  },
-  {
-    id: '8',
-    contactName: 'Sibutar Butar',
-    contactInitial: 'S',
-    trxType: 'credit',
-    trxValue: '3.000.000',
-    updatedAt: '4 hari lalu'
-  },
-  {
-    id: '9',
-    contactName: 'Aan Siguna',
-    contactInitial: 'A',
-    trxType: 'debit',
-    trxValue: '2.000.000',
-    updatedAt: '3 hari lalu'
-  },
-  {
-    id: '10',
-    contactName: 'Sibutar Butar',
-    contactInitial: 'S',
-    trxType: 'credit',
-    trxValue: '3.000.000',
-    updatedAt: '4 hari lalu'
-  },
-  {
-    id: '999'
-  },
-  {
-    id: '9999'
   }
 ]
 
@@ -134,9 +80,9 @@ function Kontak () {
             <MaterialIcons name='person' size={32} color='white'/>
           </View>
           <Text style={{ fontSize: 16 }}>
-            Anda Berikan: <Text style={{ color: 'red' }}>Rp. 2.000.000</Text>
+            Anda Berikan: <Text style={{ color: '#ce4165' }}>Rp. 2.000.000</Text>
             {'\n'}
-            Anda Dapatkan: <Text style={{ color: 'green' }}>Rp. 3.000.000</Text>
+            Anda Dapatkan: <Text style={{ color: '#7dd220' }}>Rp. 3.000.000</Text>
           </Text>
         </View>
 
@@ -164,9 +110,9 @@ function Kontak () {
 
       <TouchableWithoutFeedback onPress={() => showContact()}>
         <View style={styles.addContactBtn}>
-          <AntDesign name='plus' size={22} style={{color:'#fff'}}/>
+          <AntDesign name='plus' size={24} style={{color:'#fff', fontWeight:'bold'}}/>
           <Text style={styles.addContactBtnText}>
-            Tambah Kontak
+           Tambah Kontak
           </Text>
         </View>
       </TouchableWithoutFeedback>
@@ -182,7 +128,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     borderBottomWidth: 5,
-    borderBottomColor: '#bbb',
+    borderBottomColor: '#f3f3f3',
     paddingBottom: 6
   },
   topBarLeft: {
@@ -204,7 +150,7 @@ const styles = StyleSheet.create({
     marginRight: 15
   },
   personBg: {
-    backgroundColor: '#444',
+    backgroundColor: '#eb5789',
     padding: 6,
     borderRadius: 25,
     marginLeft: 13,
@@ -225,18 +171,28 @@ const styles = StyleSheet.create({
     zIndex: 999,
     right: 25,
     bottom: 25,
-    borderWidth: 2,
-    borderColor: '#5844ed',
-    borderRadius: 20,
-    padding: 8,
-    backgroundColor: '#5844ed'
+    borderRadius: 100,
+    padding: 15,
+    backgroundColor: '#2a2c7b',
+    shadowColor: "#000000",
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    shadowOffset: {
+      height: 1,
+      width: 1
+    }
   },
   contactList: {
     marginTop: 5,
     paddingBottom: 100
   },
   addContactBtnText: {
-    fontSize: 16,
-    color:'#fff'
+    fontSize: 12,
+    color:'#fff',
+    position:'absolute',
+    borderRadius: 6,
+    backgroundColor:'#1a1a1a',
+    left:-100,
+    padding:5
   }
 })

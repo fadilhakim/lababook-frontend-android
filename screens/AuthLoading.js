@@ -14,15 +14,16 @@ function AuthLoading (props) {
   } = props
 
   useEffect(() => {
-    if (token) {
-      if (isNew) {
-        navigation.navigate('Register')
-      } else {
-        navigation.navigate('App')
-      }
-    } else {
-      navigation.navigate('Auth')
-    }
+    // if (token) {
+    //   if (isNew) {
+    //     navigation.navigate('Register')
+    //   } else {
+    //     navigation.navigate('App')
+    //   }
+    // } else {
+    //   navigation.navigate('Auth')
+    // }
+    navigation.navigate('Home')
   })
 
   return (

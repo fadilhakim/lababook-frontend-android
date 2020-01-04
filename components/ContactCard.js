@@ -88,17 +88,17 @@ const styles = StyleSheet.create({
     paddingRight: 20
   },
   contactRightTopPaid: {
-    color: 'green'
+    color: '#7dd220'
   },
   contactRightTopLent: {
-    color: 'red'
+    color: '#ce4165'
   },
   contactRightBottomPaid: {
     fontSize: 15,
-    color: 'green'
+    color: '#7dd220'
   },
   contactRightBottomLent: {
     fontSize: 15,
-    color: 'red'
+    color: '#ce4165'
   }
 })

@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   title: {
-    color: '#7f03fc',
+    color: '#2a2c7b',
     fontWeight: 'bold',
     fontSize: 24,
     paddingBottom: 20,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
   phone: {
     width: '100%',
-    borderBottomColor: '#7f03fc',
+    borderBottomColor: '#2a2c7b',
     borderBottomWidth: 2,
     paddingTop: 4,
     paddingBottom: 4,
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   button: {
-    backgroundColor: '#7f03fc',
+    backgroundColor: '#2a2c7b',
     padding: 12,
     borderRadius: 4,
     alignItems: 'center',

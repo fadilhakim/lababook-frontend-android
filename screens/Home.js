@@ -4,7 +4,8 @@ import {
   Text,
   StyleSheet,
   StatusBar,
-  TouchableNativeFeedback
+  TouchableNativeFeedback,
+  Image
 } from 'react-native'
 import { Ionicons, Foundation, SimpleLineIcons } from '@expo/vector-icons'
 import { connect } from 'react-redux'
@@ -35,7 +36,7 @@ const HomeTabs = createMaterialTopTabNavigator(
       style: {
         height: 50,
         marginBottom: 10,
-        backgroundColor: '#5844ed'
+        backgroundColor: '#2a2c7b'
       },
       tabStyle: {
         alignItems: 'center',
@@ -77,14 +78,12 @@ function Home (props) {
 
       <View style={styles.topBar}>
         <View style={styles.topBarLeft}>
-          <Foundation
-            name='book'
-            size={32}
-            color='#444'
-            style={styles.bookLogo}
-          />
+
+         <Image style={styles.logoIcon} source={require('../assets/icon.png')}/>
+
           <Text {...tProps} style={styles.bookName}>
-            {user.bookName}
+            {/*user.bookName*/}
+            Warung Mira
           </Text>
         </View>
 
@@ -134,12 +133,20 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     width: '100%'
   },
+
+  logoIcon: {
+    height:40,
+    width:40,
+    marginLeft:10,
+    marginTop:10,
+    marginRight:12
+  },
   topBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
     marginTop: Constanst.statusBarHeight,
-    backgroundColor: '#5844ed'
+    backgroundColor: '#2a2c7b'
   },
   topBarRight: {
     flexDirection: 'row'
@@ -151,7 +158,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     paddingTop: 10,
     paddingBottom: 10,
-    fontSize: 28,
+    fontSize: 25,
     fontWeight: 'bold'
   },
   logo: {
