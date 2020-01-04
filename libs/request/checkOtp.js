@@ -5,7 +5,7 @@ import { api } from '../../config/url'
 export default async (phoneNumber, otp) => {
   console.log(phoneNumber, otp)
   const response = await Axios.post(
-    `${api}/check-otp-register`,
+    `${api}/check-otp`,
     {
       phoneNumber,
       otp

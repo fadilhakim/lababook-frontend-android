@@ -12,7 +12,8 @@ const initialStates = {
   phoneNumber: '',
   userName: '',
   bookName: '',
-  token: ''
+  token: '',
+  isNew: true
 }
 
 export default function user (state = initialStates, action) {
@@ -46,7 +47,8 @@ export default function user (state = initialStates, action) {
     case USER_CONFIRMED:
       return {
         ...state,
-        token: action.token
+        token: action.token,
+        isNew: action.isNew
       }
     default:
       return state

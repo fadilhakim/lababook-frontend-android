@@ -12,9 +12,9 @@ import {
 } from 'react-native'
 
 import { textExtraProps as tProps } from '../config/system'
-import { confirmLogin } from '../store/actions/user'
+import { confirmOTP } from '../store/actions/user'
 
-function OTPLogin (props) {
+function OTP (props) {
   const { user, confirmOtp, loading, navigation } = props
   const refs = new Array(4).fill(null)
   const otp = new Array(4).fill(0)
@@ -116,11 +116,11 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    confirmOtp: (phoneNumber, otp, cb) => dispatch(confirmLogin(phoneNumber, otp, cb))
+    confirmOtp: (phoneNumber, otp, cb) => dispatch(confirmOTP(phoneNumber, otp, cb))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(OTPLogin)
+export default connect(mapStateToProps, mapDispatchToProps)(OTP)
 
 const styles = StyleSheet.create({
   container: {

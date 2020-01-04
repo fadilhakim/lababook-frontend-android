@@ -8,10 +8,8 @@ import * as Font from 'expo-font'
 
 import Welcome from './screens/Welcome'
 import Login from './screens/Login'
-import Username from './screens/Username'
-import Bookname from './screens/Bookname'
-import OTPRegister from './screens/OTPRegister'
-import OTPLogin from './screens/OTPLogin'
+import Register from './screens/Register'
+import OTP from './screens/OTP'
 import Home from './screens/Home'
 import AuthLoading from './screens/AuthLoading'
 import Settings from './screens/Settings'
@@ -34,17 +32,8 @@ const AuthNavigator = createStackNavigator(
     Login: {
       screen: Login
     },
-    Username: {
-      screen: Username
-    },
-    Bookname: {
-      screen: Bookname
-    },
-    OTPRegister: {
-      screen: OTPRegister
-    },
-    OTPLogin: {
-      screen: OTPLogin
+    OTP: {
+      screen: OTP
     }
   },
   {
@@ -88,7 +77,8 @@ const Root = createAppContainer(
     {
       AuthLoading: AuthLoading,
       Auth: AuthNavigator,
-      App: AppNavigator
+      App: AppNavigator,
+      Register: Register
     },
     {
       initialRouteName: 'AuthLoading'

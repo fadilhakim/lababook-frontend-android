@@ -13,8 +13,8 @@ import {
 import { textExtraProps as tProps } from '../config/system'
 import { updateUserName } from '../store/actions/user'
 
-function Username (props) {
-  const { navigation, updateUserName } = props
+function Register (props) {
+  const { navigation, updateUserName, clearStates } = props
   const [username, setUsername] = useState('')
   const [isError, setError] = useState(false)
   const [errMsg, setErrMsg] = useState('')
@@ -87,11 +87,12 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    updateUserName: (userName) => dispatch(updateUserName(userName))
+    updateUserName: (userName) => dispatch(updateUserName(userName)),
+    clearStates: () => dispatch({ type: 'CLEAR_STATES' })
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Username)
+export default connect(mapStateToProps, mapDispatchToProps)(Register)
 
 const styles = StyleSheet.create({
   container: {

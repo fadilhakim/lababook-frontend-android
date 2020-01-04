@@ -105,17 +105,14 @@ function Settings (props) {
       </View>
 
       <View style={styles.settingBottom}>
-        <TouchableNativeFeedback>
+        <TouchableNativeFeedback onPress={() => signOut()}>
           <View style={styles.logOutBtn}>
             <FontAwesome
               name='power-off'
               color='#444'
               size={16}
             />
-            <Text
-              style={styles.logOutText}
-              onPress={() => signOut()}
-            >
+            <Text style={styles.logOutText}>
               Log Out
             </Text>
           </View>

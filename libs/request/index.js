@@ -1,11 +1,9 @@
 import login from './login'
 import register from './register'
-import otpRegister from './otpRegister'
-import otpLogin from './otpLogin'
+import checkOtp from './checkOtp'
 
 export {
   login,
   register,
-  otpRegister,
-  otpLogin
+  checkOtp
 }

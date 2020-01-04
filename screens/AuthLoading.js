@@ -1,20 +1,28 @@
 import React, { useEffect } from 'react'
 import {
-  AsyncStorage,
   View,
   ActivityIndicator,
   StatusBar
 } from 'react-native'
+import { connect } from 'react-redux'
 import Constants from 'expo-constants'
 
 function AuthLoading (props) {
-  const { navigation } = props
+  const {
+    navigation,
+    user: { token, isNew }
+  } = props
 
   useEffect(() => {
-    AsyncStorage.getItem('userToken')
-      .then(userToken => {
-        navigation.navigate(userToken ? 'App' : 'Auth')
-      })
+    if (token) {
+      if (isNew) {
+        navigation.navigate('Register')
+      } else {
+        navigation.navigate('App')
+      }
+    } else {
+      navigation.navigate('Auth')
+    }
   })
 
   return (
@@ -30,4 +38,10 @@ function AuthLoading (props) {
   )
 }
 
-export default AuthLoading
+function mapStateToProps (state) {
+  return {
+    user: state.user
+  }
+}
+
+export default connect(mapStateToProps)(AuthLoading)
