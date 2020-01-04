@@ -4,7 +4,8 @@ import {
   Text,
   StyleSheet,
   StatusBar,
-  TouchableNativeFeedback
+  TouchableNativeFeedback,
+
 } from 'react-native'
 import { Ionicons, Foundation, SimpleLineIcons } from '@expo/vector-icons'
 import { connect } from 'react-redux'

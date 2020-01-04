@@ -22,7 +22,9 @@ function AuthLoading (props) {
       }
     } else {
       navigation.navigate('Auth')
+      //navigation.navigate("Home")
     }
+    //navigation.navigate("Home")
   })
 
   return (
