@@ -35,27 +35,28 @@ function Login (props) {
   const doLogin = () => {
     Keyboard.dismiss()
 
-    Network.getNetworkStateAsync()
-      .then(stat => {
-        if (stat.isInternetReachable) {
-          login(phoneNumber, () => {
-            navigation.navigate('OTP')
-          })
-        } else {
-          ToastAndroid.showWithGravity(
-            'Anda tidak terhubung ke Internet',
-            ToastAndroid.LONG,
-            ToastAndroid.BOTTOM
-          )
-        }
-      })
-      .catch(error => {
-        ToastAndroid.showWithGravity(
-          error.message,
-          ToastAndroid.LONG,
-          ToastAndroid.BOTTOM
-        )
-      })
+    navigation.navigate('Home')
+    // Network.getNetworkStateAsync()
+    //   .then(stat => {
+    //     if (stat.isInternetReachable) {
+    //       login(phoneNumber, () => {
+    //         navigation.navigate('OTP')
+    //       })
+    //     } else {
+    //       ToastAndroid.showWithGravity(
+    //         'Anda tidak terhubung ke Internet',
+    //         ToastAndroid.LONG,
+    //         ToastAndroid.BOTTOM
+    //       )
+    //     }
+    //   })
+    //   .catch(error => {
+    //     ToastAndroid.showWithGravity(
+    //       error.message,
+    //       ToastAndroid.LONG,
+    //       ToastAndroid.BOTTOM
+    //     )
+    //   })
   }
 
   return (
