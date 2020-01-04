@@ -39,7 +39,7 @@ function Register (props) {
   }
 
   const toBookname = () => {
-    navigation.navigate('Bookname')
+    navigation.navigate('Login')
   }
 
   return (
