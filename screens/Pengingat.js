@@ -89,8 +89,20 @@ export default function Pengingat () {
         </View>
       </View>
 
-      <View>
-      	
+      <View style={styles.borderGray}>
+      	Terlambat
+      </View>
+
+      <FlatList
+        data={data}
+        scrollEnabled={true}
+        renderItem={({ item, index }) => <ContactCard {...item} key={index}/>}
+        keyExtractor={item => item.id}
+        style={styles.contactList}
+      />
+
+      <View style={styles.borderGray}>
+      	Hari ini
       </View>
 
       <FlatList
@@ -136,6 +148,13 @@ const styles = StyleSheet.create({
   },
   pdf: {
     color: '#444'
+  },
+  borderGray: {
+    color: '#000',
+    backgroundColor:'#f3f3f3',
+    paddingBottom:4,
+    paddingTop:4,
+    fontSize:15
   }
 })
 
