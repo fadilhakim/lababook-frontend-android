@@ -72,11 +72,11 @@ export default function Pengingat () {
             <MaterialIcons name='person' size={32} color='white'/>
           </View>
           <Text style={{ fontSize: 16 }}>
-            Terlambat: <Text style={{ color: '#ce4165' }}>2 Pelanggan</Text>
+            <Text>Terlambat:</Text> <Text style={{ color: '#ce4165' }}>2 Pelanggan</Text>
             {'\n'}
-            Hari ini: <Text style={{ color: '#000' }}>3 Pelanggan</Text>
+           <Text> Hari ini:</Text> <Text style={{ color: '#000' }}>3 Pelanggan</Text>
             {'\n'}
-            Akan Datang: <Text style={{ color: '#000' }}>5 Pelanggan</Text>
+            <Text>Akan Datang:</Text> <Text style={{ color: '#000' }}>5 Pelanggan</Text>
           </Text>
         </View>
 
@@ -90,7 +90,7 @@ export default function Pengingat () {
       </View>
 
       <View style={styles.borderGray}>
-      	Terlambat
+      	<Text>Terlambat</Text>
       </View>
 
       <FlatList
@@ -102,7 +102,7 @@ export default function Pengingat () {
       />
 
       <View style={styles.borderGray}>
-      	Hari ini
+        <Text>Hari ini</Text>
       </View>
 
       <FlatList

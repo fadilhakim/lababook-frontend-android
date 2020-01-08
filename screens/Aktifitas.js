@@ -10,10 +10,10 @@ export default class Aktifitas extends React.Component {
     this.state = {
       tableHead: ['Total \n Rp.1200000', 'Anda Berikan \n Rp.1200000', 'Anda Dapatkan \n Rp.1200000'],
       tableData: [
-        ['1', '2', '3'],
-        ['a', 'b', 'c'],
-        ['1', '2', '3'],
-        ['a', 'b', 'c']
+        ['hutang makan bakso', '200000', ''],
+        ['dio puitang', '', '200000'],
+        ['gegege no kitaro', '', '3000000'],
+        ['haula piutang', '100000', '']
       ]
     }
   }
@@ -22,10 +22,20 @@ export default class Aktifitas extends React.Component {
     const state = this.state
     return (
       <View>
-        <Text {...tProps}>Aktifitas</Text>
-        <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+        
+        <Table borderStyle={{borderWidth: 0}}>
           <Row data={state.tableHead} style={styles.head} textStyle={styles.text}/>
-          <Rows data={state.tableData} textStyle={styles.text}/>
+          {
+            this.state.tableData.map((rowData, index) => {
+              return <Row 
+                key={index}
+                data={ rowData }
+                textStyle={ {textAlign:"right" }}
+                style={[{backgroundColor:'white', height:40, padding:10 }, index%2 && { backgroundColor:"#F7F6E7", height:40, padding:10} ]}
+              ></Row>
+            })
+          }
+          {/* <Rows data={state.tableData} textStyle={styles.text} style={ styles.Rows }/> */}
         </Table>
        
       </View>
@@ -37,5 +47,11 @@ export default class Aktifitas extends React.Component {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
   head: { height: 40, backgroundColor: '#f1f8ff' },
-  text: { margin: 6 }
+  text: { margin: 6, textAlign:"right" },
+  Rows: {
+   
+    borderBottomColor:"white",
+    backgroundColor:"white",
+    borderRightColor:"black"
+  }
 });
