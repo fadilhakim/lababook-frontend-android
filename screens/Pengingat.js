@@ -88,11 +88,11 @@ export default function Pengingat () {
       <View style={styles.topBar}>
         <View style={styles.topBarLeft}>
           <Text style={{ fontSize: 16 }}>
-            Terlambat: <Text style={{ color: '#ce4165' }}>2 Pelanggan</Text>
+            <Text>Terlambat:</Text> <Text style={{ color: '#ce4165' }}>2 Pelanggan</Text>
             {'\n'}
-            Hari ini: <Text style={{ color: '#000' }}>3 Pelanggan</Text>
+           <Text> Hari ini:</Text> <Text style={{ color: '#000' }}>3 Pelanggan</Text>
             {'\n'}
-            Akan Datang: <Text style={{ color: '#000' }}>5 Pelanggan</Text>
+            <Text>Akan Datang:</Text> <Text style={{ color: '#000' }}>5 Pelanggan</Text>
           </Text>
         </View>
 
@@ -106,9 +106,13 @@ export default function Pengingat () {
       </View>
 
       <View style={styles.borderGray}>
+<<<<<<< HEAD
       	<Text style={{ fontSize: 12 }}>
       		Terlambat
       	</Text>
+=======
+      	<Text>Terlambat</Text>
+>>>>>>> 583bf0b456a69e9956f314dfe9746117ee907b79
       </View>
 
       <FlatList
