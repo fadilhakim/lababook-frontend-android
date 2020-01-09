@@ -22,7 +22,7 @@ import ContactCard from '../components/ContactCard'
 
 import { textExtraProps as tProps } from '../config/system'
 
-const data = [
+const dataHariIni = [
   {
     id: '1',
     contactName: 'Aan Siguna',
@@ -34,6 +34,25 @@ const data = [
   {
     id: '4',
     contactName: 'Shasa',
+    contactInitial: 'S',
+    trxType: 'credit',
+    trxValue: '300.000',
+    updatedAt: '3 hari lalu'
+  }
+]
+
+const dataTerlambat = [
+  {
+    id: '1',
+    contactName: 'Amanda Wiguna',
+    contactInitial: 'A',
+    trxType: 'debit',
+    trxValue: '2.000.000',
+    updatedAt: '3 hari lalu'
+  },
+  {
+    id: '4',
+    contactName: 'Sin Joe',
     contactInitial: 'S',
     trxType: 'credit',
     trxValue: '300.000',
@@ -68,9 +87,6 @@ export default function Pengingat () {
 
       <View style={styles.topBar}>
         <View style={styles.topBarLeft}>
-          <View style={styles.personBg}>
-            <MaterialIcons name='person' size={32} color='white'/>
-          </View>
           <Text style={{ fontSize: 16 }}>
             Terlambat: <Text style={{ color: '#ce4165' }}>2 Pelanggan</Text>
             {'\n'}
@@ -90,11 +106,13 @@ export default function Pengingat () {
       </View>
 
       <View style={styles.borderGray}>
-      	Terlambat
+      	<Text style={{ fontSize: 12 }}>
+      		Terlambat
+      	</Text>
       </View>
 
       <FlatList
-        data={data}
+        data={dataTerlambat}
         scrollEnabled={true}
         renderItem={({ item, index }) => <ContactCard {...item} key={index}/>}
         keyExtractor={item => item.id}
@@ -102,11 +120,13 @@ export default function Pengingat () {
       />
 
       <View style={styles.borderGray}>
-      	Hari ini
+      	<Text style={{ fontSize: 12 }}>
+      		Hari Ini
+      	</Text>
       </View>
 
       <FlatList
-        data={data}
+        data={dataHariIni}
         scrollEnabled={true}
         renderItem={({ item, index }) => <ContactCard {...item} key={index}/>}
         keyExtractor={item => item.id}
@@ -129,7 +149,8 @@ const styles = StyleSheet.create({
     paddingBottom: 6
   },
   topBarLeft: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    paddingLeft:15
   },
   topBarRight: {
     flexDirection: 'row'
@@ -154,6 +175,7 @@ const styles = StyleSheet.create({
     backgroundColor:'#f3f3f3',
     paddingBottom:4,
     paddingTop:4,
+    paddingLeft:15,
     fontSize:15
   }
 })

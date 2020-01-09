@@ -16,6 +16,10 @@ function Settings (props) {
       .then(() => navigation.navigate('AuthLoading'))
   }
 
+  const toAccountSetting = () => {
+    navigation.navigate('AccountSetting')
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.settingTop}>
@@ -27,9 +31,13 @@ function Settings (props) {
                 size={20}
                 color='#444'
               />
-              <Text style={styles.settingItemLeftText}>
-                Pengaturan Akun
-              </Text>
+
+              <TouchableNativeFeedback onPress={() => toAccountSetting()}>
+                <Text style={styles.settingItemLeftText}>
+                  Pengaturan Akuns
+                </Text>
+               </TouchableNativeFeedback>
+
             </View>
             <View style={styles.settingItemRight}>
               <FontAwesome
