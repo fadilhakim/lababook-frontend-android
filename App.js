@@ -12,8 +12,8 @@ import Register from './screens/Register'
 import OTP from './screens/OTP'
 import Home from './screens/Home'
 import AuthLoading from './screens/AuthLoading'
-import Settings from './screens/Settings'
-import AccountSetting from './screens/AccountSetting'
+import Settings from "./screens/Settings"
+// import AccountSetting from './screens/AccountSetting'
 
 import { store, persistor } from './store'
 
@@ -35,6 +35,9 @@ const AuthNavigator = createStackNavigator(
     },
     OTP: {
       screen: OTP
+    },
+    Settings:{
+      screen:Settings
     }
   },
   {
@@ -79,7 +82,8 @@ const Root = createAppContainer(
       AuthLoading: AuthLoading,
       Auth: AuthNavigator,
       App: AppNavigator,
-      Register: Register
+      Register: Register,
+      //Settings:Settings
     },
     {
       initialRouteName: 'AuthLoading'
