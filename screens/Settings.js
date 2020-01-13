@@ -32,7 +32,7 @@ function Settings (props) {
                 color='#444'
               />
 
-              <TouchableNativeFeedback onPress={() => toAccountSetting()}>
+              <TouchableNativeFeedback onPress={() =>  navigation.navigate('AccountSetting') }>
                 <Text style={styles.settingItemLeftText}>
                   Pengaturan Akuns
                 </Text>

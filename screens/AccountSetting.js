@@ -13,7 +13,7 @@ function AccountSetting (props) {
 
  
   return (
-    <View style={styles.container}>
+    <View style={{ color: '#000' }}>
       <Text>
         Account Setting
       </Text>
@@ -21,7 +21,7 @@ function AccountSetting (props) {
   )
 }
 
-export default Settings
+export default AccountSetting
 
 const styles = StyleSheet.create({
 

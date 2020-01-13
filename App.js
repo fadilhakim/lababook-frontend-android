@@ -35,6 +35,9 @@ const AuthNavigator = createStackNavigator(
     },
     OTP: {
       screen: OTP
+    },
+    AccountSetting : {
+      screen : AccountSetting
     }
   },
   {
@@ -79,7 +82,8 @@ const Root = createAppContainer(
       AuthLoading: AuthLoading,
       Auth: AuthNavigator,
       App: AppNavigator,
-      Register: Register
+      Register: Register,
+      AccountSetting : AccountSetting
     },
     {
       initialRouteName: 'AuthLoading'
