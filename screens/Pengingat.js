@@ -106,9 +106,11 @@ export default function Pengingat () {
       </View>
 
       <View style={styles.borderGray}>
+
       	<Text style={{ fontSize: 12 }}>
       		Terlambat
       	</Text>
+
       </View>
 
       <FlatList
