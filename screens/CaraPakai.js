@@ -4,32 +4,32 @@ import {
   Text,
   StyleSheet,
   Button,
-  TouchableNativeFeedback,
-  AsyncStorage,FormLabel,FormInput, FormValidationMessage
+  WebView
 } from 'react-native'
-import { FontAwesome } from '@expo/vector-icons'
-import AccForm from '../components/AccForm'
 
-function AccountSetting (props) {
+
+function CaraPakai (props) {
   const { navigation } = props
 
   const { goBack } = props.navigation;
     return (
       <View style={styles.container}>
-        <AccForm />
+        <WebView
+         source = {{ uri:
+         'https://www.youtube.com/watch?v=aCe0h50hyCc' }}
+         />
       </View>
     );
  
 }
 
-export default AccountSetting
+export default CaraPakai
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'stretch',
     justifyContent: 'center',
-    paddingLeft : 60,
-    paddingRight : 60
+
   }
 })

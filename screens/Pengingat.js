@@ -144,7 +144,7 @@ export default function Pengingat () {
 const styles = StyleSheet.create({
   topBar: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    // justifyContent: 'left',
     width: '100%',
     borderBottomWidth: 5,
     borderBottomColor: '#f3f3f3',

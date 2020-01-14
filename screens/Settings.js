@@ -44,7 +44,7 @@ function Settings (props) {
           </View>
         </TouchableNativeFeedback>
 
-        <TouchableNativeFeedback>
+        <TouchableNativeFeedback onPress={() =>  navigation.navigate('CaraPakai') }>
           <View style={styles.settingItem}>
             <View style={styles.settingItemLeft}>
               <FontAwesome
@@ -178,12 +178,12 @@ const styles = StyleSheet.create({
   },
   logOutText: {
     fontSize: 20,
-    color: '#444',
+    color: '#000',
     fontWeight: 'bold',
     marginLeft: 10
   },
   creditBlock: {
     minHeight: 200,
-    backgroundColor: '#bbb'
+    backgroundColor: '#aaa'
   }
 })

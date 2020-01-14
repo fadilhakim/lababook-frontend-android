@@ -14,6 +14,7 @@ import Home from './screens/Home'
 import AuthLoading from './screens/AuthLoading'
 import Settings from "./screens/Settings"
 import AccountSetting from './screens/AccountSetting'
+import CaraPakai from './screens/CaraPakai'
 
 import { store, persistor } from './store'
 
@@ -34,6 +35,9 @@ const AuthNavigator = createStackNavigator(
     },
     AccountSetting : {
       screen : AccountSetting
+    },
+    CaraPakai : {
+      screen : CaraPakai
     }
   },
   {
@@ -68,26 +72,45 @@ const AppNavigator = createStackNavigator(
           marginLeft: -5
         }
       }
+    },
+    AccountSetting: {
+      screen: AccountSetting,
+      navigationOptions: {
+        headerBackTitleVisible: true,
+        headerTitle: 'Pengaturan Akun',
+        headerTintColor: 'white',
+        headerStyle : {
+          backgroundColor:'#2a2c7b'
+        },
+        headerTitleStyle: {
+          color: '#fff',
+          paddingTop: 10,
+          paddingBottom: 10,
+          fontSize: 22,
+          fontWeight: 'bold',
+          marginLeft: -5
+        }
+      }
+    },
+    CaraPakai: {
+      screen: CaraPakai,
+      navigationOptions: {
+        headerBackTitleVisible: true,
+        headerTitle: 'Cara Pakai',
+        headerTintColor: 'white',
+        headerStyle : {
+          backgroundColor:'#2a2c7b'
+        },
+        headerTitleStyle: {
+          color: '#fff',
+          paddingTop: 10,
+          paddingBottom: 10,
+          fontSize: 22,
+          fontWeight: 'bold',
+          marginLeft: -5
+        }
+      }
     }
-    // AccountSetting: {
-    //   screen: AccountSetting,
-    //   navigationOptions: {
-    //     headerBackTitleVisible: true,
-    //     headerTitle: 'Settings',
-    //     headerTintColor: 'white',
-    //     headerStyle : {
-    //       backgroundColor:'#2a2c7b'
-    //     },
-    //     headerTitleStyle: {
-    //       color: '#fff',
-    //       paddingTop: 10,
-    //       paddingBottom: 10,
-    //       fontSize: 22,
-    //       fontWeight: 'bold',
-    //       marginLeft: -5
-    //     }
-    //   }
-    // }
   },
   {
     initialRouteName: 'Home',
@@ -102,7 +125,8 @@ const Root = createAppContainer(
       Auth: AuthNavigator,
       App: AppNavigator,
       Register: Register,
-      AccountSetting : AccountSetting
+      AccountSetting : AccountSetting,
+      CaraPakai : CaraPakai
     },
     {
       initialRouteName: 'AuthLoading'
