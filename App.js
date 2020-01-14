@@ -12,7 +12,7 @@ import Register from './screens/Register'
 import OTP from './screens/OTP'
 import Home from './screens/Home'
 import AuthLoading from './screens/AuthLoading'
-import Settings from './screens/Settings'
+import Settings from "./screens/Settings"
 import AccountSetting from './screens/AccountSetting'
 
 import { store, persistor } from './store'
