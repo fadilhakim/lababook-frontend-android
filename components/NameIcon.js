@@ -1,9 +1,16 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
+import * as Font from 'expo-font'
+
+Font.loadAsync({
+  NexaBold: require('../assets/fonts/NexaBold.otf'),
+  NexaLight: require('../assets/fonts/NexaLight.otf'),
+  "RobotoMono-Light": require('../assets/fonts/RobotoMono-Light.ttf')
+})
 
 function NameIcon (props) {
   const { contactInitial } = props
-
+   
   return (
     <View style={styles.container}>
       <Text style={styles.text}>
@@ -33,6 +40,6 @@ const styles = StyleSheet.create({
     fontSize: 35,
     color: 'white',
     // fontWeight: 'bold',
-    fontFamily: 'RobotoMonoLight'
+    fontFamily: 'RobotoMono-Light'
   }
 })

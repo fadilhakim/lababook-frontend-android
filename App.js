@@ -17,11 +17,7 @@ import AccountSetting from './screens/AccountSetting'
 
 import { store, persistor } from './store'
 
-Font.loadAsync({
-  NexaBold: require('./assets/fonts/NexaBold.otf'),
-  NexaLight: require('./assets/fonts/NexaLight.otf'),
-  RobotoMonoLight: require('./assets/fonts/RobotoMono-Light.ttf')
-})
+
 
 useScreens()
 
@@ -115,6 +111,15 @@ const Root = createAppContainer(
 )
 
 export default function App () {
+
+  this.componentDidMount = function() {
+    Font.loadAsync({
+      NexaBold: require('./assets/fonts/NexaBold.otf'),
+      NexaLight: require('./assets/fonts/NexaLight.otf'),
+      "RobotoMono-Light": require('./assets/fonts/RobotoMono-Light.ttf')
+    })
+  }
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
