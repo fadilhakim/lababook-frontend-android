@@ -59,16 +59,39 @@ const AppNavigator = createStackNavigator(
       navigationOptions: {
         headerBackTitleVisible: true,
         headerTitle: 'Settings',
+        headerTintColor: 'white',
+        headerStyle : {
+          backgroundColor:'#2a2c7b'
+        },
         headerTitleStyle: {
-          color: '#444',
+          color: '#fff',
           paddingTop: 10,
           paddingBottom: 10,
-          fontSize: 28,
+          fontSize: 22,
           fontWeight: 'bold',
           marginLeft: -5
         }
       }
     }
+    // AccountSetting: {
+    //   screen: AccountSetting,
+    //   navigationOptions: {
+    //     headerBackTitleVisible: true,
+    //     headerTitle: 'Settings',
+    //     headerTintColor: 'white',
+    //     headerStyle : {
+    //       backgroundColor:'#2a2c7b'
+    //     },
+    //     headerTitleStyle: {
+    //       color: '#fff',
+    //       paddingTop: 10,
+    //       paddingBottom: 10,
+    //       fontSize: 22,
+    //       fontWeight: 'bold',
+    //       marginLeft: -5
+    //     }
+    //   }
+    // }
   },
   {
     initialRouteName: 'Home',

@@ -16,10 +16,6 @@ function Settings (props) {
       .then(() => navigation.navigate('AuthLoading'))
   }
 
-  const toAccountSetting = () => {
-    navigation.navigate('AccountSetting')
-  }
-
   return (
     <View style={styles.container}>
       <View style={styles.settingTop}>
@@ -34,7 +30,7 @@ function Settings (props) {
 
               <TouchableNativeFeedback onPress={() =>  navigation.navigate('AccountSetting') }>
                 <Text style={styles.settingItemLeftText}>
-                  Pengaturan Akuns
+                  Pengaturan Akun
                 </Text>
                </TouchableNativeFeedback>
 
@@ -160,10 +156,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   settingItemLeftText: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 18,
     marginLeft: 10,
-    color: '#444'
+    color: '#000'
   },
   settingItemRight: {
     alignItems: 'center',

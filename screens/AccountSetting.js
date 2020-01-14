@@ -13,8 +13,8 @@ function AccountSetting (props) {
 
  
   return (
-    <View style={{ color: '#000' }}>
-      <Text>
+    <View style={styles.container}>
+      <Text style={{ color: '#000'}}>
         Account Setting
       </Text>
     </View>
@@ -24,5 +24,9 @@ function AccountSetting (props) {
 export default AccountSetting
 
 const styles = StyleSheet.create({
-
+  container: {
+    flex: 1,
+    alignItems: 'stretch',
+    justifyContent: 'space-between'
+  }
 })
