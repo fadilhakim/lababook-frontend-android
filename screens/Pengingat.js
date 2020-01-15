@@ -8,8 +8,6 @@ import {
 
 } from 'react-native'
 
-
-
 import {
   MaterialIcons,
   AntDesign
@@ -18,7 +16,7 @@ import {
 import * as Permissions from 'expo-permissions'
 import * as Contacts from 'expo-contacts'
 
-import ContactCard from '../components/ContactCard'
+import ReminderCard from '../components/ReminderCard'
 
 import { textExtraProps as tProps } from '../config/system'
 
@@ -116,7 +114,7 @@ export default function Pengingat () {
       <FlatList
         data={dataTerlambat}
         scrollEnabled={true}
-        renderItem={({ item, index }) => <ContactCard {...item} key={index}/>}
+        renderItem={({ item, index }) => <ReminderCard {...item} key={index}/>}
         keyExtractor={item => item.id}
         style={styles.contactList}
       />
@@ -130,7 +128,7 @@ export default function Pengingat () {
       <FlatList
         data={dataHariIni}
         scrollEnabled={true}
-        renderItem={({ item, index }) => <ContactCard {...item} key={index}/>}
+        renderItem={({ item, index }) => <ReminderCard {...item} key={index}/>}
         keyExtractor={item => item.id}
         style={styles.contactList}
       />

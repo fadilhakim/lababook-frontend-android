@@ -8,12 +8,12 @@ export default class Aktifitas extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tableHead: ['Total \n Rp.1200000', 'Anda Berikan \n Rp.1200000', 'Anda Dapatkan \n Rp.1200000'],
+      tableHead: ['Total \n 5 Transaksi', 'Anda Berikan \n Rp.1.200.000', 'Anda Dapatkan \n Rp.1.200.000'],
       tableData: [
-        ['hutang makan bakso', '200000', ''],
-        ['dio puitang', '', '200000'],
-        ['gegege no kitaro', '', '3000000'],
-        ['haula piutang', '100000', '']
+        ['hutang makan bakso', '200.000', ''],
+        ['dio puitang', '', '200.000'],
+        ['gegege no kitaro', '', '3.000.000'],
+        ['haula piutang', '100.000', '']
       ]
     }
   }
@@ -23,15 +23,15 @@ export default class Aktifitas extends React.Component {
     return (
       <View>
         
-        <Table borderStyle={{borderWidth: 0}}>
+        <Table>
           <Row data={state.tableHead} style={styles.head} textStyle={styles.text}/>
           {
             this.state.tableData.map((rowData, index) => {
               return <Row 
                 key={index}
                 data={ rowData }
-                textStyle={ {textAlign:"right" }}
-                style={[{backgroundColor:'white', height:40, padding:10 }, index%2 && { backgroundColor:"#F7F6E7", height:40, padding:10} ]}
+                textStyle={ {textAlign:"left", borderRightColor:"#f3f3f3", borderRightWidth:3, paddingLeft:5 }}
+                style={[{backgroundColor:'white', minHeight:20, alignItems: 'center', paddingLeft:5 }, index%2 && { backgroundColor:"#F7F6E7", minHeight:20, alignItems: 'center', paddingLeft:5} ]}
               ></Row>
             })
           }
@@ -46,8 +46,8 @@ export default class Aktifitas extends React.Component {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
-  head: { height: 40, backgroundColor: '#f1f8ff' },
-  text: { margin: 6, textAlign:"right" },
+  head: { height: 50, backgroundColor: '#f1f8ff', paddingLeft:5 },
+  text: { paddingLeft: 5, textAlign:"left" , fontWeight: 'bold'},
   Rows: {
    
     borderBottomColor:"white",
