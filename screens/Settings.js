@@ -32,7 +32,7 @@ function Settings (props) {
                 <Text style={styles.settingItemLeftText}>
                   Pengaturan Akun
                 </Text>
-               </TouchableNativeFeedback>
+              </TouchableNativeFeedback>
 
             </View>
             <View style={styles.settingItemRight}>
