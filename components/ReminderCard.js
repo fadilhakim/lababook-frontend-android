@@ -5,6 +5,7 @@ import { AntDesign, Ionicons, Foundation, SimpleLineIcons } from '@expo/vector-i
 import NameIcon from './NameIcon'
 import { textExtraProps as tProps } from '../config/system'
 
+
 function ReminderCard (props) {
   const {
     contactName,
@@ -13,7 +14,6 @@ function ReminderCard (props) {
     trxType,
     updatedAt
   } = props
-
 
   const Component = (
     <View style={styles.contact}>
@@ -44,12 +44,7 @@ function ReminderCard (props) {
       </View>
       </TouchableHighlight>
 
-      <Modal visible={this.state.isModalVisible}>
-         <View>
-           <Text>Whatsapp</Text>
-           <Text>SMS</Text>
-         </View>
-      </Modal>
+      
     </View>
   )
 
@@ -60,8 +55,6 @@ function ReminderCard (props) {
     </View>
   )
 }
-
-
 
 export default ReminderCard
 

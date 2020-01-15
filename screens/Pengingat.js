@@ -119,19 +119,7 @@ export default function Pengingat () {
         style={styles.contactList}
       />
 
-      <View style={styles.borderGray}>
-      	<Text style={{ fontSize: 12 }}>
-      		Hari Ini
-      	</Text>
-      </View>
-
-      <FlatList
-        data={dataHariIni}
-        scrollEnabled={true}
-        renderItem={({ item, index }) => <ReminderCard {...item} key={index}/>}
-        keyExtractor={item => item.id}
-        style={styles.contactList}
-      />
+      
     
     </View>
   )
