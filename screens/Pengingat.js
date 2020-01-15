@@ -4,7 +4,7 @@ import {
   Text,
   StyleSheet,
   TouchableWithoutFeedback,
-  FlatList
+  FlatList,
 
 } from 'react-native'
 
@@ -58,7 +58,7 @@ const dataTerlambat = [
   }
 ]
 
-async function showContact () {
+async function showContact() {
   try {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS)
 
@@ -79,7 +79,7 @@ async function showContact () {
   }
 }
 
-export default function Pengingat () {
+export default function Pengingat() {
   return (
     <View style={{ flex: 1 }}>
 
@@ -88,7 +88,7 @@ export default function Pengingat () {
           <Text style={{ fontSize: 16 }}>
             <Text>Terlambat:</Text> <Text style={{ color: '#ce4165' }}>2 Pelanggan</Text>
             {'\n'}
-           <Text> Hari ini:</Text> <Text style={{ color: '#000' }}>3 Pelanggan</Text>
+            <Text> Hari ini:</Text> <Text style={{ color: '#000' }}>3 Pelanggan</Text>
             {'\n'}
             <Text>Akan Datang:</Text> <Text style={{ color: '#000' }}>5 Pelanggan</Text>
           </Text>
@@ -105,8 +105,8 @@ export default function Pengingat () {
 
       <View style={styles.borderGray}>
 
-      	<Text style={{ fontSize: 12 }}>
-      		Terlambat
+        <Text style={{ fontSize: 12 }}>
+          Terlambat
       	</Text>
 
       </View>
@@ -114,25 +114,25 @@ export default function Pengingat () {
       <FlatList
         data={dataTerlambat}
         scrollEnabled={true}
-        renderItem={({ item, index }) => <ReminderCard {...item} key={index}/>}
+        renderItem={({ item, index }) => <ReminderCard {...item} key={index} />}
         keyExtractor={item => item.id}
         style={styles.contactList}
       />
 
       <View style={styles.borderGray}>
-      	<Text style={{ fontSize: 12 }}>
-      		Hari Ini
+        <Text style={{ fontSize: 12 }}>
+          Hari Ini
       	</Text>
       </View>
 
       <FlatList
         data={dataHariIni}
         scrollEnabled={true}
-        renderItem={({ item, index }) => <ReminderCard {...item} key={index}/>}
+        renderItem={({ item, index }) => <ReminderCard {...item} key={index} />}
         keyExtractor={item => item.id}
         style={styles.contactList}
       />
-    
+
     </View>
   )
 }
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   },
   topBarLeft: {
     flexDirection: 'row',
-    paddingLeft:15
+    paddingLeft: 15
   },
   topBarRight: {
     flexDirection: 'row'
@@ -172,11 +172,11 @@ const styles = StyleSheet.create({
   },
   borderGray: {
     color: '#000',
-    backgroundColor:'#f3f3f3',
-    paddingBottom:4,
-    paddingTop:4,
-    paddingLeft:15,
-    fontSize:15
+    backgroundColor: '#f3f3f3',
+    paddingBottom: 4,
+    paddingTop: 4,
+    paddingLeft: 15,
+    fontSize: 15
   }
 })
 
