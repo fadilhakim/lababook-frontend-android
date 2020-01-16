@@ -22,7 +22,9 @@ export default class Aktifitas extends React.Component {
     const state = this.state
     return (
       <View>
-        
+        <View>
+          
+        </View>
         <Table borderStyle={{borderWidth: 0}}>
           <Row data={state.tableHead} style={styles.head} textStyle={styles.text}/>
           {
@@ -30,7 +32,7 @@ export default class Aktifitas extends React.Component {
               return <Row 
                 key={index}
                 data={ rowData }
-                textStyle={ {textAlign:"right" }}
+                borderStyle={{ borderWidth:1}}
                 style={[{backgroundColor:'white', height:40, padding:10 }, index%2 && { backgroundColor:"#F7F6E7", height:40, padding:10} ]}
               ></Row>
             })
