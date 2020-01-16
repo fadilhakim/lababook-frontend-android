@@ -8,9 +8,9 @@ Font.loadAsync({
   "RobotoMono-Light": require('../assets/fonts/RobotoMono-Light.ttf')
 })
 
-function NameIcon (props) {
+function NameIcon(props) {
   const { contactInitial } = props
-   
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>

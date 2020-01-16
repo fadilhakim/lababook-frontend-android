@@ -6,9 +6,10 @@ import {
   TouchableNativeFeedback,
   AsyncStorage
 } from 'react-native'
+
 import { FontAwesome } from '@expo/vector-icons'
 
-function Settings (props) {
+function Settings(props) {
   const { navigation } = props
 
   const signOut = () => {
@@ -19,7 +20,7 @@ function Settings (props) {
   return (
     <View style={styles.container}>
       <View style={styles.settingTop}>
-        <TouchableNativeFeedback>
+        <TouchableNativeFeedback onPress={() => navigation.navigate('AccountSetting')}>
           <View style={styles.settingItem}>
             <View style={styles.settingItemLeft}>
               <FontAwesome
@@ -28,11 +29,11 @@ function Settings (props) {
                 color='#444'
               />
 
-              <TouchableNativeFeedback onPress={() =>  navigation.navigate('AccountSetting') }>
-                <Text style={styles.settingItemLeftText}>
-                  Pengaturan Akun
+
+              <Text style={styles.settingItemLeftText}>
+                Pengaturan Akun
                 </Text>
-              </TouchableNativeFeedback>
+
 
             </View>
             <View style={styles.settingItemRight}>
@@ -44,7 +45,7 @@ function Settings (props) {
           </View>
         </TouchableNativeFeedback>
 
-        <TouchableNativeFeedback onPress={() =>  navigation.navigate('CaraPakai') }>
+        <TouchableNativeFeedback onPress={() => navigation.navigate('CaraPakai')}>
           <View style={styles.settingItem}>
             <View style={styles.settingItemLeft}>
               <FontAwesome

@@ -15,11 +15,9 @@ import AuthLoading from './screens/AuthLoading'
 import Settings from "./screens/Settings"
 import AccountSetting from './screens/AccountSetting'
 import CaraPakai from './screens/CaraPakai'
-import DetailTransaction from './screens/DetailTransaction'
+import DetailTransaction from "./screens/DetailTransaction"
 
 import { store, persistor } from './store'
-
-
 
 useScreens()
 
@@ -34,14 +32,14 @@ const AuthNavigator = createStackNavigator(
     OTP: {
       screen: OTP
     },
-    AccountSetting : {
-      screen : AccountSetting
+    AccountSetting: {
+      screen: AccountSetting
     },
-    DetailTransaction : {
-      screen : DetailTransaction
+    DetailTransaction: {
+      screen: DetailTransaction
     },
-    CaraPakai : {
-      screen : CaraPakai
+    CaraPakai: {
+      screen: CaraPakai
     }
   },
   {
@@ -64,8 +62,8 @@ const AppNavigator = createStackNavigator(
         headerBackTitleVisible: true,
         headerTitle: 'Settings',
         headerTintColor: 'white',
-        headerStyle : {
-          backgroundColor:'#2a2c7b'
+        headerStyle: {
+          backgroundColor: '#2a2c7b'
         },
         headerTitleStyle: {
           color: '#fff',
@@ -83,8 +81,8 @@ const AppNavigator = createStackNavigator(
         headerBackTitleVisible: true,
         headerTitle: 'Pengaturan Akun',
         headerTintColor: 'white',
-        headerStyle : {
-          backgroundColor:'#2a2c7b'
+        headerStyle: {
+          backgroundColor: '#2a2c7b'
         },
         headerTitleStyle: {
           color: '#fff',
@@ -100,10 +98,10 @@ const AppNavigator = createStackNavigator(
       screen: DetailTransaction,
       navigationOptions: {
         headerBackTitleVisible: true,
-        headerTitle: 'Settings',
+        headerTitle: 'Detail Transaction',
         headerTintColor: 'white',
-        headerStyle : {
-          backgroundColor:'#2a2c7b'
+        headerStyle: {
+          backgroundColor: '#2a2c7b'
         },
         headerTitleStyle: {
           color: '#fff',
@@ -121,8 +119,8 @@ const AppNavigator = createStackNavigator(
         headerBackTitleVisible: true,
         headerTitle: 'Cara Pakai',
         headerTintColor: 'white',
-        headerStyle : {
-          backgroundColor:'#2a2c7b'
+        headerStyle: {
+          backgroundColor: '#2a2c7b'
         },
         headerTitleStyle: {
           color: '#fff',
@@ -148,9 +146,9 @@ const Root = createAppContainer(
       Auth: AuthNavigator,
       App: AppNavigator,
       Register: Register,
-      AccountSetting : AccountSetting,
-      CaraPakai : CaraPakai,
-      DetailTransaction : DetailTransaction
+      AccountSetting: AccountSetting,
+      CaraPakai: CaraPakai,
+      DetailTransaction: DetailTransaction
     },
     {
       initialRouteName: 'AuthLoading'
@@ -158,9 +156,9 @@ const Root = createAppContainer(
   )
 )
 
-export default function App () {
+export default function App() {
 
-  this.componentDidMount = function() {
+  this.componentDidMount = function () {
     Font.loadAsync({
       NexaBold: require('./assets/fonts/NexaBold.otf'),
       NexaLight: require('./assets/fonts/NexaLight.otf'),
@@ -171,7 +169,7 @@ export default function App () {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <Root/>
+        <Root />
       </PersistGate>
     </Provider>
   )

@@ -14,6 +14,7 @@ import {
 } from '@expo/vector-icons'
 import * as Permissions from 'expo-permissions'
 import * as Contacts from 'expo-contacts'
+// import { withNavigation } from 'react-navigation';
 
 import ContactCard from '../components/ContactCard'
 
@@ -52,7 +53,7 @@ const data = [
   }
 ]
 
-async function showContact () {
+async function showContact() {
   try {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS)
 
@@ -73,14 +74,22 @@ async function showContact () {
   }
 }
 
-function Kontak () {
+function _onPress(props, item) {
+  const { navigation } = props
+  navigation.navigate("DetailTransaction", { params: item })
+}
+
+function Kontak(props) {
+
+
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.topBar}>
         <View style={styles.topBarLeft}>
           <View style={styles.personBg}>
-            <MaterialIcons name='person' size={32} color='white'/>
+            <MaterialIcons name='person' size={32} color='white' />
           </View>
+
           <Text style={{ fontSize: 16 }}>
             Anda Berikan: <Text style={{ color: '#ce4165' }}>Rp. 2.000.000</Text>
             {'\n'}
@@ -101,25 +110,33 @@ function Kontak () {
           </TouchableWithoutFeedback>
         </View>
       </View>
-      
-        <FlatList
-          data={data}
-          scrollEnabled={true}
-          renderItem={({ item, index }) => <ContactCard {...item} key={index}/>}
-          keyExtractor={item => item.id}
-          style={styles.contactList}
-        />
-     
+
+      <FlatList
+        data={data}
+        scrollEnabled={true}
+        renderItem={({ item, index }) => {
+          return (
+            < TouchableNativeFeedback onPress={() => _onPress(props, item)}>
+              <View >
+                <ContactCard {...item} key={index} />
+              </View>
+            </TouchableNativeFeedback>
+          )
+        }}
+        keyExtractor={item => item.id}
+        style={styles.contactList}
+      />
+
 
       <TouchableWithoutFeedback onPress={() => showContact()}>
         <View style={styles.addContactBtn}>
-          <AntDesign name='plus' size={24} style={{color:'#fff', fontWeight:'bold'}}/>
+          <AntDesign name='plus' size={24} style={{ color: '#fff', fontWeight: 'bold' }} />
           <Text style={styles.addContactBtnText}>
-           Tambah Kontak
+            Tambah Kontak
           </Text>
         </View>
       </TouchableWithoutFeedback>
-    </View>
+    </View >
   )
 }
 
@@ -191,11 +208,11 @@ const styles = StyleSheet.create({
   },
   addContactBtnText: {
     fontSize: 12,
-    color:'#fff',
-    position:'absolute',
+    color: '#fff',
+    position: 'absolute',
     borderRadius: 6,
-    backgroundColor:'#1a1a1a',
-    left:-100,
-    padding:5
+    backgroundColor: '#1a1a1a',
+    left: -100,
+    padding: 5
   }
 })
