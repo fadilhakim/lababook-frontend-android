@@ -17,6 +17,8 @@ import AccountSetting from './screens/AccountSetting'
 import CaraPakai from './screens/CaraPakai'
 import DetailTransaction from './screens/DetailTransaction'
 
+import Test from "./screens/Test"
+
 import { store, persistor } from './store'
 
 import NavigationService from './helpers/NavigationService';
@@ -42,6 +44,9 @@ const AuthNavigator = createStackNavigator(
     },
     CaraPakai : {
       screen : CaraPakai
+    },
+    Test : {
+      screen: Test
     }
   },
   {
@@ -63,6 +68,25 @@ const AppNavigator = createStackNavigator(
       navigationOptions: {
         headerBackTitleVisible: true,
         headerTitle: 'Settings',
+        headerTintColor: 'white',
+        headerStyle : {
+          backgroundColor:'#2a2c7b'
+        },
+        headerTitleStyle: {
+          color: '#fff',
+          paddingTop: 10,
+          paddingBottom: 10,
+          fontSize: 22,
+          fontWeight: 'bold',
+          marginLeft: -5
+        }
+      }
+    },
+    Test: {
+      screen: Test,
+      navigationOptions: {
+        headerBackTitleVisible: true,
+        headerTitle: 'Test',
         headerTintColor: 'white',
         headerStyle : {
           backgroundColor:'#2a2c7b'
@@ -150,7 +174,8 @@ const Root = createAppContainer(
       Register: Register,
       AccountSetting : AccountSetting,
       CaraPakai : CaraPakai,
-      DetailTransaction : DetailTransaction
+      DetailTransaction : DetailTransaction,
+      Test: Test
     },
     {
       initialRouteName: 'AuthLoading'
