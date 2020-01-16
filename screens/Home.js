@@ -19,6 +19,8 @@ import Kontak from './Kontak'
 import Aktifitas from './Aktifitas'
 import Pengingat from './Pengingat'
 
+// import DetailTransaction from "./DetailTransaction"
+
 const HomeTabs = createMaterialTopTabNavigator(
   {
     Kontak: { screen: Kontak },

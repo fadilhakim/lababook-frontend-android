@@ -18,6 +18,8 @@ import * as Contacts from 'expo-contacts'
 
 import ContactCard from '../components/ContactCard'
 
+import NavigationService from '../helpers/NavigationService';
+
 const data = [
   {
     id: '1',
@@ -74,14 +76,7 @@ async function showContact() {
   }
 }
 
-function _onPress(props, item) {
-  const { navigation } = props
-  navigation.navigate("DetailTransaction", { params: item })
-}
-
 function Kontak(props) {
-
-
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.topBar}>
@@ -116,17 +111,21 @@ function Kontak(props) {
         scrollEnabled={true}
         renderItem={({ item, index }) => {
           return (
-            < TouchableNativeFeedback onPress={() => _onPress(props, item)}>
-              <View >
+            <TouchableNativeFeedback onPress={() => { NavigationService.navigate("DetailTransaction") }}>
+              <View>
                 <ContactCard {...item} key={index} />
               </View>
             </TouchableNativeFeedback>
+
           )
         }}
         keyExtractor={item => item.id}
         style={styles.contactList}
       />
 
+      <TouchableNativeFeedback onPress={() => { NavigationService.navigate("Test") }}>
+        <Text> Test Page </Text>
+      </TouchableNativeFeedback>
 
       <TouchableWithoutFeedback onPress={() => showContact()}>
         <View style={styles.addContactBtn}>
