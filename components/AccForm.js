@@ -24,7 +24,7 @@ export default class AccForm extends React.Component {
 		                color='#fff'
 		                style={styles.logoCamera}
 		              />
-		            </View>
+		       </View>
 				</View>
 				<Text style={styles.formLabel}>Nama Anda :</Text>
 				<TextInput style={styles.formInput} placeholder="nama"> Andre </TextInput>

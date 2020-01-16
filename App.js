@@ -96,25 +96,25 @@ const AppNavigator = createStackNavigator(
         }
       }
     },
-    DetailTransaction: {
-      screen: DetailTransaction,
-      navigationOptions: {
-        headerBackTitleVisible: true,
-        headerTitle: 'Detail Transaction',
-        headerTintColor: 'white',
-        headerStyle : {
-          backgroundColor:'#2a2c7b'
-        },
-        headerTitleStyle: {
-          color: '#fff',
-          paddingTop: 10,
-          paddingBottom: 10,
-          fontSize: 22,
-          fontWeight: 'bold',
-          marginLeft: -5
-        }
-      }
-    },
+    // DetailTransaction: {
+    //   screen: DetailTransaction,
+    //   navigationOptions: {
+    //     headerBackTitleVisible: true,
+    //     headerTitle: 'Aan Wiguna',
+    //     headerTintColor: 'white',
+    //     headerStyle : {
+    //       backgroundColor:'#2a2c7b'
+    //     },
+    //     headerTitleStyle: {
+    //       color: '#fff',
+    //       paddingTop: 10,
+    //       paddingBottom: 10,
+    //       fontSize: 22,
+    //       fontWeight: 'bold',
+    //       marginLeft: -5
+    //     }
+    //   }
+    // },
     CaraPakai: {
       screen: CaraPakai,
       navigationOptions: {
