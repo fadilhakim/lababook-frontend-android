@@ -19,7 +19,7 @@ import DetailTransaction from './screens/DetailTransaction'
 
 import { store, persistor } from './store'
 
-
+import NavigationService from './helpers/NavigationService';
 
 useScreens()
 
@@ -100,7 +100,7 @@ const AppNavigator = createStackNavigator(
       screen: DetailTransaction,
       navigationOptions: {
         headerBackTitleVisible: true,
-        headerTitle: 'Settings',
+        headerTitle: 'Detail Transaction',
         headerTintColor: 'white',
         headerStyle : {
           backgroundColor:'#2a2c7b'
@@ -171,7 +171,9 @@ export default function App () {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <Root/>
+        <Root ref={navigatorRef => {
+          NavigationService.setTopLevelNavigator(navigatorRef);
+        }}/>
       </PersistGate>
     </Provider>
   )

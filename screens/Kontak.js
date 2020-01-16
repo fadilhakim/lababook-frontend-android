@@ -17,6 +17,8 @@ import * as Contacts from 'expo-contacts'
 
 import ContactCard from '../components/ContactCard'
 
+import NavigationService from '../helpers/NavigationService';
+
 const data = [
   {
     id: '1',
@@ -73,7 +75,7 @@ async function showContact () {
   }
 }
 
-function Kontak () {
+function Kontak (props) {
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.topBar}>
@@ -105,7 +107,16 @@ function Kontak () {
         <FlatList
           data={data}
           scrollEnabled={true}
-          renderItem={({ item, index }) => <ContactCard {...item} key={index}/>}
+          renderItem={({ item, index }) => { 
+            return(
+              <TouchableNativeFeedback onPress={() => {  NavigationService.navigate("DetailTransaction") }}>
+                <View>
+                  <ContactCard {...item} key={index}/>
+                </View>
+              </TouchableNativeFeedback>
+              
+            )
+          }}
           keyExtractor={item => item.id}
           style={styles.contactList}
         />
