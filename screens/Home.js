@@ -45,8 +45,9 @@ const HomeTabs = createMaterialTopTabNavigator(
       labelStyle: {
         color: '#fff',
         fontSize: 15,
-        fontWeight: 'normal',
-        fontFamily: 'sans-serif'
+        fontWeight: 'bold',
+        fontFamily: 'sans-serif',
+        textTransform : 'uppercase'
       },
       indicatorStyle: {
         borderBottomWidth: 5,

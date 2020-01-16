@@ -4,7 +4,9 @@ import {
   Text,
   StyleSheet,
   TouchableWithoutFeedback,
-  FlatList
+  TouchableNativeFeedback,
+  FlatList,
+  TouchableHighlight
 } from 'react-native'
 import {
   MaterialIcons,
@@ -89,24 +91,25 @@ function Kontak () {
         <View style={styles.topBarRight}>
           <TouchableWithoutFeedback>
             <View style={styles.topBarRightFilter}>
-              <MaterialIcons name='filter-list' size={27} color='#444' style={styles.filter} />
+              <MaterialIcons name='filter-list' size={27} color='#2a2c7b' style={styles.filter} />
             </View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback>
             <View style={styles.topBarRightPdf}>
-              <AntDesign name='pdffile1' size={27} color='#444' style={styles.pdf} />
+              <AntDesign name='pdffile1' size={27} color='#2a2c7b' style={styles.pdf} />
             </View>
           </TouchableWithoutFeedback>
         </View>
       </View>
-
-      <FlatList
-        data={data}
-        scrollEnabled={true}
-        renderItem={({ item, index }) => <ContactCard {...item} key={index}/>}
-        keyExtractor={item => item.id}
-        style={styles.contactList}
-      />
+      
+        <FlatList
+          data={data}
+          scrollEnabled={true}
+          renderItem={({ item, index }) => <ContactCard {...item} key={index}/>}
+          keyExtractor={item => item.id}
+          style={styles.contactList}
+        />
+     
 
       <TouchableWithoutFeedback onPress={() => showContact()}>
         <View style={styles.addContactBtn}>
@@ -157,10 +160,10 @@ const styles = StyleSheet.create({
     marginRight: 8
   },
   filter: {
-    color: '#444'
+    color: '#2a2c7b'
   },
   pdf: {
-    color: '#444'
+    color: '#2a2c7b'
   },
   addContactBtn: {
     backgroundColor: 'white',
