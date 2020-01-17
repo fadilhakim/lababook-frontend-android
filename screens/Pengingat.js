@@ -124,7 +124,6 @@ export default function Pengingat() {
 }
 
 
-
 const styles = StyleSheet.create({
   topBar: {
     flexDirection: 'row',

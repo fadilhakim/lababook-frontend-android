@@ -4,9 +4,11 @@ import {
   Text,
   StyleSheet,
   TouchableNativeFeedback,
-  AsyncStorage
+  AsyncStorage,
+  Button
 } from 'react-native'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
+import NavigationService from '../helpers/NavigationService';
 
 function DetailTransaction (props) {
   const { navigation } = props
@@ -19,14 +21,16 @@ function DetailTransaction (props) {
   return (
     <View style={styles.container}>
       <View style={styles.headerBlue}>
-        <View style={styles.divBack}>
-            <Ionicons
-              name='md-arrow-back'
-              size={30}
-              color='#fff'
-              style={styles.arrowBack}
-            />
-        </View>
+        <TouchableNativeFeedback onPress={() => {  NavigationService.navigate("Home") }}>
+          <View style={styles.divBack}>
+              <Ionicons
+                name='md-arrow-back'
+                size={30}
+                color='#fff'
+                style={styles.arrowBack}
+              />
+          </View>
+        </TouchableNativeFeedback>
         <View style={styles.initialNameCircle}><Text style={{color:'#fff', fontWeight:'bold', fontSize: 25}}>A</Text></View> 
         <Text style={styles.headText}>Aan Wiguna</Text>
         <Text style={styles.headPhone}>+62 9310 8810</Text>
@@ -42,6 +46,11 @@ function DetailTransaction (props) {
       <View style={styles.headerBtm}>
         <Text>Total : <Text>Rp. 3.000.000(Anda berikan)</Text></Text>
         <Text>Pengingat : <Text>Kam, 22 Nov 2019</Text></Text>
+      </View>
+
+      <View style={styles.btnWrap}>
+        <Button title="Anda Berikan" style={styles.btnBerikan}/>
+        <Button title="Anda Dapatkan" style={styles.btnDapatkan}/>
       </View>
     </View>
   )
@@ -108,7 +117,7 @@ const styles = StyleSheet.create({
     width:30,
     position: 'absolute',
     left:10,
-    bottom:10
+    bottom:15
   },
   divLogo: {
     paddingLeft: 5,
@@ -147,6 +156,18 @@ const styles = StyleSheet.create({
     paddingBottom:10,
     borderBottomWidth:10,
     borderBottomColor:'#f3f3f3'
+  },
+  btnWrap : {
+    position: 'absolute',
+    bottom: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  btnBerikan : {
+
+  },
+  btnDapatkan : {
+    
   }
 
 })
