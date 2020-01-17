@@ -1,16 +1,36 @@
-import React from 'react';
-import { View, React, StyleSheet } from "react-native";
+import React, { Component } from 'react';
 
-class Test extends React {
+import { View, Text } from "react-native"
+
+import TestStyle from "./../style/TestStyle"
+
+class Test extends Component {
+
     render() {
+
+        const dt = ["apple", 'banana', "orange"]
+
+        const dtList = dt.map(item => {
+            return (
+                <View key={ item }>
+                    <Text> { item }</Text>
+                </View>
+            )
+        })
+
         return (
-            <View>
-                <Text> Hello </Text>
+            <View style={ TestStyle.container }>
+                <Text> Test </Text>
+
+                { dtList }
             </View>
         );
     }
 }
-
-const styles = StyleSheet.create({})
+// function Test(props) {
+//     return(<View>
+//         <Text> Hello </Text>
+//     </View>)
+// }
 
 export default Test;

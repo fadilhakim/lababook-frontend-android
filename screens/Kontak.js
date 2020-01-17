@@ -120,7 +120,10 @@ function Kontak (props) {
           keyExtractor={item => item.id}
           style={styles.contactList}
         />
-     
+
+      <TouchableNativeFeedback onPress={() => {  NavigationService.navigate("Test") }}>
+          <Text> Test Page </Text>
+      </TouchableNativeFeedback>
 
       <TouchableWithoutFeedback onPress={() => showContact()}>
         <View style={styles.addContactBtn}>
