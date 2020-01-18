@@ -21,8 +21,9 @@ import * as Contacts from 'expo-contacts'
 import ContactCard from '../components/ContactCard'
 import NavigationService from '../helpers/NavigationService';
 
-import { textExtraProps as tProps } from '../config/system'
-import { fetchContact, createContact, deleteContact } from '../store/actions/contact'
+import ContactAPI from "../api/contact"
+
+import { API_URL } from "react-native-dotenv"
 
 const data = [
   {
@@ -72,7 +73,7 @@ async function showContact () {
       })
 
       if (data.length > 0) {
-        console.log(data)
+        console.log(`${ API_URL } => `,data)
       }
     }
   } catch (error) {
@@ -85,24 +86,47 @@ class Kontak extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      users:[],
-      name:"",
-      phoneNumber:"",
-      userId:"",
-      bookId:""
+      contacts:[],
+      userId:1, // sementara
+      bookId:1, // sementara
+      contactInput:{
+        name:"",
+        phoneNumber:"",
+        userId:"",
+        bookId:""
+      }
     }
 
-    //this.setPhoneNumber = this.setPhoneNumber.bind(this)
+    this.getContacts = this.getContacts.bind(this)
+
+   
   }
 
   componentDidMount(){
-  
-
-  
+    
+   this.getContacts()
+   
   }
 
+  getContacts() {
+    const contactApi = new ContactAPI()
 
+    const _this = this
 
+    const bookId = this.state.bookId
+
+    contactApi.getContacts(bookId)
+    .then(res => {
+      _this.setState({
+        contacts: this.state.contacts.concat( res.data )
+      })
+
+      console.log("contact => ",this.state.contacts)
+    })
+    .catch(err => {
+      alert(`${ API_URL } => ${err}`)
+    })
+  }
 
   render() {
     return (

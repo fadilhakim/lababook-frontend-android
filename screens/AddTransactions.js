@@ -13,6 +13,13 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import NavigationService from '../helpers/NavigationService';
 import BaseStyle from "./../style/BaseStyle"
 
+import * as Font from 'expo-font'
+
+Font.loadAsync({
+  
+  "Roboto_medium": require('../assets/fonts/Roboto-Medium.ttf')
+})
+
 function DetailTransaction (props) {
   const { navigation } = props
 
@@ -25,7 +32,7 @@ function DetailTransaction (props) {
     <Container style={BaseStyle.container}>
         <Header style={styles.headerRed}>
           <Left>
-          <TouchableNativeFeedback onPress={() => {  NavigationService.navigate("DetailTransaction") }}>
+          <TouchableNativeFeedback onPress={() => {  navigation.goBack() }}>
             <Button transparent>
               <Icon name='arrow-back' />
             </Button>
