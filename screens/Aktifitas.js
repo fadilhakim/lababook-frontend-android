@@ -38,12 +38,12 @@ export default class Aktifitas extends React.Component {
               defaultDate={new Date(2018, 4, 4)}
               // minimumDate={new Date(2018, 1, 1)}
               maximumDate={new Date()}
-              locale={"in"}
+              locale={"id"}
               timeZoneOffsetInMinutes={undefined}
               modalTransparent={false}
               animationType={"fade"}
               androidMode={"default"}
-              placeHolderText="Select date"
+              placeHolderText="start date"
               textStyle={{ color: "green" }}
               placeHolderTextStyle={{ color: "#2a2c7b" }}
               onDateChange={ () => {console.log("date change") }}
@@ -59,12 +59,12 @@ export default class Aktifitas extends React.Component {
                 defaultDate={new Date(2018, 4, 4)}
                 // minimumDate={new Date(2018, 1, 1)}
                 maximumDate={new Date()}
-                locale={"in"}
+                locale={"id"}
                 timeZoneOffsetInMinutes={undefined}
                 modalTransparent={false}
                 animationType={"fade"}
                 androidMode={"default"}
-                placeHolderText="Select date"
+                placeHolderText="end date"
                 textStyle={{ color: "green" }}
                 placeHolderTextStyle={{ color: "#2a2c7b" }}
                 onDateChange={ () => {console.log("date change") }}

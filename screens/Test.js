@@ -4,6 +4,8 @@ import { View, Text } from "react-native"
 
 import TestStyle from "./../style/TestStyle"
 
+import { API_URL } from "react-native-dotenv"
+
 class Test extends Component {
 
     render() {
@@ -20,7 +22,9 @@ class Test extends Component {
 
         return (
             <View style={ TestStyle.container }>
+
                 <Text> Test </Text>
+                <Text> { API_URL } </Text>
 
                 { dtList }
             </View>
