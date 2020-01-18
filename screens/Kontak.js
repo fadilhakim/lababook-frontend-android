@@ -1,4 +1,5 @@
-import React from 'react'
+import React,{ Component } from 'react'
+
 import {
   View,
   Text,
@@ -9,17 +10,21 @@ import {
   TouchableHighlight,
   Button
 } from 'react-native'
+
 import {
   MaterialIcons,
   AntDesign
 } from '@expo/vector-icons'
+
 import * as Permissions from 'expo-permissions'
 import * as Contacts from 'expo-contacts'
 import Modal from "react-native-modal";
 
 import ContactCard from '../components/ContactCard'
-
 import NavigationService from '../helpers/NavigationService';
+
+import { textExtraProps as tProps } from '../config/system'
+import { fetchContact, createContact, deleteContact } from '../store/actions/contact'
 
 const data = [
   {
@@ -77,6 +82,7 @@ async function showContact () {
   }
 }
 
+<<<<<<< HEAD
 function Kontak (props) {
 
   this.constructor = () => {
@@ -104,20 +110,92 @@ function Kontak (props) {
             Anda Dapatkan: <Text style={{ color: '#7dd220' }}>Rp. 3.000.000</Text>
           </Text>
         </View>
+=======
+class Kontak extends Component {
+  
+  constructor(props) {
+    super(props)
+    this.state = {
+      users:[],
+      name:"",
+      phoneNumber:"",
+      userId:"",
+      bookId:""
+    }
+>>>>>>> bff2d9be9e2f92be22a91180ca080ca76abe74bb
 
-        <View style={styles.topBarRight}>
-          <TouchableWithoutFeedback>
-            <View style={styles.topBarRightFilter}>
-              <MaterialIcons name='filter-list' size={27} color='#2a2c7b' style={styles.filter} />
+    //this.setPhoneNumber = this.setPhoneNumber.bind(this)
+  }
+
+  componentDidMount(){
+  
+
+  
+  }
+
+
+
+
+  render() {
+    return (
+      <View style={{ flex: 1 }}>
+        <View style={styles.topBar}>
+          <View style={styles.topBarLeft}>
+            <View style={styles.personBg}>
+              <MaterialIcons name='person' size={32} color='white'/>
             </View>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback>
-            <View style={styles.topBarRightPdf}>
-              <AntDesign name='pdffile1' size={27} color='#2a2c7b' style={styles.pdf} />
-            </View>
-          </TouchableWithoutFeedback>
+            <Text style={{ fontSize: 16 }}>
+              Anda Berikan: <Text style={{ color: '#ce4165' }}>Rp. 2.000.000</Text>
+              {'\n'}
+              Anda Dapatkan: <Text style={{ color: '#7dd220' }}>Rp. 3.000.000</Text>
+            </Text>
+          </View>
+  
+          <View style={styles.topBarRight}>
+            <TouchableWithoutFeedback>
+              <View style={styles.topBarRightFilter}>
+                <MaterialIcons name='filter-list' size={27} color='#2a2c7b' style={styles.filter} />
+              </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback>
+              <View style={styles.topBarRightPdf}>
+                <AntDesign name='pdffile1' size={27} color='#2a2c7b' style={styles.pdf} />
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
         </View>
+        
+          <FlatList
+            data={data}
+            scrollEnabled={true}
+            renderItem={({ item, index }) => { 
+              return(
+                <TouchableNativeFeedback onPress={() => {  NavigationService.navigate("DetailTransaction") }}>
+                  <View>
+                    <ContactCard {...item} key={index}/>
+                  </View>
+                </TouchableNativeFeedback>
+                
+              )
+            }}
+            keyExtractor={item => item.id}
+            style={styles.contactList}
+          />
+  
+        {/* <TouchableNativeFeedback onPress={() => {  NavigationService.navigate("Test") }}>
+            <Text> Test Page </Text>
+        </TouchableNativeFeedback> */}
+  
+        <TouchableWithoutFeedback onPress={() => showContact()}>
+          <View style={styles.addContactBtn}>
+            <AntDesign name='plus' size={24} style={{color:'#fff', fontWeight:'bold'}}/>
+            <Text style={styles.addContactBtnText}>
+             Tambah Kontak
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
+<<<<<<< HEAD
       
         <FlatList
           data={data}
@@ -153,6 +231,11 @@ function Kontak (props) {
       </Modal>
     </View>
   )
+=======
+    )
+  }
+ 
+>>>>>>> bff2d9be9e2f92be22a91180ca080ca76abe74bb
 }
 
 export default Kontak
