@@ -6,7 +6,8 @@ import {
   TouchableWithoutFeedback,
   TouchableNativeFeedback,
   FlatList,
-  TouchableHighlight
+  TouchableHighlight,
+  Button
 } from 'react-native'
 import {
   MaterialIcons,
@@ -14,6 +15,7 @@ import {
 } from '@expo/vector-icons'
 import * as Permissions from 'expo-permissions'
 import * as Contacts from 'expo-contacts'
+import Modal from "react-native-modal";
 
 import ContactCard from '../components/ContactCard'
 
@@ -76,6 +78,19 @@ async function showContact () {
 }
 
 function Kontak (props) {
+
+  this.constructor = () => {
+    this.toggleModal = this.toggleModal.bind(this)
+  }
+
+  this.state = {
+    isModalVisible: false
+  };
+ 
+  this.toggleModal = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.topBar}>
@@ -129,6 +144,13 @@ function Kontak (props) {
           </Text>
         </View>
       </TouchableWithoutFeedback>
+      <Button title="Show modal" onPress={() => {this.toggleModal()}} />
+      <Modal isVisible={this.state.isModalVisible}>
+        <View style={{ flex: 1 }}>
+          <Text>Hello!</Text>
+          <Button title="Hide modal" onPress={() => {this.toggleModal()}} />
+        </View>
+      </Modal>
     </View>
   )
 }

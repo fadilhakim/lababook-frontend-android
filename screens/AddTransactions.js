@@ -4,7 +4,8 @@ import {
   Text,
   StyleSheet,
   TouchableNativeFeedback,
-  AsyncStorage
+  AsyncStorage,
+  Share
 } from 'react-native'
 import {
   Container, Header, Content, Form, Item, Input, Label , Left, Body, Right, Button, Icon, Title, Subtitle
@@ -21,6 +22,27 @@ function DetailTransaction (props) {
       .then(() => navigation.navigate('AuthLoading'))
   }
 
+  this.onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          'Aan Wiguna ini utang kamu',
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   return (
     <Container style={BaseStyle.container}>
         <Header style={styles.headerRed}>
@@ -32,35 +54,35 @@ function DetailTransaction (props) {
           </TouchableNativeFeedback>
           </Left>
           <Body>
-            <Title>Anda Berikan</Title>
-            <Subtitle>Aan Siguna</Subtitle>
+            <Title style={BaseStyle.fixTitle}>Anda Berikan</Title>
+            <Subtitle style={BaseStyle.fixSubtitle}>Aan Siguna</Subtitle>
           </Body>
           <Right>
             <Button transparent>
               <Icon name='trash' />
             </Button>
-            <Button transparent>
+            <Button onPress={ () => { this.onShare() }} transparent>
               <Icon name='share' />
             </Button>
           </Right>
         </Header>
         <Content>
           <Form style={BaseStyle.formTransaction}>
-            <Item stackedLabel>
-              <Label>Jumlah</Label>
-              <Input />
+            <Item style={BaseStyle.inputItem}>
+              <Icon style={BaseStyle.inputIcon} active name='md-pricetag' />
+              <Input placeholder="Jumlah" />
             </Item>
-            <Item stackedLabel>
-              <Label>Keterangan</Label>
-              <Input />
+            <Item style={BaseStyle.inputItem}>
+              <Icon style={BaseStyle.inputIcon} active name='md-text' />
+              <Input placeholder="Keterangan" />
             </Item>
-            <Item stackedLabel>
-              <Label>Tanggal Transaksi</Label>
-              <Input />
+            <Item style={BaseStyle.inputItem}>
+              <Icon style={BaseStyle.inputIcon} style={{color : '#aaa'}} active name='ios-calendar' />
+              <Input placeholder="Tanggal Transaksi" />
             </Item>
-            <Item stackedLabel>
-              <Label>Lampirkan Gambar</Label>
-              <Input />
+            <Item style={BaseStyle.inputItem}>
+              <Icon style={BaseStyle.inputIcon} active name='ios-camera' />
+              <Input placeholder="Lampiran Gambar" />
             </Item>
 
           </Form>
