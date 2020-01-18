@@ -121,10 +121,6 @@ function Kontak (props) {
           style={styles.contactList}
         />
 
-      <TouchableNativeFeedback onPress={() => {  NavigationService.navigate("Test") }}>
-          <Text> Test Page </Text>
-      </TouchableNativeFeedback>
-
       <TouchableWithoutFeedback onPress={() => showContact()}>
         <View style={styles.addContactBtn}>
           <AntDesign name='plus' size={24} style={{color:'#fff', fontWeight:'bold'}}/>
