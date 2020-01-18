@@ -4,7 +4,9 @@ import {
   Text,
   StyleSheet,
   TouchableNativeFeedback,
-  AsyncStorage
+  AsyncStorage,
+  Linking,
+  Share
 } from 'react-native'
 import { FontAwesome } from '@expo/vector-icons'
 
@@ -15,6 +17,28 @@ function Settings (props) {
     AsyncStorage.removeItem('userToken')
       .then(() => navigation.navigate('AuthLoading'))
   }
+
+  this.onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          'I share lababook for you to record a Transactions between us',
+      });
+
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
 
   return (
     <View style={styles.container}>
@@ -65,7 +89,7 @@ function Settings (props) {
           </View>
         </TouchableNativeFeedback>
 
-        <TouchableNativeFeedback>
+        <TouchableNativeFeedback  onPress={() => Linking.openURL('https://api.whatsapp.com/send?phone=+6281295009910&text=Halo')}>
           <View style={styles.settingItem}>
             <View style={styles.settingItemLeft}>
               <FontAwesome
@@ -94,7 +118,7 @@ function Settings (props) {
                 size={20}
                 color='#444'
               />
-              <Text style={styles.settingItemLeftText}>
+              <Text onPress={ () => { this.onShare() }} style={styles.settingItemLeftText}>
                 Bagikan Aplikasi
               </Text>
             </View>

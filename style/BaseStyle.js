@@ -10,13 +10,6 @@ export default style = StyleSheet.create({
 	alignItems: 'stretch'
 	// justifyContent: 'space-between'
   },
-  formTransaction: {
-	flex: 1,
-	alignItems: 'stretch',
-	// justifyContent: 'space-between'
-	flexGrow : 1
-
-  },
   
   headerBlue : {
     backgroundColor: '#2a2c7b',
@@ -157,5 +150,23 @@ export default style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     textAlign : 'center'
+  },
+
+  inputItem : {
+  	marginRight: 10,
+  	marginBottom : 20
+  },
+
+  inputIcon : {
+  	color : '#aaa'
+  },
+
+  fixTitle : {
+  	fontWeight : 'bold'
+  },
+
+  fixSubtitle : {
+  	fontStyle : "italic"
   }
+
 })
