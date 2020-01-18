@@ -16,6 +16,7 @@ import Settings from "./screens/Settings"
 import AccountSetting from './screens/AccountSetting'
 import CaraPakai from './screens/CaraPakai'
 import DetailTransaction from './screens/DetailTransaction'
+import AddTransactions from './screens/AddTransactions'
 
 import Test from "./screens/Test"
 
@@ -175,6 +176,7 @@ const Root = createAppContainer(
       AccountSetting : AccountSetting,
       CaraPakai : CaraPakai,
       DetailTransaction : DetailTransaction,
+      AddTransactions : AddTransactions,
       Test: Test
     },
     {

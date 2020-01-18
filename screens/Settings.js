@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   logOutBtn: {
-    borderTopColor: '#aaa',
+    borderTopColor: '#f3f3f3',
     borderTopWidth: 1,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -184,6 +184,6 @@ const styles = StyleSheet.create({
   },
   creditBlock: {
     minHeight: 200,
-    backgroundColor: '#aaa'
+    backgroundColor: '#f3f3f3'
   }
 })

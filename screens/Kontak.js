@@ -150,9 +150,9 @@ class Kontak extends Component {
             style={styles.contactList}
           />
   
-        <TouchableNativeFeedback onPress={() => {  NavigationService.navigate("Test") }}>
+        {/* <TouchableNativeFeedback onPress={() => {  NavigationService.navigate("Test") }}>
             <Text> Test Page </Text>
-        </TouchableNativeFeedback>
+        </TouchableNativeFeedback> */}
   
         <TouchableWithoutFeedback onPress={() => showContact()}>
           <View style={styles.addContactBtn}>
