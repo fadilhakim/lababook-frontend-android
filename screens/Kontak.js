@@ -18,7 +18,6 @@ import {
 
 import * as Permissions from 'expo-permissions'
 import * as Contacts from 'expo-contacts'
-import Modal from "react-native-modal";
 
 import ContactCard from '../components/ContactCard'
 import NavigationService from '../helpers/NavigationService';
@@ -26,6 +25,8 @@ import NavigationService from '../helpers/NavigationService';
 import ContactAPI from "../api/contact"
 
 import { API_URL } from "react-native-dotenv"
+
+import Modal from "react-native-modal";
 
 const data = [
   {
@@ -83,40 +84,12 @@ async function showContact () {
   }
 }
 
-<<<<<<< HEAD
-function Kontak (props) {
-
-  this.constructor = () => {
-    this.toggleModal = this.toggleModal.bind(this)
-  }
-
-  this.state = {
-    isModalVisible: false
-  };
- 
-  this.toggleModal = () => {
-    this.setState({ isModalVisible: !this.state.isModalVisible });
-  };
-
-  return (
-    <View style={{ flex: 1 }}>
-      <View style={styles.topBar}>
-        <View style={styles.topBarLeft}>
-          <View style={styles.personBg}>
-            <MaterialIcons name='person' size={32} color='white'/>
-          </View>
-          <Text style={{ fontSize: 16 }}>
-            Anda Berikan: <Text style={{ color: '#ce4165' }}>Rp. 2.000.000</Text>
-            {'\n'}
-            Anda Dapatkan: <Text style={{ color: '#7dd220' }}>Rp. 3.000.000</Text>
-          </Text>
-        </View>
-=======
 class Kontak extends Component {
   
   constructor(props) {
     super(props)
     this.state = {
+      isModalVisible: false,
       contacts:[],
       userId:1, // sementara
       bookId:1, // sementara
@@ -127,12 +100,15 @@ class Kontak extends Component {
         bookId:""
       }
     }
->>>>>>> bff2d9be9e2f92be22a91180ca080ca76abe74bb
 
     this.getContacts = this.getContacts.bind(this)
-
+    this.toggleModal = this.toggleModal.bind(this)
    
   }
+
+  toggleModal() {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+  };
 
   componentDidMount(){
     
@@ -156,7 +132,7 @@ class Kontak extends Component {
       console.log("contact => ",this.state.contacts)
     })
     .catch(err => {
-      alert(`${ API_URL } => ${err}`)
+      alert(`${ API_URL } => ${err} => bookId:`)
     })
   }
 
@@ -209,7 +185,15 @@ class Kontak extends Component {
         {/* <TouchableNativeFeedback onPress={() => {  NavigationService.navigate("Test") }}>
             <Text> Test Page </Text>
         </TouchableNativeFeedback> */}
-  
+
+        <Button title="Show modal" onPress={() => {this.toggleModal()}} />
+        <Modal isVisible={this.state.isModalVisible}>
+          <View style={{ flex: 1 }}>
+            <Text>Hello!</Text>
+            <Button title="Hide modal" onPress={() => {this.toggleModal()}} />
+          </View>
+        </Modal>
+
         <TouchableWithoutFeedback onPress={() => showContact()}>
           <View style={styles.addContactBtn}>
             <AntDesign name='plus' size={24} style={{color:'#fff', fontWeight:'bold'}}/>
@@ -219,47 +203,9 @@ class Kontak extends Component {
           </View>
         </TouchableWithoutFeedback>
       </View>
-<<<<<<< HEAD
-      
-        <FlatList
-          data={data}
-          scrollEnabled={true}
-          renderItem={({ item, index }) => { 
-            return(
-              <TouchableNativeFeedback onPress={() => {  NavigationService.navigate("DetailTransaction") }}>
-                <View>
-                  <ContactCard {...item} key={index}/>
-                </View>
-              </TouchableNativeFeedback>
-              
-            )
-          }}
-          keyExtractor={item => item.id}
-          style={styles.contactList}
-        />
-
-      <TouchableWithoutFeedback onPress={() => showContact()}>
-        <View style={styles.addContactBtn}>
-          <AntDesign name='plus' size={24} style={{color:'#fff', fontWeight:'bold'}}/>
-          <Text style={styles.addContactBtnText}>
-           Tambah Kontak
-          </Text>
-        </View>
-      </TouchableWithoutFeedback>
-      <Button title="Show modal" onPress={() => {this.toggleModal()}} />
-      <Modal isVisible={this.state.isModalVisible}>
-        <View style={{ flex: 1 }}>
-          <Text>Hello!</Text>
-          <Button title="Hide modal" onPress={() => {this.toggleModal()}} />
-        </View>
-      </Modal>
-    </View>
-  )
-=======
     )
   }
  
->>>>>>> bff2d9be9e2f92be22a91180ca080ca76abe74bb
 }
 
 export default Kontak
@@ -336,5 +282,21 @@ const styles = StyleSheet.create({
     backgroundColor:'#1a1a1a',
     left:-100,
     padding:5
+  },
+  inputItem : {
+  	marginRight: 10,
+  	marginBottom : 20
+  },
+
+  inputIcon : {
+  	color : '#aaa'
+  },
+
+  fixTitle : {
+  	fontWeight : 'bold'
+  },
+
+  fixSubtitle : {
+  	fontStyle : "italic"
   }
 })
