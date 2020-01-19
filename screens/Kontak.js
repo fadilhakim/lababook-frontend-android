@@ -29,6 +29,8 @@ import { API_URL } from "react-native-dotenv"
 
 import Modal from "react-native-modal";
 
+import BaseStyle from "./../style/BaseStyle"
+
 async function showContact() {
   try {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS)
@@ -116,6 +118,7 @@ class Kontak extends Component {
             id: item.id,
             contactName: item.name,
             contactInitial: item.name[0],
+            phoneNumber: item.phoneNumber,
             trxType: 'debit', // hasil join
             trxValue: '2.000.000', // hasil join 
             updatedAt: '3 hari lalu' // hasil join dari trx
@@ -182,7 +185,15 @@ class Kontak extends Component {
           scrollEnabled={true}
           renderItem={({ item, index }) => {
             return (
-              <TouchableNativeFeedback onPress={() => { NavigationService.navigate("DetailTransaction") }}>
+              <TouchableNativeFeedback onPress={() => {
+                NavigationService.navigate("DetailTransaction", {
+
+                  name: item.contactName,
+                  phoneNumber: item.phoneNumber,
+                  contactInitial: item.contactInitial
+
+                })
+              }}>
                 <View>
                   <ContactCard {...item} key={index} />
                 </View>
