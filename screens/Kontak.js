@@ -7,7 +7,7 @@ import {
   TouchableWithoutFeedback,
   TouchableNativeFeedback,
   FlatList,
-  TouchableHighlight,
+ 
   Button
 } from 'react-native'
 
@@ -18,6 +18,7 @@ import {
 
 import * as Permissions from 'expo-permissions'
 import * as Contacts from 'expo-contacts'
+import axios from "axios"
 
 import ContactCard from '../components/ContactCard'
 import NavigationService from '../helpers/NavigationService';
@@ -28,40 +29,7 @@ import { API_URL } from "react-native-dotenv"
 
 import Modal from "react-native-modal";
 
-const data = [
-  {
-    id: '1',
-    contactName: 'Aan Siguna',
-    contactInitial: 'A',
-    trxType: 'debit',
-    trxValue: '2.000.000',
-    updatedAt: '3 hari lalu'
-  },
-  {
-    id: '2',
-    contactName: 'Sibutar Butar',
-    contactInitial: 'S',
-    trxType: 'credit',
-    trxValue: '3.000.000',
-    updatedAt: '4 hari lalu'
-  },
-  {
-    id: '3',
-    contactName: 'Dimas Arya',
-    contactInitial: 'D',
-    trxType: 'debit',
-    trxValue: '700.000',
-    updatedAt: '1 hari lalu'
-  },
-  {
-    id: '4',
-    contactName: 'Shasa',
-    contactInitial: 'S',
-    trxType: 'credit',
-    trxValue: '300.000',
-    updatedAt: '3 hari lalu'
-  }
-]
+
 
 async function showContact () {
   try {
@@ -103,6 +71,7 @@ class Kontak extends Component {
 
     this.getContacts = this.getContacts.bind(this)
     this.toggleModal = this.toggleModal.bind(this)
+    this.getSWpeopleApi = this.getSWpeopleApi.bind(this)
    
   }
 
@@ -113,7 +82,22 @@ class Kontak extends Component {
   componentDidMount(){
     
    this.getContacts()
+   //this.getSWpeopleApi()
    
+  }
+
+  getSWpeopleApi() {
+   
+
+    const testget = axios.get("https://swapi.co/api/people/1",{
+      headers: {
+          'Content-Type': 'application/json'
+      }
+    })
+
+    testget.then(res => {
+      console.log("Star Wars => ",res.data)
+    })
   }
 
   getContacts() {
@@ -125,18 +109,48 @@ class Kontak extends Component {
 
     contactApi.getContacts(bookId)
     .then(res => {
-      _this.setState({
-        contacts: this.state.contacts.concat( res.data )
+
+      const data = res.data
+      const newData = []
+
+      data.map(item => {
+         newData.push({
+          id: item.id,
+          contactName: item.name,
+          contactInitial: item.name[0],
+          trxType: 'debit', // hasil join
+          trxValue: '2.000.000', // hasil join 
+          updatedAt: '3 hari lalu' // hasil join dari trx
+        })
       })
 
-      console.log("contact => ",this.state.contacts)
+      _this.setState({
+        contacts: this.state.contacts.concat( newData )
+      },function(){
+        console.log("contact => ",this.state.contacts)
+      })
+
+     
+     
     })
     .catch(err => {
-      alert(`${ API_URL } => ${err} => bookId:`)
+      alert(`${ API_URL } => ${err} => bookId:${ bookId }`)
     })
   }
 
   render() {
+
+    // const data = [{
+    
+    //   id: 1,
+    //   contactName: "Juleha",
+    //   contactInitial: "J",
+    //   trxType: 'debit',
+    //   trxValue: '2.000.000',
+    //   updatedAt: '3 hari lalu',
+    //   key:"4ururozl"
+    // }]
+
     return (
       <View style={{ flex: 1 }}>
         <View style={styles.topBar}>
@@ -166,7 +180,7 @@ class Kontak extends Component {
         </View>
         
           <FlatList
-            data={data}
+            data={ this.state.contacts }
             scrollEnabled={true}
             renderItem={({ item, index }) => { 
               return(

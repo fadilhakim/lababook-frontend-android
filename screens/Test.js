@@ -27,6 +27,7 @@ class Test extends Component {
                 <Text> { API_URL } </Text>
 
                 { dtList }
+                <Text> hello </Text>
             </View>
         );
     }
