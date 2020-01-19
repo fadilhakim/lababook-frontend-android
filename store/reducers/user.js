@@ -2,6 +2,7 @@ import {
   UPDATE_PHONE_NUMBER,
   UPDATE_USER_NAME,
   UPDATE_BOOK_NAME,
+  UPDATE_BOOK_ID,
   USER_REGISTERED,
   USER_ACTIVATED,
   USER_LOGIN,
@@ -12,6 +13,7 @@ const initialStates = {
   phoneNumber: '',
   userName: '',
   bookName: '',
+  bookId:"",
   token: '',
   isNew: true
 }
@@ -33,6 +35,13 @@ export default function user (state = initialStates, action) {
         ...state,
         bookName: action.bookName
       }
+
+    case UPDATE_BOOK_ID:
+      return {
+        ...state,
+        bookId:action.bookId
+      }
+
     case USER_LOGIN:
     case USER_REGISTERED: {
       const { user } = action

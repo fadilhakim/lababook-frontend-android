@@ -15,7 +15,8 @@ import AuthLoading from './screens/AuthLoading'
 import Settings from "./screens/Settings"
 import AccountSetting from './screens/AccountSetting'
 import CaraPakai from './screens/CaraPakai'
-import DetailTransaction from "./screens/DetailTransaction"
+import DetailTransaction from './screens/DetailTransaction'
+import AddTransactions from './screens/AddTransactions'
 
 import Test from "./screens/Test"
 
@@ -120,25 +121,25 @@ const AppNavigator = createStackNavigator(
         }
       }
     },
-    DetailTransaction: {
-      screen: DetailTransaction,
-      navigationOptions: {
-        headerBackTitleVisible: true,
-        headerTitle: 'Detail Transaction',
-        headerTintColor: 'white',
-        headerStyle: {
-          backgroundColor: '#2a2c7b'
-        },
-        headerTitleStyle: {
-          color: '#fff',
-          paddingTop: 10,
-          paddingBottom: 10,
-          fontSize: 22,
-          fontWeight: 'bold',
-          marginLeft: -5
-        }
-      }
-    },
+    // DetailTransaction: {
+    //   screen: DetailTransaction,
+    //   navigationOptions: {
+    //     headerBackTitleVisible: true,
+    //     headerTitle: 'Aan Wiguna',
+    //     headerTintColor: 'white',
+    //     headerStyle : {
+    //       backgroundColor:'#2a2c7b'
+    //     },
+    //     headerTitleStyle: {
+    //       color: '#fff',
+    //       paddingTop: 10,
+    //       paddingBottom: 10,
+    //       fontSize: 22,
+    //       fontWeight: 'bold',
+    //       marginLeft: -5
+    //     }
+    //   }
+    // },
     CaraPakai: {
       screen: CaraPakai,
       navigationOptions: {
@@ -175,6 +176,7 @@ const Root = createAppContainer(
       AccountSetting: AccountSetting,
       CaraPakai: CaraPakai,
       DetailTransaction: DetailTransaction,
+      AddTransactions: AddTransactions,
       Test: Test
     },
     {

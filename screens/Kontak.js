@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { Component } from 'react'
+
 import {
   View,
   Text,
@@ -6,19 +7,29 @@ import {
   TouchableWithoutFeedback,
   TouchableNativeFeedback,
   FlatList,
-  TouchableHighlight
+  TouchableHighlight,
+  Button
 } from 'react-native'
+
 import {
   MaterialIcons,
   AntDesign
 } from '@expo/vector-icons'
+
 import * as Permissions from 'expo-permissions'
 import * as Contacts from 'expo-contacts'
 // import { withNavigation } from 'react-navigation';
 
 import ContactCard from '../components/ContactCard'
-
 import NavigationService from '../helpers/NavigationService';
+
+import ContactAPI from "../api/contact"
+
+import { API_URL } from "react-native-dotenv"
+
+import Modal from "react-native-modal";
+
+import BaseStyle from "./../style/BaseStyle"
 
 const data = [
   {
@@ -68,7 +79,7 @@ async function showContact() {
       })
 
       if (data.length > 0) {
-        console.log(data)
+        console.log(`${API_URL} => `, data)
       }
     }
   } catch (error) {
@@ -76,67 +87,136 @@ async function showContact() {
   }
 }
 
-function Kontak(props) {
-  return (
-    <View style={{ flex: 1 }}>
-      <View style={styles.topBar}>
-        <View style={styles.topBarLeft}>
-          <View style={styles.personBg}>
-            <MaterialIcons name='person' size={32} color='white' />
+class Kontak extends Component {
+
+  constructor(props) {
+    super(props)
+    this.state = {
+      isModalVisible: false,
+      contacts: [],
+      userId: 1, // sementara
+      bookId: 1, // sementara
+      contactInput: {
+        name: "",
+        phoneNumber: "",
+        userId: "",
+        bookId: ""
+      }
+    }
+
+    this.getContacts = this.getContacts.bind(this)
+    this.toggleModal = this.toggleModal.bind(this)
+
+  }
+
+  toggleModal() {
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+  };
+
+  componentDidMount() {
+
+    this.getContacts()
+
+  }
+
+  getContacts() {
+    const contactApi = new ContactAPI()
+
+    const _this = this
+
+    const bookId = this.state.bookId
+
+    contactApi.getContacts(bookId)
+      .then(res => {
+        _this.setState({
+          contacts: this.state.contacts.concat(res.data)
+        })
+
+        console.log("contact => ", this.state.contacts)
+      })
+      .catch(err => {
+        alert(`${API_URL} => ${err} => bookId:`)
+      })
+  }
+
+  render() {
+    return (
+      <View style={{ flex: 1 }}>
+        <View style={styles.topBar}>
+          <View style={styles.topBarLeft}>
+            <View style={styles.personBg}>
+              <MaterialIcons name='person' size={32} color='white' />
+            </View>
+            <Text style={{ fontSize: 16 }}>
+              Anda Berikan: <Text style={{ color: '#ce4165' }}>Rp. 2.000.000</Text>
+              {'\n'}
+              Anda Dapatkan: <Text style={{ color: '#7dd220' }}>Rp. 3.000.000</Text>
+            </Text>
           </View>
 
-          <Text style={{ fontSize: 16 }}>
-            Anda Berikan: <Text style={{ color: '#ce4165' }}>Rp. 2.000.000</Text>
-            {'\n'}
-            Anda Dapatkan: <Text style={{ color: '#7dd220' }}>Rp. 3.000.000</Text>
-          </Text>
-        </View>
-
-        <View style={styles.topBarRight}>
-          <TouchableWithoutFeedback>
-            <View style={styles.topBarRightFilter}>
-              <MaterialIcons name='filter-list' size={27} color='#2a2c7b' style={styles.filter} />
-            </View>
-          </TouchableWithoutFeedback>
-          <TouchableWithoutFeedback>
-            <View style={styles.topBarRightPdf}>
-              <AntDesign name='pdffile1' size={27} color='#2a2c7b' style={styles.pdf} />
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </View>
-
-      <FlatList
-        data={data}
-        scrollEnabled={true}
-        renderItem={({ item, index }) => {
-          return (
-            <TouchableNativeFeedback onPress={() => { NavigationService.navigate("DetailTransaction") }}>
-              <View>
-                <ContactCard {...item} key={index} />
+          <View style={styles.topBarRight}>
+            <TouchableWithoutFeedback onPress={() => { this.toggleModal() }} >
+              <View style={styles.topBarRightFilter}>
+                <MaterialIcons name='filter-list' size={27} color='#2a2c7b' style={styles.filter} />
               </View>
-            </TouchableNativeFeedback>
-
-          )
-        }}
-        keyExtractor={item => item.id}
-        style={styles.contactList}
-      />
-
-      <TouchableNativeFeedback onPress={() => { NavigationService.navigate("Test") }}>
-        <Text> Test Page </Text>
-      </TouchableNativeFeedback>
-
-      <TouchableWithoutFeedback onPress={() => showContact()}>
-        <View style={styles.addContactBtn}>
-          <AntDesign name='plus' size={24} style={{ color: '#fff', fontWeight: 'bold' }} />
-          <Text style={styles.addContactBtnText}>
-            Tambah Kontak
-          </Text>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback>
+              <View style={styles.topBarRightPdf}>
+                <AntDesign name='pdffile1' size={27} color='#2a2c7b' style={styles.pdf} />
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
         </View>
-      </TouchableWithoutFeedback>
-    </View >
-  )
+
+        <FlatList
+          data={data}
+          scrollEnabled={true}
+          renderItem={({ item, index }) => {
+            return (
+              <TouchableNativeFeedback onPress={() => {
+                NavigationService.navigate("DetailTransaction", {
+                  detail: item
+                })
+              }}>
+                <View>
+                  <ContactCard {...item} key={index} />
+                </View>
+              </TouchableNativeFeedback>
+
+            )
+          }}
+          keyExtractor={item => item.id}
+          style={styles.contactList}
+        />
+
+        {/* <TouchableNativeFeedback onPress={() => {  NavigationService.navigate("Test") }}>
+            <Text> Test Page </Text>
+        </TouchableNativeFeedback> */}
+
+        <Modal
+          style={BaseStyle.halfModal}
+          isVisible={this.state.isModalVisible}
+          animationIn='slideInUp'
+          animationOut='slideOutDown'
+        >
+          <View style={BaseStyle.modalContent}>
+            <Text>Hello!</Text>
+            <Button title="Hide modal" onPress={() => { this.toggleModal() }} />
+          </View>
+        </Modal>
+
+        <TouchableWithoutFeedback onPress={() => showContact()}>
+          <View style={styles.addContactBtn}>
+            <AntDesign name='plus' size={24} style={{ color: '#fff', fontWeight: 'bold' }} />
+            <Text style={styles.addContactBtnText}>
+              Tambah Kontak
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
+      </View>
+    )
+  }
+
 }
 
 export default Kontak
@@ -213,5 +293,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#1a1a1a',
     left: -100,
     padding: 5
+  },
+  inputItem: {
+    marginRight: 10,
+    marginBottom: 20
+  },
+
+  inputIcon: {
+    color: '#aaa'
+  },
+
+  fixTitle: {
+    fontWeight: 'bold'
+  },
+
+  fixSubtitle: {
+    fontStyle: "italic"
   }
 })

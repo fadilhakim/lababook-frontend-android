@@ -14,6 +14,7 @@ import {
 } from '../../libs/request'
 import { showErrorBottom } from '../../libs/errorHandler'
 import syncActions from '../../libs/syncActions'
+import { UPDATE_BOOK_ID } from '../actionTypes/contact'
 
 export function updatePhoneNumber (newPhoneNumber) {
   return {
@@ -33,6 +34,13 @@ export function updateBookName (newBookName) {
   return {
     type: UPDATE_BOOK_NAME,
     bookName: newBookName
+  }
+}
+
+export function updateBookId(newBookId) {
+  return {
+    type:UPDATE_BOOK_ID,
+    bookId: newBookId
   }
 }
 
