@@ -28,6 +28,8 @@ import { API_URL } from "react-native-dotenv"
 
 import Modal from "react-native-modal";
 
+import BaseStyle from "./../style/BaseStyle"
+
 const data = [
   {
     id: '1',
@@ -152,7 +154,7 @@ class Kontak extends Component {
           </View>
   
           <View style={styles.topBarRight}>
-            <TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => {this.toggleModal()}} >
               <View style={styles.topBarRightFilter}>
                 <MaterialIcons name='filter-list' size={27} color='#2a2c7b' style={styles.filter} />
               </View>
@@ -186,9 +188,13 @@ class Kontak extends Component {
             <Text> Test Page </Text>
         </TouchableNativeFeedback> */}
 
-        <Button title="Show modal" onPress={() => {this.toggleModal()}} />
-        <Modal isVisible={this.state.isModalVisible}>
-          <View style={{ flex: 1 }}>
+        <Modal
+         style={BaseStyle.halfModal} 
+         isVisible={this.state.isModalVisible}
+         animationIn = 'slideInUp'
+         animationOut ='slideOutDown'
+         >
+          <View style={BaseStyle.modalContent}>
             <Text>Hello!</Text>
             <Button title="Hide modal" onPress={() => {this.toggleModal()}} />
           </View>
