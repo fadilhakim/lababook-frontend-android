@@ -167,6 +167,16 @@ export default style = StyleSheet.create({
 
   fixSubtitle : {
   	fontStyle : "italic"
+  },
+
+  halfModal : {
+  	height: 120
+  },
+  modalContent : {
+  	height: 120,
+  	backgroundColor : '#fff',
+  	alignItems: 'stretch'
   }
+
 
 })
