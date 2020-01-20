@@ -31,6 +31,8 @@ import Modal from "react-native-modal";
 
 import BaseStyle from "./../style/BaseStyle"
 
+// import {SelectContact} from 'react-native-select-contact'
+
 async function showContact() {
   try {
     const { status } = await Permissions.askAsync(Permissions.CONTACTS)
@@ -44,7 +46,10 @@ async function showContact() {
       })
 
       if (data.length > 0) {
-        console.log(`${API_URL} => `, data)
+
+        alert("you have "+data.length+" contacts ")
+        // screen select contact 
+        //console.log(`${API_URL} => `, data)
       }
     }
   } catch (error) {
@@ -72,7 +77,24 @@ class Kontak extends Component {
     this.getContacts = this.getContacts.bind(this)
     this.toggleModal = this.toggleModal.bind(this)
     this.getSWpeopleApi = this.getSWpeopleApi.bind(this)
+    this.getPhoneNumber = this.getPhoneNumber.bind(this)
 
+  }
+
+  getPhoneNumber() {
+      return SelectContact.openContactSelection()
+          .then(selection => {
+              if (!selection) {
+                  return null;
+              }
+              
+              let { contact, selectedPhone } = selection;
+              console.log(`Selected ${selectedPhone.type} phone number ${selectedPhone.number} from ${contact.name}`);
+              return selectedPhone.number;
+          })
+          .catch(err => {
+            alert("err => ",err)
+          });  
   }
 
   toggleModal() {
@@ -221,7 +243,7 @@ class Kontak extends Component {
           </View>
         </Modal>
 
-        <TouchableWithoutFeedback onPress={() => showContact()}>
+        <TouchableWithoutFeedback onPress={() =>  showContact() }>
           <View style={styles.addContactBtn}>
             <AntDesign name='plus' size={24} style={{ color: '#fff', fontWeight: 'bold' }} />
             <Text style={styles.addContactBtnText}>
