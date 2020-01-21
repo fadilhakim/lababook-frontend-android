@@ -49,11 +49,13 @@ async function showContact() {
       if (data.length > 0) {
 
         //alert("you have "+data.length+" contacts ")
-        NavigationService.navigate("SelectContact",{
-          contacts:data
+        NavigationService.navigate("SelectContact", {
+          contacts: data
         })
         // screen select contact 
         //console.log(`${API_URL} => `, data)
+      } else {
+        alert("you have no contacts")
       }
     }
   } catch (error) {
@@ -86,19 +88,19 @@ class Kontak extends Component {
   }
 
   getPhoneNumber() {
-      return SelectContact.openContactSelection()
-          .then(selection => {
-              if (!selection) {
-                  return null;
-              }
-              
-              let { contact, selectedPhone } = selection;
-              console.log(`Selected ${selectedPhone.type} phone number ${selectedPhone.number} from ${contact.name}`);
-              return selectedPhone.number;
-          })
-          .catch(err => {
-            alert("err => ",err)
-          });  
+    return SelectContact.openContactSelection()
+      .then(selection => {
+        if (!selection) {
+          return null;
+        }
+
+        let { contact, selectedPhone } = selection;
+        console.log(`Selected ${selectedPhone.type} phone number ${selectedPhone.number} from ${contact.name}`);
+        return selectedPhone.number;
+      })
+      .catch(err => {
+        alert("err => ", err)
+      });
   }
 
   toggleModal() {
@@ -247,7 +249,7 @@ class Kontak extends Component {
           </View>
         </Modal>
 
-        <TouchableWithoutFeedback onPress={() =>  showContact() }>
+        <TouchableWithoutFeedback onPress={() => showContact()}>
           <View style={styles.addContactBtn}>
             <AntDesign name='plus' size={24} style={{ color: '#fff', fontWeight: 'bold' }} />
             <Text style={styles.addContactBtnText}>
