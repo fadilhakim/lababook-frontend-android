@@ -21,6 +21,7 @@ import * as Contacts from 'expo-contacts'
 import axios from "axios"
 
 import ContactCard from '../components/ContactCard'
+// import SelectContact from "./components/SelectContact"
 import NavigationService from '../helpers/NavigationService';
 
 import ContactAPI from "../api/contact"
@@ -47,7 +48,10 @@ async function showContact() {
 
       if (data.length > 0) {
 
-        alert("you have "+data.length+" contacts ")
+        //alert("you have "+data.length+" contacts ")
+        NavigationService.navigate("SelectContact",{
+          contacts:data
+        })
         // screen select contact 
         //console.log(`${API_URL} => `, data)
       }

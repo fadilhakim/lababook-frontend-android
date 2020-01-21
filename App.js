@@ -17,6 +17,7 @@ import AccountSetting from './screens/AccountSetting'
 import CaraPakai from './screens/CaraPakai'
 import DetailTransaction from './screens/DetailTransaction'
 import AddTransactions from './screens/AddTransactions'
+import SelectContact from "./components/SelectContact"
 
 import Test from "./screens/Test"
 
@@ -48,7 +49,8 @@ const AuthNavigator = createStackNavigator(
     },
     Test: {
       screen: Test
-    }
+    },
+    SelectContact:{screen:SelectContact},
   },
   {
     initialRouteName: 'Welcome',
@@ -177,6 +179,7 @@ const Root = createAppContainer(
       CaraPakai: CaraPakai,
       DetailTransaction: DetailTransaction,
       AddTransactions: AddTransactions,
+      SelectContact:SelectContact,
       Test: Test
     },
     {
