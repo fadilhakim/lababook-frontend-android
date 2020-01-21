@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableNativeFeedback, StyleSheet, FlatList, List, ListItem} from "react-native"
+import { Text, View, TouchableNativeFeedback, StyleSheet, FlatList, ListItem} from "react-native"
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { Input, Icon, Item} from "native-base"
 import NavigationService from '../helpers/NavigationService';
@@ -32,25 +32,31 @@ class SelectContact extends Component {
             // const phone =  item.phoneNumbers
 
             // if(phone.length > 0){
-            //     newData.push({
-            //         name:item.name,
-            //         phoneNumber:item.phoneNumbers[0].number,
-            //         lookupKey:item.lookupKey
-            //     })
+         
             // } else {
             //     console.log(phone)
             // }
             if (item.phoneNumbers) {
-                console.log( "item => ", item.phoneNumbers[0].number)
+                //console.log("====================",item.phoneNumbers[0].number.toString(), item.name)
+                newData.push({
+                    name:item.name ,
+                    phoneNumber:item.phoneNumbers[0].number.toString(),
+                    lookupKey:item.lookupKey
+                })
             }
            
            
         })
 
-        // this.setState({
-        //     contacts:this.state.contacts.concat( newData )
-        // })  
-        // console.log("===>", newData)
+        this.setState({
+            contacts:this.state.contacts.concat( newData )
+        })  
+        // for(i = 0; i < newData.length; i++) {
+        //     console.log("===>", newData[i])
+        // }
+
+        
+       
     }
 
     searchContact() {
@@ -67,6 +73,8 @@ class SelectContact extends Component {
 
         const { navigation } = this.props
         const params = navigation.state.params
+
+        console.log( this.state.contacts.length , " contacts")
 
         return (
             <View>
@@ -106,18 +114,23 @@ class SelectContact extends Component {
                
                     <FlatList
                         data={ this.state.contacts }
-                        renderItem= {({ item }) => {
+                        scrollEnabled={true}
+                        renderItem= {({item, index}) => {
 
-                        
-                            return (<ListItem
-                                roundAvatar
-                                title={`${item.name}`}
-                                subtitle={`${item.phoneNumbers.number}`}
-                                
-                            >
+                            return (
+                                <Item
+                                    roundAvatar
+                                    title={`${item.name}`}
+                                    subtitle={`${item.phoneNumber}`}
+                                    key={index}
+                            
+                                >
 
-                            </ListItem>)
+                                </Item>
+                            )
                         }}
+                        keyExtractor={ item => { item.lookupKey }}
+                       
                     >
 
                     </FlatList>
