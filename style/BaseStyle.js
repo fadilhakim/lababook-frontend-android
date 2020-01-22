@@ -173,9 +173,15 @@ export default style = StyleSheet.create({
   	height: 120
   },
   modalContent : {
-  	height: 120,
+  	height: 220,
   	backgroundColor : '#fff',
-  	alignItems: 'stretch'
+  	alignItems: 'stretch',
+  	padding : 15
+  },
+  labelStyleModal : {
+  	fontWeight: "bold",
+  	fontSize : 15,
+  	color : '#2a2c7b'
   }
 
 

@@ -129,14 +129,15 @@ class SelectContact extends Component {
                             <TouchableNativeFeedback onPress={() => { }}>
                                 <View key={index}>
                                     <Item
-
+                                        style={style.listContact}
                                         // title={`${item.name}`}
                                         // subtitle={`${item.phoneNumber}`}
                                         key={index}
 
                                     >
-                                        <View><Text>{item.name}</Text></View>
-                                        <View><Text>{item.phoneNumber}</Text></View>
+                                        <View style={style.circleName}><Text style={{color:'#fff', fontWeight : 'bold', fontSize : 20}}>{item.name[0]}</Text></View>
+                                        <View><Text style={{fontSize:16}}>{item.name}</Text></View>
+  
                                     </Item>
                                 </View>
                             </TouchableNativeFeedback>
@@ -166,5 +167,26 @@ const style = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 20,
         marginTop: 5
+    },
+    listContact :  {
+        paddingTop:15,
+        paddingBottom:15,
+        flexDirection : 'row',
+        paddingLeft:15,
+        fontWeight : 'bold'
+    },
+    circleName : {
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingBottom: 2,
+        backgroundColor: '#eb5789',
+        borderRadius: 100,
+        alignItems: 'center',
+        justifyContent: 'center',
+        color:'#fff',
+        height:42,
+        width:42,
+        textAlign:'center',
+        marginRight : 20
     }
 })

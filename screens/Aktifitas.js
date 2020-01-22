@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableNativeFeedback } from 'react-native'
 import { Table, Row, Rows } from 'react-native-table-component'
-import { DatePicker } from "native-base"
+import { DatePicker, Content, Icon, Picker, Form } from "native-base"
 
 import { textExtraProps as tProps } from '../config/system'
 
@@ -15,9 +15,16 @@ export default class Aktifitas extends React.Component {
         ['dio puitang', '', '200.000'],
         ['jotaro hutang', '', '3.000.000'],
         ['haula piutang', '100.000', '']
-      ]
-    }
+      ],
+      selected : "key1"
+    };
   }
+
+  onValueChange(value: string) {
+    this.setState({
+      selected: value
+    });
+  }  
 
   render() {
     const state = this.state
@@ -29,7 +36,20 @@ export default class Aktifitas extends React.Component {
               Aktifitas : 
               
           </Text>
-          <TextInput></TextInput>
+          <Picker
+              mode="dropdown"
+              iosHeader="Select your SIM"
+              iosIcon={<Icon name="arrow-down" />}
+              style={{ width: undefined }}
+              selectedValue={this.state.selected}
+              onValueChange={this.onValueChange.bind(this)}
+            >
+              <Picker.Item label="Wallet" value="key0" />
+              <Picker.Item label="ATM Card" value="key1" />
+              <Picker.Item label="Debit Card" value="key2" />
+              <Picker.Item label="Credit Card" value="key3" />
+              <Picker.Item label="Net Banking" value="key4" />
+            </Picker>
         </View>
         <View style={styles.topBar}>
           

@@ -110,7 +110,7 @@ function Settings(props) {
             </View>
           </View>
         </TouchableNativeFeedback>
-
+        
         <TouchableNativeFeedback>
           <View style={styles.settingItem}>
             <View style={styles.settingItemLeft}>

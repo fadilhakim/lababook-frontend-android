@@ -10,6 +10,9 @@ import {
 
   Button
 } from 'react-native'
+import {
+  Content, Icon, Picker, Form, Label
+} from 'native-base'
 
 import {
   MaterialIcons,
@@ -77,7 +80,9 @@ class Kontak extends Component {
         phoneNumber: "",
         userId: "",
         bookId: ""
-      }
+      },
+      selected: "key1",
+      selected2: "kunci1"
     }
 
     this.getContacts = this.getContacts.bind(this)
@@ -102,6 +107,8 @@ class Kontak extends Component {
         alert("err => ", err)
       });
   }
+
+
 
   toggleModal() {
     this.setState({ isModalVisible: !this.state.isModalVisible });
@@ -165,6 +172,18 @@ class Kontak extends Component {
       .catch(err => {
         alert(`${API_URL} => ${err} => bookId:${bookId}`)
       })
+  }
+
+  onValueChange(value: string) {
+    this.setState({
+      selected: value
+    });
+  }
+
+  onValueChange_2(value: string) {
+    this.setState({
+      selected2: value
+    });
   }
 
   render() {
@@ -244,8 +263,38 @@ class Kontak extends Component {
           animationOut='slideOutDown'
         >
           <View style={BaseStyle.modalContent}>
-            <Text>Hello!</Text>
-            <Button title="Hide modal" onPress={() => { this.toggleModal() }} />
+            <Form>
+            <Label  style={BaseStyle.labelStyleModal}>Urutkan dari :</Label>
+              <Picker
+                mode="dropdown"
+                iosHeader="Select Filter"
+                selectedValue={this.state.selected}
+                onValueChange={this.onValueChange.bind(this)}
+                itemStyle={{ backgroundColor: "grey", color: "#f3f3f3", fontSize:13 }}
+                style={{color: "#f3f3f3", fontSize:13 }}
+              >
+                <Picker.Item label="Terbaru" value="key0" />
+                <Picker.Item label="Terlama" value="key1" />
+                <Picker.Item label="Terbanyak" value="key2" />
+                <Picker.Item label="Nama A-Z" value="key3" />
+              </Picker>
+              <Label style={BaseStyle.labelStyleModal}>Filter dari :</Label>
+              <Picker
+                mode="dropdown"
+                iosHeader="Select Filter"
+                style={{ width: undefined }}
+                selectedValue={this.state.selected2}
+                onValueChange={this.onValueChange_2.bind(this)}
+              >
+                <Picker.Item label="Semua" value="kunci1" />
+                <Picker.Item label="Lunas" value="kunci2" />
+                <Picker.Item label="Berikan" value="kunci3" />
+                <Picker.Item label="Dapatkan" value="kunci4" />
+              </Picker>
+            </Form>
+
+
+            <Button style={{marginTop:20}} title="Close Filter" onPress={() => { this.toggleModal() }}/>
           </View>
         </Modal>
 
