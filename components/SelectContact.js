@@ -84,21 +84,21 @@ class SelectContact extends Component {
                     style: 'cancel',
                 },
                 {text: 'Yes', onPress: () => {
-                    // const data = {
-                    //     name:item.name,
-                    //     phoneNumber:item.phoneNumber,
-                    //     userId:this.state.userId,
-                    //     bookId:this.state.bookId,
-                    // }
+                    const data = {
+                        name:item.name,
+                        phoneNumber:item.phoneNumber,
+                        userId:this.state.userId,
+                        bookId:this.state.bookId,
+                    }
             
-                    // contactApi.createContact(data)
-                    // .then( res => {
-                    //     NavigationService.navigate("Home")
-                    // })
-                    // .catch( err => {
-                    //     alert( err )
-                    // })
-                    alert("Yes Pressed")
+                    return contactApi.createContact(data)
+                    .then( res => {
+                        NavigationService.navigate("Home")
+                    })
+                    .catch( err => {
+                        console.log( err )
+                    })
+                    //alert("Yes Pressed")
                 }},
             ],
             {cancelable: false},

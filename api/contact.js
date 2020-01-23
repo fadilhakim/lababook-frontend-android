@@ -25,11 +25,10 @@ export default class ContactAPI {
             bookId:data.bookId,
         }
 
-        return axios.post(api+"/contact/create",{
-            data:dt,
-            headers: {
-                'Content-Type': 'application/json'
-            }
+        //console.log("check => ",api+"/contact/create", dt)
+
+        return axios.post(api+"/contact/create",dt,{
+            'Content-Type': 'application/json'
         })
     }
 
