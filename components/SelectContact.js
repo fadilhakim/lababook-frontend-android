@@ -9,11 +9,12 @@ import BaseStyle from "../style/BaseStyle"
 
 class SelectContact extends Component {
 
-    constructor(props) {
-        super(props)
+    constructor() {
+        super()
 
         this.state = {
             contacts: [],
+            contactBackup:[],
             searchInput: ""
         }
 
@@ -49,7 +50,8 @@ class SelectContact extends Component {
         })
 
         this.setState({
-            contacts: this.state.contacts.concat(newData)
+            contacts: this.state.contacts.concat(newData),
+            contactBackup: this.state.contactBackup.concat( newData )
         })
         // for(i = 0; i < newData.length; i++) {
         //     console.log("===>", newData[i])
@@ -62,19 +64,32 @@ class SelectContact extends Component {
 
     handleSearchInput(val) {
 
-        console.log(val)
+        // console.log(val)
 
-        // this.setState({
-        //     searchInput: val
-        // }, () => {
-        //     // const contacts = this.state.contacts
+        if(val === "") {
+            console.log("input empty")
+            return false
+        }
+        const newContacts = []
+      
+        data = this.state.contactBackup
+        //console.log(data[10])
+        searchText = val.trim().toLowerCase()
 
-        //     // contacts.map(item => {
-        //     //     if (item.name.include(val) || item.phoneNumber.include(val)) {
-        //     //         return item
-        //     //     }
-        //     // })
-        // })
+        for( var i = 0; i < data.length; i++) {
+            if (data[i].name.toLowerCase().includes(searchText) ) {
+                newContacts.push( data[i] )
+               
+            }
+        }
+
+        if(newContacts.length > 0) {
+            this.setState({
+                contacts:newContacts
+            })
+            //console.log(" =====> ", newContacts.slice(0,2) )
+        }
+        
     }
 
     render() {
@@ -82,7 +97,7 @@ class SelectContact extends Component {
         const { navigation } = this.props
         const params = navigation.state.params
 
-        console.log(this.state.contacts.length, " contacts")
+        //console.log(this.state.contacts.length, " contacts")
 
         return (
             <View>
@@ -104,15 +119,17 @@ class SelectContact extends Component {
 
 
                 </View>
-                <View style={{ marginTop: 20 }}>
+                <View style={{ marginTop:5 }}>
 
                     <Item>
+                        <Icon active name='search' style={{ marginLeft:15 }} />
                         <Input
-                            style={{ paddingLeft: 10, fontSize: 12 }}
+                            style={{ paddingLeft: 10, fontSize: 14 }}
                             placeholder="Search Contact ..."
-                            onKeyUp={(event) => { this.handleSearchInput(event.target.value) }}
+                            
+                            onChangeText={(val) => { this.handleSearchInput(val) }}
                         >
-                            <Icon active name='search' />
+                            
                         </Input>
                     </Item>
 
@@ -123,10 +140,11 @@ class SelectContact extends Component {
                 <FlatList
                     data={this.state.contacts}
                     scrollEnabled={true}
+                    keyExtractor={(item,index) => { item.lookupKey }}
                     renderItem={({ item, index }) => {
 
                         return (
-                            <TouchableNativeFeedback onPress={() => { }}>
+                            <TouchableNativeFeedback key={index} onPress={() => { NavigationService.navigate(" ",{ item }) }}>
                                 <View key={index}>
                                     <Item
                                         style={style.listContact}
@@ -143,8 +161,6 @@ class SelectContact extends Component {
                             </TouchableNativeFeedback>
                         )
                     }}
-                    keyExtractor={item => { item.lookupKey }}
-
                 >
 
                 </FlatList>
