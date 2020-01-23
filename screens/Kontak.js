@@ -174,13 +174,13 @@ class Kontak extends Component {
       })
   }
 
-  onValueChange(value: string) {
+  onValueChange(value) {
     this.setState({
       selected: value
     });
   }
 
-  onValueChange_2(value: string) {
+  onValueChange_2(value) {
     this.setState({
       selected2: value
     });
@@ -242,7 +242,7 @@ class Kontak extends Component {
                 })
               }}>
                 <View>
-                  <ContactCard {...item} key={index} />
+                  <ContactCard {...item} />
                 </View>
               </TouchableNativeFeedback>
 

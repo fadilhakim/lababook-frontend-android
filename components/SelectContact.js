@@ -1,21 +1,26 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableNativeFeedback, StyleSheet, FlatList, ListItem } from "react-native"
+import { Text, View, TouchableNativeFeedback, StyleSheet, FlatList, ActivityIndicator , Alert } from "react-native"
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { Input, Icon, Item } from "native-base"
 import NavigationService from '../helpers/NavigationService';
 
 import BaseStyle from "../style/BaseStyle"
+
 // import { SafeAreaView } from 'react-navigation';
+
+import ContactAPI from "./../api/contact"
 
 class SelectContact extends Component {
 
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
 
         this.state = {
             contacts: [],
             contactBackup:[],
-            searchInput: ""
+            searchInput: "",
+            userId: 1, // sementara
+            bookId: 1, // sementara
         }
 
         //this.searchContact = this.searchContact.bind(this)
@@ -40,6 +45,7 @@ class SelectContact extends Component {
             if (item.phoneNumbers) {
                 //console.log("====================",item.phoneNumbers[0].number.toString(), item.name)
                 newData.push({
+                    id:item.lookupKey,
                     name: item.name,
                     phoneNumber: item.phoneNumbers[0].number.toString(),
                     lookupKey: item.lookupKey
@@ -61,6 +67,43 @@ class SelectContact extends Component {
 
     }
 
+    addContact(item) {
+        
+        const contactApi = new ContactAPI()
+        //const confirmation = confirm("Are you sure want to add "+name+" ?")
+
+        // Works on both Android and iOS
+        Alert.alert(
+            'Add Contact',
+            `Are you sure want to add ${item.name} ?`,
+            [
+               
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {text: 'Yes', onPress: () => {
+                    // const data = {
+                    //     name:item.name,
+                    //     phoneNumber:item.phoneNumber,
+                    //     userId:this.state.userId,
+                    //     bookId:this.state.bookId,
+                    // }
+            
+                    // contactApi.createContact(data)
+                    // .then( res => {
+                    //     NavigationService.navigate("Home")
+                    // })
+                    // .catch( err => {
+                    //     alert( err )
+                    // })
+                    alert("Yes Pressed")
+                }},
+            ],
+            {cancelable: false},
+        );
+    }
 
     handleSearchInput(val) {
 
@@ -77,8 +120,14 @@ class SelectContact extends Component {
         searchText = val.trim().toLowerCase()
 
         for( var i = 0; i < data.length; i++) {
-            if (data[i].name.toLowerCase().includes(searchText) ) {
-                newContacts.push( data[i] )
+            if (data[i].name.toLowerCase().includes(searchText) || data[i].phoneNumber.toLowerCase().includes(searchText)) {
+                newContacts.push({
+                    id:data[i].id,
+                    lookupKey:data[i].lookupKey,
+                    name:data[i].name,
+                    phoneNumber:data[i].phoneNumber
+
+                })
                
             }
         }
@@ -140,23 +189,17 @@ class SelectContact extends Component {
                 <FlatList
                     data={this.state.contacts}
                     scrollEnabled={true}
-                    keyExtractor={(item,index) => { item.lookupKey }}
+                    keyExtractor={(item,index) =>  index.toString()  }
                     renderItem={({ item, index }) => {
 
                         return (
-                            <TouchableNativeFeedback key={index} onPress={() => { NavigationService.navigate(" ",{ item }) }}>
-                                <View key={index}>
-                                    <Item
-                                        style={style.listContact}
-                                        // title={`${item.name}`}
-                                        // subtitle={`${item.phoneNumber}`}
-                                        key={index}
-
-                                    >
-                                        <View style={style.circleName}><Text style={{color:'#fff', fontWeight : 'bold', fontSize : 20}}>{item.name[0]}</Text></View>
-                                        <View><Text style={{fontSize:16}}>{item.name}</Text></View>
-  
-                                    </Item>
+                            <TouchableNativeFeedback onPress={ () => { this.addContact(item) }}>
+                               <View style={style.listContact}>
+                                    <View style={style.circleName}><Text style={{color:'#fff', fontWeight : 'bold', fontSize : 20}}>{item.name[0]}</Text></View>
+                                    <View style={{flexDirection:"column"}}>
+                                        <View style={style.nameText}><Text style={{fontSize:16}}>{item.name}</Text></View>
+                                        <View style={style.phoneNumber}><Text style={{fontSize:11}}>{item.phoneNumber}</Text></View>
+                                    </View>
                                 </View>
                             </TouchableNativeFeedback>
                         )
@@ -189,7 +232,10 @@ const style = StyleSheet.create({
         paddingBottom:15,
         flexDirection : 'row',
         paddingLeft:15,
-        fontWeight : 'bold'
+        fontWeight : 'bold',
+        borderBottomColor:"grey",
+        borderBottomWidth:1
+    
     },
     circleName : {
         paddingLeft: 10,
@@ -204,5 +250,13 @@ const style = StyleSheet.create({
         width:42,
         textAlign:'center',
         marginRight : 20
+    },
+    nameText:{
+       
+        alignSelf:"flex-start"
+    },
+    phoneText:{
+       
+        alignSelf:"flex-end"
     }
 })
