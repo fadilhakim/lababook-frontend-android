@@ -26,6 +26,7 @@ import axios from "axios"
 import ContactCard from '../components/ContactCard'
 // import SelectContact from "./components/SelectContact"
 import NavigationService from '../helpers/NavigationService';
+import { numberFormat } from "../helpers/NumberFormat";
 
 import ContactAPI from "../api/contact"
 
@@ -82,7 +83,9 @@ class Kontak extends Component {
         bookId: ""
       },
       selected: "key1",
-      selected2: "kunci1"
+      selected2: "kunci1",
+      totalCredit:0,
+      totalDebit:0,
     }
 
     this.getContacts = this.getContacts.bind(this)
@@ -147,21 +150,34 @@ class Kontak extends Component {
 
         const data = res.data
         const newData = []
-
+        
         data.map(item => {
+
+          var trxType = "credit"
+
+          if( item.totalTransaction < 0) {
+            trxType = "debit"
+          }
+
+          _this.setState({
+            totalCredit: this.state.totalCredit + item.totalCredit,
+            totalDebit: this.state.totalDebit + item.totalDebit,
+          })
+
           newData.push({
             id: item.id,
             contactName: item.name,
             contactInitial: item.name[0],
             phoneNumber: item.phoneNumber,
-            trxType: 'debit', // hasil join
-            trxValue: '2.000.000', // hasil join 
+            trxType: trxType, // hasil join
+            trxValue: numberFormat(item.totalTransaction), // hasil join 
             updatedAt: '3 hari lalu' // hasil join dari trx
           })
         })
 
         _this.setState({
-          contacts: this.state.contacts.concat(newData)
+          contacts: this.state.contacts.concat(newData),
+         
         }, function () {
           console.log("contact => ", this.state.contacts)
         })
@@ -207,9 +223,9 @@ class Kontak extends Component {
               <MaterialIcons name='person' size={32} color='white' />
             </View>
             <Text style={{ fontSize: 16 }}>
-              Anda Berikan: <Text style={{ color: '#ce4165' }}>Rp. 2.000.000</Text>
+                Anda Berikan: <Text style={{ color: '#ce4165' }}>Rp. { numberFormat(this.state.totalDebit) }</Text>
               {'\n'}
-              Anda Dapatkan: <Text style={{ color: '#7dd220' }}>Rp. 3.000.000</Text>
+              Anda Dapatkan: <Text style={{ color: '#7dd220' }}>Rp. { numberFormat(this.state.totalCredit) }</Text>
             </Text>
           </View>
 
@@ -237,7 +253,7 @@ class Kontak extends Component {
 
                   name: item.contactName,
                   phoneNumber: item.phoneNumber,
-                  contactInitial: item.contactInitial
+                  contactInitial: item.contactInitial,
 
                 })
               }}>

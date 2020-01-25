@@ -34,9 +34,7 @@ function ContactCard (props) {
       <View style={styles.contactRight}>
         <Text {...tProps} style={trxType === 'debit' ? styles.contactRightTopLent : styles.contactRightTopPaid}>
           {
-            trxType === 'debit'
-              ? 'Anda berikan'
-              : 'Anda dapatkan'
+            trxType === 'debit' ? 'Anda berikan' : 'Anda dapatkan'
           }
         </Text>
         <Text {...tProps} style={trxType === 'debit' ? styles.contactRightBottomLent : styles.contactRightBottomPaid}>
