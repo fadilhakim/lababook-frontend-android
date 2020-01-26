@@ -9,7 +9,7 @@ export default class Aktifitas extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tableHead: ['Total \n 5 Transaksi', 'Anda Berikan \n Rp.1.200.000', 'Anda Dapatkan \n Rp.1.200.000'],
+      tableHead: ['Total \n 5 Transaksi', 'Anda Berikan \n Rp.300.000', 'Anda Dapatkan \n Rp.3.200.000'],
       tableData: [
         ['hutang makan bakso', '200.000', ''],
         ['dio puitang', '', '200.000'],
@@ -31,26 +31,26 @@ export default class Aktifitas extends React.Component {
     return (
       <View>
         
-        <View>
-          <Text style={{ fontSize: 16 }}>
+     
+        <View style  = {styles.topAct}>
+          <Text style={{ fontSize: 16, paddingLeft : 8 , fontWeight : 'bold'}}>
               Aktifitas : 
-              
           </Text>
           <Picker
               mode="dropdown"
               iosHeader="Select your SIM"
               iosIcon={<Icon name="arrow-down" />}
-              style={{ width: undefined }}
+              style={{ posisiton : 'absolute', left : 10, top : -14  }}
               selectedValue={this.state.selected}
               onValueChange={this.onValueChange.bind(this)}
             >
-              <Picker.Item label="Wallet" value="key0" />
-              <Picker.Item label="ATM Card" value="key1" />
-              <Picker.Item label="Debit Card" value="key2" />
-              <Picker.Item label="Credit Card" value="key3" />
-              <Picker.Item label="Net Banking" value="key4" />
+              <Picker.Item label="Terbaru" value="key0" />
+              <Picker.Item label="Terlama" value="key1" />
+              <Picker.Item label="Terbanyak" value="key2" />
+              <Picker.Item label="A-Z" value="key3" />
             </Picker>
         </View>
+     
         <View style={styles.topBar}>
           
           <View style={styles.topBarLeft}>
@@ -63,7 +63,7 @@ export default class Aktifitas extends React.Component {
               modalTransparent={false}
               animationType={"fade"}
               androidMode={"default"}
-              placeHolderText="start date"
+              placeHolderText="start date :"
               textStyle={{ color: "green" }}
               placeHolderTextStyle={{ color: "#2a2c7b" }}
               onDateChange={ () => {console.log("date change") }}
@@ -84,7 +84,7 @@ export default class Aktifitas extends React.Component {
                 modalTransparent={false}
                 animationType={"fade"}
                 androidMode={"default"}
-                placeHolderText="end date"
+                placeHolderText="end date :"
                 textStyle={{ color: "green" }}
                 placeHolderTextStyle={{ color: "#2a2c7b" }}
                 onDateChange={ () => {console.log("date change") }}
@@ -108,7 +108,7 @@ export default class Aktifitas extends React.Component {
                 key={index}
                 data={rowData}
                 textStyle={{ textAlign: "left", borderRightColor: "#f3f3f3", borderRightWidth: 3, paddingLeft: 5 }}
-                style={[{ backgroundColor: 'white', minHeight: 20, alignItems: 'center', paddingLeft: 5 }, index % 2 && { backgroundColor: "#F7F6E7", minHeight: 20, alignItems: 'center', paddingLeft: 5 }]}
+                style={[{ backgroundColor: 'white', minHeight: 20, alignItems: 'center', paddingLeft: 5, paddingTop : 8, paddingBottom : 8 }, index % 2 && { backgroundColor: "#F7F6E7", minHeight: 20, alignItems: 'center', paddingLeft: 5, paddingTop : 8, paddingBottom : 8 }]}
               ></Row>
             })
           }
@@ -122,6 +122,10 @@ export default class Aktifitas extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  topAct : {
+    flexDirection : 'row',
+    justifyContent: 'flex-end'
+  },
 
   topBar: {
     flexDirection: 'row',
@@ -140,7 +144,7 @@ const styles = StyleSheet.create({
 
   container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
   head: { height: 50, backgroundColor: '#f1f8ff', paddingLeft: 5 },
-  text: { paddingLeft: 5, textAlign: "left", fontWeight: 'bold' },
+  text: { paddingLeft: 5, textAlign: "left"},
   Rows: {
 
     borderBottomColor: "white",

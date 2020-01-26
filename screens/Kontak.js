@@ -286,8 +286,8 @@ class Kontak extends Component {
                 iosHeader="Select Filter"
                 selectedValue={this.state.selected}
                 onValueChange={this.onValueChange.bind(this)}
-                itemStyle={{ backgroundColor: "grey", color: "#f3f3f3", fontSize:13 }}
-                style={{color: "#f3f3f3", fontSize:13 }}
+                itemStyle={{ backgroundColor: "grey", color: "#f1f1f1", fontSize:13 }}
+                style={{color: "#f1f1f1", fontSize:13 }}
               >
                 <Picker.Item label="Terbaru" value="key0" />
                 <Picker.Item label="Terlama" value="key1" />
@@ -301,6 +301,8 @@ class Kontak extends Component {
                 style={{ width: undefined }}
                 selectedValue={this.state.selected2}
                 onValueChange={this.onValueChange_2.bind(this)}
+                itemStyle={{ backgroundColor: "grey", color: "#f1f1f1", fontSize:13 }}
+                style={{color: "#f1f1f1", fontSize:13 }}
               >
                 <Picker.Item label="Semua" value="kunci1" />
                 <Picker.Item label="Lunas" value="kunci2" />
