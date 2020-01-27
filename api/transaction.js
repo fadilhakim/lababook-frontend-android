@@ -16,6 +16,17 @@ export default class Transaction {
         })
     }
 
+    getTransactionByContact(contactId) {
+        return axios.get(api+"/transaction/contact",{
+            params:{
+                contactId:contactId
+            },
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+    }
+
     createTransactions(data) {
 
         const dt = {

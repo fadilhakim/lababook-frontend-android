@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import {
   View,
   Text,
@@ -11,62 +11,124 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import NavigationService from '../helpers/NavigationService';
 import BaseStyle from "./../style/BaseStyle"
 
-function DetailTransaction(props) {
-  const { navigation } = props
-  const params = props.navigation.state.params
+import TransactionAPI from "./../api/transaction"
 
-  const signOut = () => {
-    AsyncStorage.removeItem('userToken')
-      .then(() => navigation.navigate('AuthLoading'))
+class DetailTransaction extends Component {
+
+  constructor() {
+    super()
+
+    this.state = {
+      contactTransactions:[]
+    }
   }
 
+  componentDidMount() {
 
-  return (
-    <View style={BaseStyle.container}>
-      <View style={BaseStyle.headerBlue}>
-        <TouchableNativeFeedback onPress={() => { NavigationService.navigate("Home") }}>
-          <View style={BaseStyle.divBack}>
+    const transactionApi = new TransactionAPI()
+
+    const { navigation } = this.props
+    const params = this.props.navigation.state.params
+
+    transactionApi.getTransactionByContact(params.contactId)
+    .then(res => {
+      console.log( " res =====> ",res.data)
+      this.setState({
+        contactTransactions:this.state.contactTransactions.concat(res.data)
+      })
+    })
+    .catch(err => {
+      alert(err)
+    })
+
+  }
+
+  signOut() {
+    AsyncStorage.removeItem('userToken')
+    .then(() => navigation.navigate('AuthLoading'))
+  }
+
+  render() {
+    const { navigation } = this.props
+    const params = this.props.navigation.state.params
+    
+    var dataTransaction =   <View style={BaseStyle.blmWrap}>
+      <Text style={BaseStyle.blmAdaText}>Belum Anda Transaksi</Text>
+    </View>
+
+    if( this.state.contactTransactions.length > 0) {
+      dataTransaction = this.state.contactTransactions.map(item => {
+        return (
+          <View key={ item.trxId }>
+            <Text>{ JSON.stringify(item)  }</Text>
+          </View>
+        )
+      })
+    }
+  
+    return (
+      <View style={BaseStyle.container}>
+        <View style={BaseStyle.headerBlue}>
+          <TouchableNativeFeedback onPress={() => { NavigationService.navigate("Home") }}>
+            <View style={BaseStyle.divBack}>
+              <Ionicons
+                name='md-arrow-back'
+                size={30}
+                color='#fff'
+                style={BaseStyle.arrowBack}
+              />
+            </View>
+          </TouchableNativeFeedback>
+          <View style={BaseStyle.initialNameCircle}><Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 25 }}>{params.contactInitial}</Text></View>
+          <Text style={BaseStyle.headText}>{params.name}</Text>
+          <Text style={BaseStyle.headPhone}>{params.phoneNumber} </Text>
+          <View style={BaseStyle.divLogo}>
             <Ionicons
-              name='md-arrow-back'
-              size={30}
+              name='md-call'
+              size={25}
               color='#fff'
-              style={BaseStyle.arrowBack}
+              style={BaseStyle.logoPhone}
             />
           </View>
-        </TouchableNativeFeedback>
-        <View style={BaseStyle.initialNameCircle}><Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 25 }}>{params.contactInitial}</Text></View>
-        <Text style={BaseStyle.headText}>{params.name}</Text>
-        <Text style={BaseStyle.headPhone}>{params.phoneNumber} </Text>
-        <View style={BaseStyle.divLogo}>
-          <Ionicons
-            name='md-call'
-            size={25}
-            color='#fff'
-            style={BaseStyle.logoPhone}
-          />
+        </View>
+        <View style={BaseStyle.headerBtm}>
+          <Text>Total : Rp. { params.totalTransaction } </Text>
+          <Text>Pengingat : - </Text>
+        </View>
+        
+        { dataTransaction }
+        
+        <View style={BaseStyle.btnWrap}>
+  
+          <TouchableNativeFeedback onPress={() => { NavigationService.navigate("AddTransactions",{
+            
+            transactionType:"debit",
+            transactionType:"credit",
+            name: params.name,
+            phoneNumber: params.phoneNumber,
+            contactInitial: params.contactInitial,
+            contactId:params.contactId,
+            totalTransaction:params.trxValue
+          }) }}>
+            <View style={BaseStyle.btnBerikan}><Text style={BaseStyle.btnText}>ANDA BERIKAN</Text></View>
+          </TouchableNativeFeedback>
+          <TouchableNativeFeedback onPress={() => { NavigationService.navigate("AddTransactions",{
+            transactionType:"credit",
+            name: params.name,
+            phoneNumber: params.phoneNumber,
+            contactInitial: params.contactInitial,
+            contactId:params.contactId,
+            totalTransaction:params.trxValue
+          }) }}>
+            <View onPress={() => { NavigationService.navigate("Home") }} style={BaseStyle.btnDapatkan}>
+              <Text style={BaseStyle.btnText}>ANDA DAPATKAN</Text></View>
+          </TouchableNativeFeedback>
         </View>
       </View>
-      <View style={BaseStyle.headerBtm}>
-        <Text>Total :- </Text>
-        <Text>Pengingat : - </Text>
-      </View>
+    )
+  }
 
-      <View style={BaseStyle.blmWrap}>
-        <Text style={BaseStyle.blmAdaText}>Belum Anda Transaksi</Text>
-
-      </View>
-
-      <View style={BaseStyle.btnWrap}>
-
-        <TouchableNativeFeedback onPress={() => { NavigationService.navigate("AddTransactions") }}>
-          <View style={BaseStyle.btnBerikan}><Text style={BaseStyle.btnText}>ANDA BERIKAN</Text></View>
-        </TouchableNativeFeedback>
-        <TouchableNativeFeedback onPress={() => { NavigationService.navigate("AddTransactions") }}>
-          <View onPress={() => { NavigationService.navigate("Home") }} style={BaseStyle.btnDapatkan}><Text style={BaseStyle.btnText}>ANDA DAPATKAN</Text></View>
-        </TouchableNativeFeedback>
-      </View>
-    </View>
-  )
+  
 }
 
 export default DetailTransaction

@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{ Component } from 'react'
 import {
   View,
   Text,
@@ -21,15 +21,75 @@ Font.loadAsync({
   "Roboto_medium": require('../assets/fonts/Roboto-Medium.ttf')
 })
 
-function DetailTransaction (props) {
-  const { navigation } = props
+class DetailTransaction extends Component {
 
-  const signOut = () => {
-    AsyncStorage.removeItem('userToken')
-      .then(() => navigation.navigate('AuthLoading'))
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      input:{
+        amount:0,
+        description:"",
+        date:"",
+        transactionType:""
+      }
+    }
+
+    this.handleAmountChange = this.handleAmountChange.bind(this)
+    this.handleDateChange = this.handleDateChange.bind(this)
+    this.handleDescriptionChange = this.handleDescriptionChange.bind(this)
+    this.addTransaction = this.addTransaction.bind(this)
   }
 
-  this.onShare = async () => {
+  componentDidMount() {
+
+    const params = this.props.navigation.state.params
+    const trxType = params.transactionType
+
+    alert( trxType )
+
+    this.setState((prevState) => ({
+      input:{
+        ...prevState.input,
+        transactionType:trxType
+      }
+    }))
+  }
+
+  handleAmountChange(value) {
+    this.setState((prevState) => ({
+      input:{
+        ...prevState.input,
+        amount:value
+      }
+    }))
+    //console.log( " handle ===> ",this.state.input.amount )
+  }
+
+  handleDescriptionChange(value) {
+    this.setState((prevState) => ({
+      input:{
+        ...prevState.input,
+        description:value
+      }
+        
+    }))
+  }
+
+  handleDateChange(value) {
+    this.setState((prevState) => ({
+        input:{
+          ...prevState.input,
+          date:value
+        }    
+    }))
+  }
+
+  addTransaction() {
+
+  }
+
+  onShare = async () => {
     try {
       const result = await Share.share({
         message:
@@ -50,59 +110,71 @@ function DetailTransaction (props) {
     }
   };
 
-  return (
-    <Container style={BaseStyle.container}>
-        <Header style={styles.headerRed}>
-          <Left>
-          <TouchableNativeFeedback onPress={() => {  navigation.goBack() }}>
-            <Button transparent>
-              <Icon name='arrow-back' />
-            </Button>
-          </TouchableNativeFeedback>
-          </Left>
-          <Body>
-            <Title style={BaseStyle.fixTitle}>Anda Berikan</Title>
-            <Subtitle style={BaseStyle.fixSubtitle}>Aan Siguna</Subtitle>
-          </Body>
-          <Right>
-            <Button transparent>
-              <Icon name='trash' />
-            </Button>
-            <Button onPress={ () => { this.onShare() }} transparent>
-              <Icon name='share' />
-            </Button>
-          </Right>
-        </Header>
-        <Content>
-          <Form style={BaseStyle.formTransaction}>
-            <Item style={BaseStyle.inputItem}>
-              <Icon style={BaseStyle.inputIcon} active name='md-pricetag' />
-              <Input placeholder="Jumlah" />
-            </Item>
-            <Item style={BaseStyle.inputItem}>
-              <Icon style={BaseStyle.inputIcon} active name='md-text' />
-              <Input placeholder="Keterangan" />
-            </Item>
-            <Item style={BaseStyle.inputItem}>
-              <Icon style={BaseStyle.inputIcon} style={{color : '#aaa'}} active name='ios-calendar' />
-              <Input placeholder="Tanggal Transaksi" />
-            </Item>
-            <Item style={BaseStyle.inputItem}>
-              <Icon style={BaseStyle.inputIcon} active name='ios-camera' />
-              <Input placeholder="Lampiran Gambar" />
-            </Item>
+  render() {
+    const { navigation } = this.props
 
-          </Form>
-        </Content>
-          <View style={BaseStyle.btnWrap}>
+    const signOut = () => {
+      AsyncStorage.removeItem('userToken')
+        .then(() => navigation.navigate('AuthLoading'))
+    }
 
-            <TouchableNativeFeedback onPress={() => {  NavigationService.navigate("Home") }}>
-              <View style={styles.btnBerikan}><Text style={BaseStyle.btnText}>SIMPAN TRANSAKSI</Text></View>
+    return (
+      <Container style={BaseStyle.container}>
+          <Header style={styles.headerRed}>
+            <Left>
+            <TouchableNativeFeedback onPress={() => {  navigation.goBack() }}>
+              <Button transparent>
+                <Icon name='arrow-back' />
+              </Button>
             </TouchableNativeFeedback>
+            </Left>
+            <Body>
+              <Title style={BaseStyle.fixTitle}>Anda Berikan</Title>
+              <Subtitle style={BaseStyle.fixSubtitle}>Aan Siguna</Subtitle>
+            </Body>
+            <Right>
+              <Button transparent>
+                <Icon name='trash' />
+              </Button>
+              <Button onPress={ () => { this.onShare() }} transparent>
+                <Icon name='share' />
+              </Button>
+            </Right>
+          </Header>
+          <Content>
+            <Form style={BaseStyle.formTransaction}>
+              <Item style={BaseStyle.inputItem}>
+                <Icon style={BaseStyle.inputIcon} active name='md-pricetag' />
+                <Input placeholder="Jumlah" onChangeText={(val) => { this.handleAmountChange(val) }} />
+              </Item>
+              <Item style={BaseStyle.inputItem}>
+                <Icon style={BaseStyle.inputIcon} active name='md-text' />
+                <Input placeholder="Keterangan" onChangeText={(val) => { this.handleDescriptionChange(val) }} />
+              </Item>
+              <Item style={BaseStyle.inputItem}>
+                <Icon style={BaseStyle.inputIcon} style={{color : '#aaa'}} active name='ios-calendar' />
+                <Input placeholder="Tanggal Transaksi" onChangeText={(val) => { this.handleDateChange(val) }} />
+              </Item>
+              <Item style={BaseStyle.inputItem}>
+                <Icon style={BaseStyle.inputIcon} active name='ios-camera' />
+                <Input placeholder="Lampiran Gambar" />
+              </Item>
+  
+            </Form>
+            <Text>{ JSON.stringify( this.state.input )}</Text>
+          </Content>
+            <View style={BaseStyle.btnWrap}>
+  
+              <TouchableNativeFeedback onPress={() => {  NavigationService.navigate("Home") }}>
+                <View style={styles.btnBerikan}><Text style={BaseStyle.btnText}>SIMPAN TRANSAKSI</Text></View>
+              </TouchableNativeFeedback>
+  
+            </View>
+        </Container>
+    )
 
-          </View>
-      </Container>
-  )
+  }
+  
 }
 
 export default DetailTransaction

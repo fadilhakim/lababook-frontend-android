@@ -179,7 +179,7 @@ class Kontak extends Component {
           contacts: this.state.contacts.concat(newData),
          
         }, function () {
-          console.log("contact => ", this.state.contacts)
+          //console.log("contact => ", this.state.contacts)
         })
 
 
@@ -254,6 +254,8 @@ class Kontak extends Component {
                   name: item.contactName,
                   phoneNumber: item.phoneNumber,
                   contactInitial: item.contactInitial,
+                  contactId:item.id,
+                  totalTransaction:item.trxValue
 
                 })
               }}>
