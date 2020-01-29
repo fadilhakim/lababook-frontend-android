@@ -2,7 +2,7 @@ import axios from "axios"
 
 import { api } from '../config/url'
 
-export default class Transaction {
+export default class TransactionAPI {
     
     getTransaction(bookId) {
        
@@ -34,7 +34,8 @@ export default class Transaction {
             amount:data.amount,
             description:data.description,
             userId:data.userId,
-            contactId:data.contactId
+            contactId:data.contactId,
+            dueDate:data.dueDate
         }
 
         //console.log("check => ",api+"/contact/create", dt)

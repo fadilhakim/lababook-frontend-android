@@ -255,6 +255,7 @@ class Kontak extends Component {
                   phoneNumber: item.phoneNumber,
                   contactInitial: item.contactInitial,
                   contactId:item.id,
+                  userId:this.state.userId,
                   totalTransaction:item.trxValue
 
                 })

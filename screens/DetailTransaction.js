@@ -19,7 +19,8 @@ class DetailTransaction extends Component {
     super()
 
     this.state = {
-      contactTransactions:[]
+      contactTransactions:[],
+      userId:""
     }
   }
 
@@ -29,6 +30,10 @@ class DetailTransaction extends Component {
 
     const { navigation } = this.props
     const params = this.props.navigation.state.params
+
+    this.setState({
+      userId:params.userId
+    })
 
     transactionApi.getTransactionByContact(params.contactId)
     .then(res => {
@@ -101,24 +106,26 @@ class DetailTransaction extends Component {
         <View style={BaseStyle.btnWrap}>
   
           <TouchableNativeFeedback onPress={() => { NavigationService.navigate("AddTransactions",{
-            
-            transactionType:"debit",
+          
             transactionType:"credit",
             name: params.name,
             phoneNumber: params.phoneNumber,
             contactInitial: params.contactInitial,
             contactId:params.contactId,
-            totalTransaction:params.trxValue
+            userId:this.state.userId,
+            totalTransaction:params.totalTransaction
           }) }}>
             <View style={BaseStyle.btnBerikan}><Text style={BaseStyle.btnText}>ANDA BERIKAN</Text></View>
           </TouchableNativeFeedback>
           <TouchableNativeFeedback onPress={() => { NavigationService.navigate("AddTransactions",{
-            transactionType:"credit",
+            transactionType:"debit",
             name: params.name,
             phoneNumber: params.phoneNumber,
             contactInitial: params.contactInitial,
             contactId:params.contactId,
-            totalTransaction:params.trxValue
+            userId:params.userId,
+            totalTransaction:params.totalTransaction,
+            userId:this.state.userId
           }) }}>
             <View onPress={() => { NavigationService.navigate("Home") }} style={BaseStyle.btnDapatkan}>
               <Text style={BaseStyle.btnText}>ANDA DAPATKAN</Text></View>

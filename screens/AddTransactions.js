@@ -5,14 +5,18 @@ import {
   StyleSheet,
   TouchableNativeFeedback,
   AsyncStorage,
-  Share
+  Share,
+  Alert
 } from 'react-native'
 import {
-  Container, Header, Content, Form, Item, Input, Label , Left, Body, Right, Button, Icon, Title, Subtitle
+  Container, Header, Content, Form, Item, Input, Label , Left, Body, 
+  Right, Button, Icon, Title, Subtitle, DatePicker
 } from 'native-base'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import NavigationService from '../helpers/NavigationService';
 import BaseStyle from "./../style/BaseStyle"
+
+import TransactionAPI  from "./../api/transaction"
 
 import * as Font from 'expo-font'
 
@@ -30,15 +34,19 @@ class DetailTransaction extends Component {
       input:{
         amount:0,
         description:"",
-        date:"",
-        transactionType:""
+        // date:"",
+        dueDate:"",
+        transactionType:"",
+        contactId:"",
+        userId:""
       }
     }
 
     this.handleAmountChange = this.handleAmountChange.bind(this)
-    this.handleDateChange = this.handleDateChange.bind(this)
+    //this.handleDateChange = this.handleDateChange.bind(this)
     this.handleDescriptionChange = this.handleDescriptionChange.bind(this)
     this.addTransaction = this.addTransaction.bind(this)
+    this.onShare = this.onShare.bind(this)
   }
 
   componentDidMount() {
@@ -46,12 +54,12 @@ class DetailTransaction extends Component {
     const params = this.props.navigation.state.params
     const trxType = params.transactionType
 
-    alert( trxType )
-
     this.setState((prevState) => ({
       input:{
         ...prevState.input,
-        transactionType:trxType
+        transactionType:trxType,
+        userId:params.userId,
+        contactId:params.contactId
       }
     }))
   }
@@ -76,24 +84,105 @@ class DetailTransaction extends Component {
     }))
   }
 
-  handleDateChange(value) {
+  handleDueDateChange(value) {
+
+    const thisDate = new Date(value) 
+    const year = thisDate.getFullYear()
+    const month = thisDate.getMonth() + 1
+    const date = thisDate.getDate() 
+
     this.setState((prevState) => ({
         input:{
           ...prevState.input,
-          date:value
+          dueDate:`${year}-${month}-${date}`
         }    
     }))
   }
 
   addTransaction() {
 
+    const transactionApi = new TransactionAPI()
+    const input = this.state.input
+    const params = this.props.navigation.state.params
+
+    const data = { 
+      type:input.transactionType,
+      amount:input.amount,
+      description:input.description,
+      userId:input.userId,
+      contactId:input.contactId,
+      dueDate:input.dueDate
+      //date:input.date
+    }
+
+    console.log("addTrx data => ", data )
+    
+    if( !data.amount || !data.userId || !data.contactId) {
+
+      console.log(" failed ==> ",data)
+      Alert.alert(
+        'Tambah transaksi gagal',
+        `lengkapi semua data`,
+        [
+            {text: 'Ok', onPress: () => {
+              
+            }},
+        ],
+        {cancelable: false},
+      );
+
+      return false
+    }
+
+    return transactionApi.createTransactions(data)
+    .then(res => {
+           // Works on both Android and iOS
+        Alert.alert(
+          'Tambah Transaksi berhasil',
+          `anda berhasil menambah transaksi`,
+          [
+              {text: 'Ok', onPress: () => {
+                NavigationService.navigate("DetailTransaction",{
+
+                  name: params.name,
+                  phoneNumber: params.phoneNumber,
+                  contactInitial: params.contactInitial,
+                  contactId:params.contactId,
+                  userId:this.state.input.userId,
+                  totalTransaction:params.totalTransaction
+
+                })
+              }},
+          ],
+          {cancelable: false},
+      );
+    })
+    .catch(err => {
+      console.log( err )
+      Alert.alert(
+        'Error',
+        `terjadi kesalahan`,
+        [
+            {text: 'Ok', onPress: () => {
+              
+            }},
+        ],
+        {cancelable: false},
+      )
+
+    })
+
   }
 
   onShare = async () => {
+
+    const params = this.props.navigation.state.params
+    var trxType = params.transactionType === "debit" ? "hutang" : "piutang"
+
     try {
       const result = await Share.share({
         message:
-          'Aan Wiguna ini utang kamu',
+          params.name+' ini '+trxType+' kamu',
       });
 
       if (result.action === Share.sharedAction) {
@@ -110,27 +199,67 @@ class DetailTransaction extends Component {
     }
   };
 
+  signOut = () => {
+    AsyncStorage.removeItem('userToken')
+      .then(() => navigation.navigate('AuthLoading'))
+  }
+
   render() {
     const { navigation } = this.props
+    const params = this.props.navigation.state.params
 
-    const signOut = () => {
-      AsyncStorage.removeItem('userToken')
-        .then(() => navigation.navigate('AuthLoading'))
+    var dueDateElement =  <Item style={BaseStyle.inputItem}>
+      <Icon style={BaseStyle.inputIcon} style={{color : '#aaa'}} active name='ios-calendar' />
+      <DatePicker
+        defaultDate={new Date()}
+        minimumDate={new Date()}
+      
+        locale={"id"}
+        timeZoneOffsetInMinutes={undefined}
+        modalTransparent={false}
+        animationType={"fade"}
+        androidMode={"default"}
+        placeHolderText="Tenggat Waktu"
+        format="YYYY-MM-DD"
+        placeHolderTextStyle={{ color: "#2a2c7b" }}
+        onDateChange={ (value) => { this.handleDueDateChange(value) }}
+        disabled={false}
+      />
+    
+    </Item>
+
+    if(params.transactionType === "debit") {
+      dueDateElement = <Text>{""}</Text>
     }
 
     return (
       <Container style={BaseStyle.container}>
           <Header style={styles.headerRed}>
             <Left>
-            <TouchableNativeFeedback onPress={() => {  navigation.goBack() }}>
-              <Button transparent>
-                <Icon name='arrow-back' />
-              </Button>
+            <TouchableNativeFeedback onPress={() => {  
+                //console.log('BAAAACK')
+                NavigationService.navigate("DetailTransaction", {
+                  name: params.name,
+                  phoneNumber: params.phoneNumber,
+                  contactInitial: params.contactInitial,
+                  contactId:params.contactId,
+                  userId:this.state.userId,
+                  totalTransaction:params.totalTransaction
+                }) 
+              }}>
+             <View>
+              <Ionicons
+                name='md-arrow-back'
+                size={30}
+                color='#fff'
+                style={{ marginLeft:10 }}
+              />
+            </View>
             </TouchableNativeFeedback>
             </Left>
             <Body>
-              <Title style={BaseStyle.fixTitle}>Anda Berikan</Title>
-              <Subtitle style={BaseStyle.fixSubtitle}>Aan Siguna</Subtitle>
+              <Title style={BaseStyle.fixTitle}>{ params.transactionType === "debit" ? "Anda Dapatkan" : "Anda Berikan"}</Title>
+              <Subtitle style={BaseStyle.fixSubtitle}>{ params.name }</Subtitle>
             </Body>
             <Right>
               <Button transparent>
@@ -151,22 +280,30 @@ class DetailTransaction extends Component {
                 <Icon style={BaseStyle.inputIcon} active name='md-text' />
                 <Input placeholder="Keterangan" onChangeText={(val) => { this.handleDescriptionChange(val) }} />
               </Item>
+              
+             
               <Item style={BaseStyle.inputItem}>
                 <Icon style={BaseStyle.inputIcon} style={{color : '#aaa'}} active name='ios-calendar' />
-                <Input placeholder="Tanggal Transaksi" onChangeText={(val) => { this.handleDateChange(val) }} />
+                <Input placeholder="Tanggal Transaksi" disabled value={ new Date().toISOString().split('T')[0] } />
+              
               </Item>
+              { dueDateElement }
               <Item style={BaseStyle.inputItem}>
                 <Icon style={BaseStyle.inputIcon} active name='ios-camera' />
                 <Input placeholder="Lampiran Gambar" />
               </Item>
+
+              <Text>{ this.state.input.dueDate }</Text>
   
             </Form>
-            <Text>{ JSON.stringify( this.state.input )}</Text>
+            
           </Content>
             <View style={BaseStyle.btnWrap}>
   
-              <TouchableNativeFeedback onPress={() => {  NavigationService.navigate("Home") }}>
-                <View style={styles.btnBerikan}><Text style={BaseStyle.btnText}>SIMPAN TRANSAKSI</Text></View>
+              <TouchableNativeFeedback onPress={() => {  this.addTransaction() }}>
+                <View style={styles.btnBerikan}>
+                  <Text style={BaseStyle.btnText}>SIMPAN TRANSAKSI</Text>
+                </View>
               </TouchableNativeFeedback>
   
             </View>

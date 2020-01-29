@@ -20,7 +20,7 @@ export default class Aktifitas extends React.Component {
     };
   }
 
-  onValueChange(value: string) {
+  onValueChange(value) {
     this.setState({
       selected: value
     });
@@ -76,19 +76,19 @@ export default class Aktifitas extends React.Component {
           
               <View style={styles.topBarRightPdf}>
                 <DatePicker
-                defaultDate={new Date(2018, 4, 4)}
-                // minimumDate={new Date(2018, 1, 1)}
-                maximumDate={new Date()}
-                locale={"id"}
-                timeZoneOffsetInMinutes={undefined}
-                modalTransparent={false}
-                animationType={"fade"}
-                androidMode={"default"}
-                placeHolderText="end date :"
-                textStyle={{ color: "green" }}
-                placeHolderTextStyle={{ color: "#2a2c7b" }}
-                onDateChange={ () => {console.log("date change") }}
-                disabled={false}
+                  defaultDate={new Date(2018, 4, 4)}
+                  // minimumDate={new Date(2018, 1, 1)}
+                  maximumDate={new Date()}
+                  locale={"id"}
+                  timeZoneOffsetInMinutes={undefined}
+                  modalTransparent={false}
+                  animationType={"fade"}
+                  androidMode={"default"}
+                  placeHolderText="end date :"
+                  textStyle={{ color: "green" }}
+                  placeHolderTextStyle={{ color: "#2a2c7b" }}
+                  onDateChange={ () => {console.log("date change") }}
+                  disabled={false}
                 />
               </View>
             
