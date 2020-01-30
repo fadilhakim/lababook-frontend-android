@@ -9,12 +9,9 @@ export default class Aktifitas extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tableHead: ['Total \n 5 Transaksi', 'Anda Berikan \n Rp.300.000', 'Anda Dapatkan \n Rp.3.200.000'],
+      tableHead: [],
       tableData: [
-        ['hutang makan bakso', '200.000', ''],
-        ['dio puitang', '', '200.000'],
-        ['jotaro hutang', '', '3.000.000'],
-        ['haula piutang', '100.000', '']
+   
       ],
       selected : "key1"
     };

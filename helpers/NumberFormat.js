@@ -1,3 +1,3 @@
 export function numberFormat(num) {
-    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+    return "Rp. "+num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }

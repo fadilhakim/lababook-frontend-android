@@ -223,9 +223,9 @@ class Kontak extends Component {
               <MaterialIcons name='person' size={32} color='white' />
             </View>
             <Text style={{ fontSize: 16 }}>
-                Anda Berikan: <Text style={{ color: '#ce4165' }}>Rp. { numberFormat(this.state.totalDebit) }</Text>
+                Anda Berikan: <Text style={{ color: '#ce4165' }}> { numberFormat(this.state.totalDebit) }</Text>
               {'\n'}
-              Anda Dapatkan: <Text style={{ color: '#7dd220' }}>Rp. { numberFormat(this.state.totalCredit) }</Text>
+              Anda Dapatkan: <Text style={{ color: '#7dd220' }}> { numberFormat(this.state.totalCredit) }</Text>
             </Text>
           </View>
 

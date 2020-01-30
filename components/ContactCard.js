@@ -38,7 +38,7 @@ function ContactCard (props) {
           }
         </Text>
         <Text {...tProps} style={trxType === 'debit' ? styles.contactRightBottomLent : styles.contactRightBottomPaid}>
-          Rp. {trxValue}
+           {trxValue}
         </Text>
       </View>
     </View>

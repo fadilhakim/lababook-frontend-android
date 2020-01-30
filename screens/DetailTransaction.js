@@ -8,7 +8,10 @@ import {
   Button
 } from 'react-native'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
+import { Table, Row, Rows } from 'react-native-table-component'
+
 import NavigationService from '../helpers/NavigationService';
+import { numberFormat } from "../helpers/NumberFormat";
 import BaseStyle from "./../style/BaseStyle"
 
 import TransactionAPI from "./../api/transaction"
@@ -20,7 +23,14 @@ class DetailTransaction extends Component {
 
     this.state = {
       contactTransactions:[],
-      userId:""
+      userId:"",
+      totalDebit:0,
+      totalCredit:0,
+      totalTransaction:0,
+      tableHead: [],
+      tableData: [
+     
+      ],
     }
   }
 
@@ -37,9 +47,38 @@ class DetailTransaction extends Component {
 
     transactionApi.getTransactionByContact(params.contactId)
     .then(res => {
-      console.log( " res =====> ",res.data)
+      
+      
+      const dtHeader= ["Total"]
+      const dtTable = []
+
+      res.data.map((item) => {
+        var row = []
+
+        if( item.type === "debit") {
+          row.push(item.description,numberFormat(item.amount),"")
+          
+          this.setState({
+            totalDebit: this.state.totalDebit + item.amount,
+            totalTransaction: this.state.totalTransaction + item.amount
+          })
+        } else{
+          row.push(item.description,"",numberFormat(item.amount))
+          this.setState({
+            totalCredit: this.state.totalCredit + item.amount,
+            totalTransaction: this.state.totalTransaction + item.amount
+          })
+        }
+        
+        
+        dtTable.push(row)
+      })
+
+      dtHeader.push(`Anda Berikan \n ${ numberFormat(this.state.totalDebit)}`, `Anda Dapatkan \n ${numberFormat(this.state.totalCredit)}`)
       this.setState({
-        contactTransactions:this.state.contactTransactions.concat(res.data)
+        contactTransactions:this.state.contactTransactions.concat(res.data),
+        tableHead:this.state.tableHead.concat(dtHeader),
+        tableData:this.state.tableData.concat(dtTable)
       })
     })
     .catch(err => {
@@ -62,13 +101,21 @@ class DetailTransaction extends Component {
     </View>
 
     if( this.state.contactTransactions.length > 0) {
-      dataTransaction = this.state.contactTransactions.map(item => {
-        return (
-          <View key={ item.trxId }>
-            <Text>{ JSON.stringify(item)  }</Text>
-          </View>
-        )
-      })
+      dataTransaction =  <Table>
+        <Row data={this.state.tableHead} style={styles.head} textStyle={styles.text} />
+        {
+          this.state.tableData.map((rowData, index) => {
+            return <Row
+              key={index}
+              data={rowData}
+              textStyle={{ textAlign: "left", borderRightColor: "#f3f3f3", borderRightWidth: 3, paddingLeft: 5 }}
+              style={[{ backgroundColor: 'white', minHeight: 20, alignItems: 'center', paddingLeft: 5, paddingTop : 8, paddingBottom : 8 }, index % 2 && { backgroundColor: "#F7F6E7", minHeight: 20, alignItems: 'center', paddingLeft: 5, paddingTop : 8, paddingBottom : 8 }]}
+            ></Row>
+          })
+        }
+        {/* <Rows data={state.tableData} textStyle={styles.text} style={ styles.Rows }/> */}
+      </Table>
+
     }
   
     return (
@@ -97,7 +144,7 @@ class DetailTransaction extends Component {
           </View>
         </View>
         <View style={BaseStyle.headerBtm}>
-          <Text>Total : Rp. { params.totalTransaction } </Text>
+          <Text>Total : { numberFormat(this.state.totalTransaction) } </Text>
           <Text>Pengingat : - </Text>
         </View>
         
@@ -142,5 +189,13 @@ export default DetailTransaction
 
 const styles = StyleSheet.create({
 
+  head: { height: 50, backgroundColor: '#f1f8ff', paddingLeft: 5 },
+  text: { paddingLeft: 5, textAlign: "left"},
+  Rows: {
+
+    borderBottomColor: "white",
+    backgroundColor: "white",
+    borderRightColor: "black"
+  }
 
 })
