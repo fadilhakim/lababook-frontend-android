@@ -1,7 +1,10 @@
 import React from 'react'
-import { View, Text, StyleSheet, TextInput, TouchableNativeFeedback } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableNativeFeedback,ScrollView } from 'react-native'
 import { Table, Row, Rows } from 'react-native-table-component'
 import { DatePicker, Content, Icon, Picker, Form } from "native-base"
+
+import TransactionAPI from "./../api/transaction"
+import {numberFormat} from "../helpers/NumberFormat"
 
 import { textExtraProps as tProps } from '../config/system'
 
@@ -9,6 +12,10 @@ export default class Aktifitas extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      bookId:1, // sementara
+      userId:1, // sementara,
+      totalDebit:0,
+      totalCredit:0,
       tableHead: [],
       tableData: [
    
@@ -22,6 +29,64 @@ export default class Aktifitas extends React.Component {
       selected: value
     });
   }  
+
+  componentDidMount() {
+
+    const { navigation } = this.props
+    const params = this.props.navigation.state.params
+    const _this = this
+
+    const objTrx = new TransactionAPI() 
+
+    bookId = this.state.bookId 
+
+    objTrx.getTransactionByBook(bookId)
+    .then(res => {
+
+      const resultdata = []
+
+      res.data.contacts.map(contact => {
+          contact.transactions.map(transaction => {
+            resultdata.push(transaction)
+          })
+      })
+
+      const dtHeader= ["Total"]
+      const dtTable = []
+
+      resultdata.map((item) => {
+        var row = []
+
+        if( item.type === "debit") {
+          row.push(item.description,numberFormat(item.amount),"")
+          
+          this.setState({
+            totalDebit: this.state.totalDebit + item.amount,
+            totalTransaction: this.state.totalTransaction + item.amount
+          })
+        } else{
+          row.push(item.description,"",numberFormat(item.amount))
+          this.setState({
+            totalCredit: this.state.totalCredit + item.amount,
+            totalTransaction: this.state.totalTransaction + item.amount
+          })
+        }
+        
+        dtTable.push(row)
+      })
+
+      dtHeader.push(`Anda Berikan \n ${ numberFormat(this.state.totalDebit)}`, `Anda Dapatkan \n ${numberFormat(this.state.totalCredit)}`)
+      this.setState({
+      
+        tableHead:this.state.tableHead.concat(dtHeader),
+        tableData:this.state.tableData.concat(dtTable)
+      })
+      
+    })
+    .catch(err => {
+      console.log( err )
+    })
+  }
 
   render() {
     const state = this.state
@@ -97,21 +162,25 @@ export default class Aktifitas extends React.Component {
             {/* <Text>
               Date: {this.state.chosenDate.toString().substr(4, 12)}
             </Text> */}
-        <Table>
-          <Row data={state.tableHead} style={styles.head} textStyle={styles.text} />
-          {
-            this.state.tableData.map((rowData, index) => {
-              return <Row
-                key={index}
-                data={rowData}
-                textStyle={{ textAlign: "left", borderRightColor: "#f3f3f3", borderRightWidth: 3, paddingLeft: 5 }}
-                style={[{ backgroundColor: 'white', minHeight: 20, alignItems: 'center', paddingLeft: 5, paddingTop : 8, paddingBottom : 8 }, index % 2 && { backgroundColor: "#F7F6E7", minHeight: 20, alignItems: 'center', paddingLeft: 5, paddingTop : 8, paddingBottom : 8 }]}
-              ></Row>
-            })
-          }
-          {/* <Rows data={state.tableData} textStyle={styles.text} style={ styles.Rows }/> */}
-        </Table>
-
+        <View>
+            <ScrollView >
+              <Table style={{marginBottom:100}}>
+                <Row data={state.tableHead} style={styles.head} textStyle={styles.text} />
+                {
+                  this.state.tableData.map((rowData, index) => {
+                    return <Row
+                      key={index}
+                      data={rowData}
+                      textStyle={{ textAlign: "left", borderRightColor: "#f3f3f3", borderRightWidth: 3, paddingLeft: 5 }}
+                      style={[{ backgroundColor: 'white', minHeight: 20, alignItems: 'center', paddingLeft: 5, paddingTop : 8, paddingBottom : 8 }, index % 2 && { backgroundColor: "#F7F6E7", minHeight: 20, alignItems: 'center', paddingLeft: 5, paddingTop : 8, paddingBottom : 8 }]}
+                    ></Row>
+                  })
+                }
+                {/* <Rows data={state.tableData} textStyle={styles.text} style={ styles.Rows }/> */}
+              </Table>
+            </ScrollView>
+        </View>
+       
       </View>
     )
   }

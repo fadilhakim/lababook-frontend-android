@@ -232,9 +232,17 @@ class DetailTransaction extends Component {
       dueDateElement = <Text>{""}</Text>
     }
 
+    var headerBackground = styles.headerRed 
+    var btnSave = styles.btnBerikan
+
+    if(params.transactionType === "debit") {
+      headerBackground = styles.headerGreen
+      btnSave = styles.btnDapatkan
+    }
+
     return (
       <Container style={BaseStyle.container}>
-          <Header style={styles.headerRed}>
+          <Header style={ headerBackground }>
             <Left>
             <TouchableNativeFeedback onPress={() => {  
                 //console.log('BAAAACK')
@@ -301,7 +309,7 @@ class DetailTransaction extends Component {
             <View style={BaseStyle.btnWrap}>
   
               <TouchableNativeFeedback onPress={() => {  this.addTransaction() }}>
-                <View style={styles.btnBerikan}>
+                <View style={ btnSave }>
                   <Text style={BaseStyle.btnText}>SIMPAN TRANSAKSI</Text>
                 </View>
               </TouchableNativeFeedback>
@@ -323,12 +331,30 @@ const styles = StyleSheet.create({
     height : 85,
     paddingTop:15
   },
+  headerGreen : {
+    backgroundColor : '#7dd220',
+    height : 85,
+    paddingTop:15
+  },
   btnBerikan : {
     marginRight:10,
     marginLeft:10,
     paddingTop:10,
     paddingBottom:10,
     backgroundColor:'#ce4165',
+    borderRadius:5,
+    borderWidth: 1,
+    borderColor: '#fff',
+    flex : 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  btnDapatkan : {
+    marginRight:10,
+    marginLeft:10,
+    paddingTop:10,
+    paddingBottom:10,
+    backgroundColor:'#7dd220',
     borderRadius:5,
     borderWidth: 1,
     borderColor: '#fff',

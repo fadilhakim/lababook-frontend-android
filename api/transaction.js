@@ -4,13 +4,22 @@ import { api } from '../config/url'
 
 export default class TransactionAPI {
     
-    getTransaction(bookId) {
+    getTransaction() {
        
         return axios.get(api+"/transactions",{
+           
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+    }
+
+    getTransactionByBook( bookId ) {
+        return axios.get(api+"/transaction/book",{
             params:{
                 bookId:bookId
             },
-            headers: {
+            headers:{
                 'Content-Type': 'application/json'
             }
         })
@@ -45,8 +54,8 @@ export default class TransactionAPI {
         })
     }
 
-    deleteContact() {
-        
+    deleteTransaction() {
+
     }
 
 }

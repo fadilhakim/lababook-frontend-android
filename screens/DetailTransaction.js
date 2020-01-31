@@ -5,7 +5,8 @@ import {
   StyleSheet,
   TouchableNativeFeedback,
   AsyncStorage,
-  Button
+  Button,
+  ScrollView
 } from 'react-native'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { Table, Row, Rows } from 'react-native-table-component'
@@ -101,7 +102,7 @@ class DetailTransaction extends Component {
     </View>
 
     if( this.state.contactTransactions.length > 0) {
-      dataTransaction =  <Table>
+      dataTransaction =   <ScrollView ><Table>
         <Row data={this.state.tableHead} style={styles.head} textStyle={styles.text} />
         {
           this.state.tableData.map((rowData, index) => {
@@ -114,7 +115,7 @@ class DetailTransaction extends Component {
           })
         }
         {/* <Rows data={state.tableData} textStyle={styles.text} style={ styles.Rows }/> */}
-      </Table>
+      </Table></ScrollView>
 
     }
   
