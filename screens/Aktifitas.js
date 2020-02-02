@@ -16,6 +16,7 @@ export default class Aktifitas extends React.Component {
       userId:1, // sementara,
       totalDebit:0,
       totalCredit:0,
+      countTransaction:0,
       tableHead: [],
       tableData: [
    
@@ -40,52 +41,59 @@ export default class Aktifitas extends React.Component {
 
     bookId = this.state.bookId 
 
-    objTrx.getTransactionByBook(bookId)
+    const param = {
+      bookId:bookId
+    }
+
+    objTrx.getTransactionByBook(param)
     .then(res => {
 
-      const resultdata = []
+      const resultdata = res.data
 
-      res.data.contacts.map(contact => {
-          contact.transactions.map(transaction => {
-            resultdata.push(transaction)
-          })
-      })
-
-      const dtHeader= ["Total"]
+      const dtHeader= ["Total \n "]
       const dtTable = []
 
       resultdata.map((item) => {
         var row = []
 
         if( item.type === "debit") {
-          row.push(item.description,numberFormat(item.amount),"")
+          row.push(item.contactName+"\n"+item.trx_created_at,numberFormat(item.amount),"")
           
-          this.setState({
+          _this.setState({
             totalDebit: this.state.totalDebit + item.amount,
             totalTransaction: this.state.totalTransaction + item.amount
           })
         } else{
-          row.push(item.description,"",numberFormat(item.amount))
-          this.setState({
+          row.push(item.contactName+"\n"+item.trx_created_at,"",numberFormat(item.amount))
+          _this.setState({
             totalCredit: this.state.totalCredit + item.amount,
             totalTransaction: this.state.totalTransaction + item.amount
           })
         }
         
         dtTable.push(row)
+        _this.setState({
+          countTransaction:this.state.countTransaction + 1
+        })
       })
 
+      dtHeader[0] += _this.state.countTransaction+" Transaksi"
       dtHeader.push(`Anda Berikan \n ${ numberFormat(this.state.totalDebit)}`, `Anda Dapatkan \n ${numberFormat(this.state.totalCredit)}`)
       this.setState({
       
         tableHead:this.state.tableHead.concat(dtHeader),
-        tableData:this.state.tableData.concat(dtTable)
+        tableData:this.state.tableData.concat(dtTable),
+       
       })
       
     })
     .catch(err => {
       console.log( err )
     })
+  }
+
+  filter() {
+
   }
 
   render() {
@@ -163,9 +171,10 @@ export default class Aktifitas extends React.Component {
               Date: {this.state.chosenDate.toString().substr(4, 12)}
             </Text> */}
         <View>
-            <ScrollView >
+           
               <Table style={{marginBottom:100}}>
                 <Row data={state.tableHead} style={styles.head} textStyle={styles.text} />
+                <ScrollView >
                 {
                   this.state.tableData.map((rowData, index) => {
                     return <Row
@@ -176,9 +185,14 @@ export default class Aktifitas extends React.Component {
                     ></Row>
                   })
                 }
+                <View style={{height:100}}>
+
+                </View>
+                </ScrollView>
                 {/* <Rows data={state.tableData} textStyle={styles.text} style={ styles.Rows }/> */}
               </Table>
-            </ScrollView>
+              
+            
         </View>
        
       </View>

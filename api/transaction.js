@@ -14,10 +14,19 @@ export default class TransactionAPI {
         })
     }
 
-    getTransactionByBook( bookId ) {
+    getTransactionByBook( param ) {
+
+        const bookId = param.bookId 
+        const sort = param.sort
+        const startDate = param.startDate
+        const endDate = param.endDate
+
         return axios.get(api+"/transaction/book",{
             params:{
-                bookId:bookId
+                bookId:bookId,
+                sort:sort,
+                startDate:startDate,
+                endDate:endDate
             },
             headers:{
                 'Content-Type': 'application/json'
