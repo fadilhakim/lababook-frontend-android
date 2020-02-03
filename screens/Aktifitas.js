@@ -14,6 +14,9 @@ export default class Aktifitas extends React.Component {
     this.state = {
       bookId:1, // sementara
       userId:1, // sementara,
+      sort:"",
+      startDate:"",
+      endDate:"",
       totalDebit:0,
       totalCredit:0,
       countTransaction:0,
@@ -21,8 +24,10 @@ export default class Aktifitas extends React.Component {
       tableData: [
    
       ],
-      selected : "key1"
+      selected : ""
     };
+
+    this.filter = this.filter.bind(this)
   }
 
   onValueChange(value) {
@@ -33,6 +38,33 @@ export default class Aktifitas extends React.Component {
 
   componentDidMount() {
 
+    this.filter()
+  }
+
+  handleSortChange(value) {
+    this.setState({
+      sort:value
+    },() => {
+      this.filter()
+    })
+  }
+
+  handleStartDate(value) {
+    this.setState({
+      startDate:value
+    },() => {
+      this.filter()
+    })
+  }
+
+  handleEndDate(value) {
+    this.setState({
+      endDate:value
+    },() => this.filter())
+  }
+
+  filter() {
+
     const { navigation } = this.props
     const params = this.props.navigation.state.params
     const _this = this
@@ -42,11 +74,22 @@ export default class Aktifitas extends React.Component {
     bookId = this.state.bookId 
 
     const param = {
-      bookId:bookId
+      bookId:bookId,
+      sort:this.state.sort,
+      startDate:this.state.startDate,
+      endDate:this.state.endDate
     }
 
     objTrx.getTransactionByBook(param)
     .then(res => {
+
+      this.setState({
+        countTransaction:0,
+        totalCredit:0,
+        totalDebit:0,
+        tableHead:[],
+        tableData:[]
+      })
 
       const resultdata = res.data
 
@@ -92,11 +135,7 @@ export default class Aktifitas extends React.Component {
     })
   }
 
-  filter() {
-
-  }
-
-  render() {
+  render() { 
     const state = this.state
     return (
       <View>
@@ -111,13 +150,13 @@ export default class Aktifitas extends React.Component {
               iosHeader="Select your SIM"
               iosIcon={<Icon name="arrow-down" />}
               style={{ posisiton : 'absolute', left : 10, top : -14  }}
-              selectedValue={this.state.selected}
-              onValueChange={this.onValueChange.bind(this)}
+              selectedValue={ this.state.sort }
+              onValueChange={ (value) => this.handleSortChange(value) }
             >
-              <Picker.Item label="Terbaru" value="key0" />
-              <Picker.Item label="Terlama" value="key1" />
-              <Picker.Item label="Terbanyak" value="key2" />
-              <Picker.Item label="A-Z" value="key3" />
+              <Picker.Item label="Terbaru" value="newest" />
+              <Picker.Item label="Terlama" value="oldest" />
+              <Picker.Item label="Terbanyak" value="descAmount" />
+              <Picker.Item label="A - Z" value="ascName" />
             </Picker>
         </View>
      
@@ -125,7 +164,7 @@ export default class Aktifitas extends React.Component {
           
           <View style={styles.topBarLeft}>
             <DatePicker
-              defaultDate={new Date(2018, 4, 4)}
+              defaultDate={new Date()}
               // minimumDate={new Date(2018, 1, 1)}
               maximumDate={new Date()}
               locale={"id"}
@@ -136,7 +175,7 @@ export default class Aktifitas extends React.Component {
               placeHolderText="start date :"
               textStyle={{ color: "green" }}
               placeHolderTextStyle={{ color: "#2a2c7b" }}
-              onDateChange={ () => {console.log("date change") }}
+              onDateChange={ (value) => { this.handleStartDate(value) } }
               disabled={false}
               />
           
@@ -146,7 +185,7 @@ export default class Aktifitas extends React.Component {
           
               <View style={styles.topBarRightPdf}>
                 <DatePicker
-                  defaultDate={new Date(2018, 4, 4)}
+                  defaultDate={new Date()}
                   // minimumDate={new Date(2018, 1, 1)}
                   maximumDate={new Date()}
                   locale={"id"}
@@ -157,7 +196,7 @@ export default class Aktifitas extends React.Component {
                   placeHolderText="end date :"
                   textStyle={{ color: "green" }}
                   placeHolderTextStyle={{ color: "#2a2c7b" }}
-                  onDateChange={ () => {console.log("date change") }}
+                  onDateChange={ (value) => { this.handleEndDate(value) }}
                   disabled={false}
                 />
               </View>
