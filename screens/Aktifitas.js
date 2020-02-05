@@ -30,12 +30,6 @@ export default class Aktifitas extends React.Component {
     this.filter = this.filter.bind(this)
   }
 
-  onValueChange(value) {
-    this.setState({
-      selected: value
-    });
-  }  
-
   componentDidMount() {
 
     this.filter()

@@ -82,8 +82,8 @@ class Kontak extends Component {
         userId: "",
         bookId: ""
       },
-      selected: "key1",
-      selected2: "kunci1",
+      sort: "",
+      filter: "",
       totalCredit:0,
       totalDebit:0,
     }
@@ -93,6 +93,8 @@ class Kontak extends Component {
     this.getSWpeopleApi = this.getSWpeopleApi.bind(this)
     this.getPhoneNumber = this.getPhoneNumber.bind(this)
 
+    this.handleFilterChange = this.handleFilterChange.bind(this)
+    this.handleSortChange = this.handleSortChange.bind(this)
   }
 
   getPhoneNumber() {
@@ -143,9 +145,18 @@ class Kontak extends Component {
 
     const _this = this
 
+    this.setState({
+      contacts:[],
+      totalCredit:0,
+      totalDebit:0
+    })
     const bookId = this.state.bookId
+    const filter = this.state.filter
+    const sort = this.state.sort
 
-    contactApi.getContacts(bookId)
+    const params = { bookId, filter, sort }
+
+    contactApi.getContacts(params)
       .then(res => {
 
         const data = res.data
@@ -190,15 +201,19 @@ class Kontak extends Component {
       })
   }
 
-  onValueChange(value) {
+  handleFilterChange(value) {
     this.setState({
-      selected: value
+      filter: value
+    },() => {
+      this.getContacts()
     });
   }
 
-  onValueChange_2(value) {
+  handleSortChange(value) {
     this.setState({
-      selected2: value
+      sort: value
+    },() => {
+      this.getContacts()
     });
   }
 
@@ -287,30 +302,31 @@ class Kontak extends Component {
               <Picker
                 mode="dropdown"
                 iosHeader="Select Filter"
-                selectedValue={this.state.selected}
-                onValueChange={this.onValueChange.bind(this)}
+                selectedValue={this.state.sort}
+                onValueChange={(value) => this.handleSortChange(value) }
                 itemStyle={{ backgroundColor: "grey", color: "#f1f1f1", fontSize:13 }}
-                style={{color: "#f1f1f1", fontSize:13 }}
+                style={{color: "#000000", fontSize:13 }}
               >
-                <Picker.Item label="Terbaru" value="key0" />
-                <Picker.Item label="Terlama" value="key1" />
+                <Picker.Item label="Terbaru" value="newest" />
+                <Picker.Item label="Terlama" value="oldest" />
                 <Picker.Item label="Terbanyak" value="key2" />
-                <Picker.Item label="Nama A-Z" value="key3" />
+                <Picker.Item label="Nama A-Z" value="ascName" />
               </Picker>
+              
               <Label style={BaseStyle.labelStyleModal}>Filter dari :</Label>
               <Picker
                 mode="dropdown"
                 iosHeader="Select Filter"
                 style={{ width: undefined }}
-                selectedValue={this.state.selected2}
-                onValueChange={this.onValueChange_2.bind(this)}
+                selectedValue={this.state.filter}
+                onValueChange={(value) => this.handleFilterChange(value) }
                 itemStyle={{ backgroundColor: "grey", color: "#f1f1f1", fontSize:13 }}
-                style={{color: "#f1f1f1", fontSize:13 }}
+                style={{color: "#000000", fontSize:13 }}
               >
-                <Picker.Item label="Semua" value="kunci1" />
-                <Picker.Item label="Lunas" value="kunci2" />
-                <Picker.Item label="Berikan" value="kunci3" />
-                <Picker.Item label="Dapatkan" value="kunci4" />
+                <Picker.Item label="Semua" value="all" />
+                <Picker.Item label="Lunas" value="paidOff" />
+                <Picker.Item label="Berikan" value="credit" />
+                <Picker.Item label="Dapatkan" value="debit" />
               </Picker>
             </Form>
 
