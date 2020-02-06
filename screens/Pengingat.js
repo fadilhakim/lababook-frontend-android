@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import {
   View,
   Text,
@@ -20,43 +20,6 @@ import ReminderCard from '../components/ReminderCard'
 
 import { textExtraProps as tProps } from '../config/system'
 
-const dataHariIni = [
-  {
-    id: '1',
-    contactName: 'Aan Siguna',
-    contactInitial: 'A',
-    trxType: 'debit',
-    trxValue: '2.000.000',
-    updatedAt: '3 hari lalu'
-  },
-  {
-    id: '4',
-    contactName: 'Shasa',
-    contactInitial: 'S',
-    trxType: 'credit',
-    trxValue: '300.000',
-    updatedAt: '3 hari lalu'
-  }
-]
-
-const dataTerlambat = [
-  {
-    id: '1',
-    contactName: 'Amanda Wiguna',
-    contactInitial: 'A',
-    trxType: 'debit',
-    trxValue: '2.000.000',
-    updatedAt: '3 hari lalu'
-  },
-  {
-    id: '4',
-    contactName: 'Sin Joe',
-    contactInitial: 'S',
-    trxType: 'credit',
-    trxValue: '300.000',
-    updatedAt: '3 hari lalu'
-  }
-]
 
 async function showContact() {
   try {
@@ -79,48 +42,144 @@ async function showContact() {
   }
 }
 
-export default function Pengingat() {
-  return (
-    <View style={{ flex: 1 }}>
+export default class Pengingat extends Component {
 
-      <View style={styles.topBar}>
-        <View style={styles.topBarLeft}>
-          <Text style={{ fontSize: 16 }}>
-            <Text>Terlambat:</Text> <Text style={{ color: '#ce4165' }}>2 Pelanggan</Text>
-            {'\n'}
-            <Text> Hari ini:</Text> <Text style={{ color: '#000' }}>3 Pelanggan</Text>
-            {'\n'}
-            <Text>Akan Datang:</Text> <Text style={{ color: '#000' }}>5 Pelanggan</Text>
+  constructor(props) {
+    super(props)
+    this.state = {
+      transactions:[]
+    }
+  }
+
+  render() {
+
+    
+    const todayDate = [
+      {
+        id: '1',
+        contactName: 'Aan Siguna',
+        contactInitial: 'A',
+        trxType: 'debit',
+        trxValue: '2.000.000',
+        updatedAt: '3 hari lalu'
+      },
+      {
+        id: '4',
+        contactName: 'Shasa',
+        contactInitial: 'S',
+        trxType: 'credit',
+        trxValue: '300.000',
+        updatedAt: '3 hari lalu'
+      }
+    ]
+
+    const lateDate = [
+      {
+        id: '1',
+        contactName: 'Amanda Wiguna',
+        contactInitial: 'A',
+        trxType: 'debit',
+        trxValue: '2.000.000',
+        updatedAt: '3 hari lalu'
+      },
+      {
+        id: '4',
+        contactName: 'Sin Joe',
+        contactInitial: 'S',
+        trxType: 'credit',
+        trxValue: '300.000',
+        updatedAt: '3 hari lalu'
+      }
+    ]
+
+    const tomorrowDate = [
+      {
+        id: '1',
+        contactName: 'Amanda Wiguna',
+        contactInitial: 'A',
+        trxType: 'debit',
+        trxValue: '2.000.000',
+        updatedAt: '3 hari lalu'
+      },
+      {
+        id: '4',
+        contactName: 'Sin Joe',
+        contactInitial: 'S',
+        trxType: 'credit',
+        trxValue: '300.000',
+        updatedAt: '3 hari lalu'
+      }
+    ]
+
+    return (
+      <View style={{ flex: 1 }}>
+  
+        <View style={styles.topBar}>
+          <View style={styles.topBarLeft}>
+            <Text style={{ fontSize: 16 }}>
+              <Text>Terlambat:</Text> <Text style={{ color: '#ce4165' }}>2 Pelanggan</Text>
+              {'\n'}
+              <Text> Hari ini:</Text> <Text style={{ color: '#000' }}>3 Pelanggan</Text>
+              {'\n'}
+              <Text>Akan Datang:</Text> <Text style={{ color: '#000' }}>5 Pelanggan</Text>
+            </Text>
+          </View>
+  
+          <View style={styles.topBarRight}>
+            <TouchableWithoutFeedback>
+              <View style={styles.topBarRightPdf}>
+                <AntDesign name='pdffile1' size={27} color='#aaa' style={styles.pdf} />
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </View>
+  
+        <View style={styles.borderGray}>
+          <Text style={{ fontSize: 12 }}>
+            Terlambat
           </Text>
         </View>
-
-        <View style={styles.topBarRight}>
-          <TouchableWithoutFeedback>
-            <View style={styles.topBarRightPdf}>
-              <AntDesign name='pdffile1' size={27} color='#aaa' style={styles.pdf} />
-            </View>
-          </TouchableWithoutFeedback>
+  
+        <FlatList
+          data={ lateDate }
+          scrollEnabled={true}
+          renderItem={({ item, index }) => <ReminderCard {...item} key={index} />}
+          keyExtractor={item => item.id}
+          style={styles.contactList}
+        />
+  
+        <View style={styles.borderGray}>
+          <Text style={{ fontSize: 12 }}>
+            Hari Ini
+          </Text>
         </View>
-      </View>
-
-      <View style={styles.borderGray}>
-
-        <Text style={{ fontSize: 12 }}>
-          Terlambat
-      	</Text>
-
-      </View>
-
-      <FlatList
-        data={dataTerlambat}
+  
+        <FlatList
+        data={todayDate}
         scrollEnabled={true}
         renderItem={({ item, index }) => <ReminderCard {...item} key={index} />}
         keyExtractor={item => item.id}
         style={styles.contactList}
-      />
-
-    </View>
-  )
+        />
+  
+        <View style={styles.borderGray}>
+          <Text style={{ fontSize: 12 }}>
+            Yang akan datang
+          </Text>
+        </View>
+  
+        <FlatList
+        data={ tomorrowDate }
+        scrollEnabled={true}
+        renderItem={({ item, index }) => <ReminderCard {...item} key={index} />}
+        keyExtractor={item => item.id}
+        style={styles.contactList}
+        />
+  
+      </View>
+    )
+  }
+  
 }
 
 const styles = StyleSheet.create({

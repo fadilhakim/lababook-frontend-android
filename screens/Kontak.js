@@ -18,6 +18,7 @@ import {
   MaterialIcons,
   AntDesign
 } from '@expo/vector-icons'
+import Modal from "react-native-modal";
 
 import * as Permissions from 'expo-permissions'
 import * as Contacts from 'expo-contacts'
@@ -32,7 +33,7 @@ import ContactAPI from "../api/contact"
 
 import { API_URL } from "react-native-dotenv"
 
-import Modal from "react-native-modal";
+import { timeInfo }  from "../helpers/TimeFormat"
 
 import BaseStyle from "./../style/BaseStyle"
 
@@ -182,7 +183,7 @@ class Kontak extends Component {
             phoneNumber: item.phoneNumber,
             trxType: trxType, // hasil join
             trxValue: numberFormat(item.totalTransaction), // hasil join 
-            updatedAt: '3 hari lalu' // hasil join dari trx
+            updatedAt: timeInfo(item.created_at) // hasil join dari trx
           })
         })
 
