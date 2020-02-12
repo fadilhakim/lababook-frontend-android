@@ -5,7 +5,7 @@ import { AntDesign } from '@expo/vector-icons'
 import NameIcon from './NameIcon'
 import { textExtraProps as tProps } from '../config/system'
 
-function ContactCard (props) {
+function ContactCard(props) {
   const {
     contactName,
     contactInitial,
@@ -14,10 +14,18 @@ function ContactCard (props) {
     updatedAt
   } = props
 
+  var textDesc = ""
+  if (trxValue === 0) {
+    textDesc = ""
+  } else {
+    textDesc = trxType === 'debit' ? 'Anda dapatkan' : 'Anda berikan'
+
+  }
+
   const Component = (
     <View style={styles.contact}>
       <View style={styles.contactLeft}>
-        <NameIcon contactInitial={contactInitial}/>
+        <NameIcon contactInitial={contactInitial} />
         <View style={styles.contactLeftText}>
           <View>
             <Text {...tProps} style={styles.contactLeftTopText}>
@@ -25,20 +33,18 @@ function ContactCard (props) {
             </Text>
           </View>
           <View style={styles.contactLeftBottom}>
-            <AntDesign name='clockcircleo' size={12} style={{ marginTop: 3 }}/>
+            <AntDesign name='clockcircleo' size={12} style={{ marginTop: 3 }} />
             <Text {...tProps}> {updatedAt}</Text>
           </View>
         </View>
       </View>
 
       <View style={styles.contactRight}>
-        <Text {...tProps} style={trxType === 'debit' ? styles.contactRightTopLent : styles.contactRightTopPaid}>
-          {
-            trxType === 'debit' ? 'Anda berikan' : 'Anda dapatkan'
-          }
+        <Text {...tProps} style={trxType === 'debit' ? styles.contactRightTopPaid : styles.contactRightTopLent}>
+          {textDesc}
         </Text>
-        <Text {...tProps} style={trxType === 'debit' ? styles.contactRightBottomLent : styles.contactRightBottomPaid}>
-           {trxValue}
+        <Text {...tProps} style={trxType === 'debit' ? styles.contactRightBottomPaid : styles.contactRightBottomLent}>
+          {trxValue}
         </Text>
       </View>
     </View>
@@ -46,7 +52,7 @@ function ContactCard (props) {
 
   return (
     <View>
-      { contactName ? Component : <View style={styles.contact}></View>}
+      {contactName ? Component : <View style={styles.contact}></View>}
     </View>
   )
 }
@@ -71,14 +77,14 @@ const styles = StyleSheet.create({
   },
   contactLeftTopText: {
     fontSize: 15,
-    color:'#000',
-    fontWeight:'bold'
+    color: '#000',
+    fontWeight: 'bold'
 
   },
   contactLeftBottom: {
     flexDirection: 'row',
-    fontSize:13,
-    color:'#ddd'
+    fontSize: 13,
+    color: '#ddd'
   },
   contactRight: {
     justifyContent: 'center',
