@@ -5,10 +5,12 @@ import { useScreens } from 'react-native-screens'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import * as Font from 'expo-font'
+import Carousel from 'react-native-snap-carousel'
 
+import Intro from './screens/Intro'
 import Welcome from './screens/Welcome'
 import Login from './screens/Login'
-import Register from './screens/Register'
+import RegisterOld from './screens/RegisterOld'
 import OTP from './screens/OTP'
 import Home from './screens/Home'
 import AuthLoading from './screens/AuthLoading'
@@ -32,6 +34,12 @@ const AuthNavigator = createStackNavigator(
     Welcome: {
       screen: Welcome
     },
+    Intro: {
+      screen: Intro
+    },
+    // Register01: {
+    //
+    // }
     Login: {
       screen: Login
     },
@@ -50,10 +58,12 @@ const AuthNavigator = createStackNavigator(
     Test: {
       screen: Test
     },
-    SelectContact:{screen:SelectContact},
+    SelectContact: {
+      screen: SelectContact
+    },
   },
   {
-    initialRouteName: 'Welcome',
+    initialRouteName: 'Intro',
     headerMode: 'none'
   }
 )
@@ -174,7 +184,7 @@ const Root = createAppContainer(
       AuthLoading: AuthLoading,
       Auth: AuthNavigator,
       App: AppNavigator,
-      Register: Register,
+      RegisterOld: RegisterOld,
       AccountSetting: AccountSetting,
       CaraPakai: CaraPakai,
       DetailTransaction: DetailTransaction,
@@ -183,7 +193,7 @@ const Root = createAppContainer(
       Test: Test
     },
     {
-      initialRouteName: 'AuthLoading'
+      initialRouteName: 'RegisterOld'
     }
   )
 )
