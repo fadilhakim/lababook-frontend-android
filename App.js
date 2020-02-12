@@ -10,7 +10,7 @@ import Carousel from 'react-native-snap-carousel'
 import Intro from './screens/Intro'
 import Welcome from './screens/Welcome'
 import Login from './screens/Login'
-import RegisterOld from './screens/RegisterOld'
+import RegisterOld from './screens/Register/RegisterOld'
 import OTP from './screens/OTP'
 import Home from './screens/Home'
 import AuthLoading from './screens/AuthLoading'
@@ -20,6 +20,7 @@ import CaraPakai from './screens/CaraPakai'
 import DetailTransaction from './screens/DetailTransaction'
 import AddTransactions from './screens/AddTransactions'
 import SelectContact from "./components/SelectContact"
+import { RegisterType } from './screens/Register'
 
 import Test from "./screens/Test"
 
@@ -31,36 +32,17 @@ useScreens()
 
 const AuthNavigator = createStackNavigator(
   {
-    Welcome: {
-      screen: Welcome
-    },
-    Intro: {
-      screen: Intro
-    },
-    // Register01: {
-    //
-    // }
-    Login: {
-      screen: Login
-    },
-    OTP: {
-      screen: OTP
-    },
-    AccountSetting: {
-      screen: AccountSetting
-    },
-    DetailTransaction: {
-      screen: DetailTransaction
-    },
-    CaraPakai: {
-      screen: CaraPakai
-    },
-    Test: {
-      screen: Test
-    },
-    SelectContact: {
-      screen: SelectContact
-    },
+    Welcome: Welcome,
+    Intro: Intro,
+    Register01: RegisterType,
+    Register02: RegisterOld,
+    Login: Login,
+    OTP: OTP,
+    AccountSetting: AccountSetting,
+    DetailTransaction: DetailTransaction,
+    CaraPakai: CaraPakai,
+    Test: Test,
+    SelectContact: SelectContact,
   },
   {
     initialRouteName: 'Intro',
@@ -184,7 +166,7 @@ const Root = createAppContainer(
       AuthLoading: AuthLoading,
       Auth: AuthNavigator,
       App: AppNavigator,
-      RegisterOld: RegisterOld,
+      // RegisterOld: RegisterOld,
       AccountSetting: AccountSetting,
       CaraPakai: CaraPakai,
       DetailTransaction: DetailTransaction,
@@ -193,7 +175,7 @@ const Root = createAppContainer(
       Test: Test
     },
     {
-      initialRouteName: 'RegisterOld'
+      initialRouteName: 'Auth'
     }
   )
 )

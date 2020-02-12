@@ -10,8 +10,8 @@ import {
   StatusBar
 } from 'react-native'
 
-import { textExtraProps as tProps } from '../config/system'
-import { updateUserName } from '../store/actions/user'
+import { textExtraProps as tProps } from '../../config/system'
+import { updateUserName } from '../../store/actions/user'
 
 function RegisterOld (props) {
   const { navigation, updateUserName, clearStates } = props

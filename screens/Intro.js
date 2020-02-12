@@ -1,50 +1,56 @@
 import React, { Component } from 'react'
 import {
-  Animated,
+  // Animated,
   Text,
   View,
   Image,
   StyleSheet,
-  Button,
+  // Button,
   Dimensions,
-  TouchableNativeFeedback
-} from "react-native";
+  SafeAreaView,
+  TouchableNativeFeedback, Alert
+} from 'react-native'
 import { textExtraProps as tProps } from '../config/system'
 import SwipeRender from "../utils/SwipeRender";
 // import SwipeRender from "react-native-swipe-render";
-import { CAROUSEL_1, CAROUSEL_2 } from '../utils/images'
+import {
+  CAROUSEL_1,
+  CAROUSEL_2,
+  CAROUSEL_3,
+  CAROUSEL_4,
+  CAROUSEL_5,
+  CAROUSEL_6
+} from '../utils/images'
 
 const pureHeight = Dimensions.get('window').height
 const pureWidth = Dimensions.get('window').width
 const width = pureWidth * 90 / 100 // 90 % from width
-const height = pureHeight * 50 / 100 // 50 % from width
+const height = 350 //pureHeight * 50 / 100 // 50 % from width
 
 const carouselData = [{
   desc1: 'Tambahkan Deskripsi singkat di',
   desc2: 'sepanjang tulisan ini',
-  uri: 'http://18.139.237.40/images/intro_1.png',
-  // uri: 'asset:/intro_1.png' // for android
-  // uri: 'intro_1' // for ios
+  uri: CAROUSEL_1
 },{
-  uri: 'http://18.139.237.40/images/intro_1.png',
+  uri: CAROUSEL_2,
   desc1: 'Tambahkan Deskripsi singkat di',
   desc2: 'sepanjang tulisan ini'
 },{
-  uri: 'http://18.139.237.40/images/intro_1.png',
-  desc1: 'Tambahkan Deskripsi singkat di',
-  desc2: 'sepanjang tulisan ini'
-},{
-  desc1: 'Tambahkan Deskripsi singkat di',
-  desc2: 'sepanjang tulisan ini',
-  uri: 'http://18.139.237.40/images/intro_1.png'
-},{
-  uri: 'http://18.139.237.40/images/intro_1.png',
+  uri: CAROUSEL_3,
   desc1: 'Tambahkan Deskripsi singkat di',
   desc2: 'sepanjang tulisan ini'
 },{
   desc1: 'Tambahkan Deskripsi singkat di',
   desc2: 'sepanjang tulisan ini',
-  uri: 'http://18.139.237.40/images/intro_1.png'
+  uri: CAROUSEL_4
+},{
+  uri: CAROUSEL_5,
+  desc1: 'Tambahkan Deskripsi singkat di',
+  desc2: 'sepanjang tulisan ini'
+},{
+  desc1: 'Tambahkan Deskripsi singkat di',
+  desc2: 'sepanjang tulisan ini',
+  uri: CAROUSEL_6
 }]
 
 export default class Intro2 extends Component {
@@ -99,9 +105,13 @@ export default class Intro2 extends Component {
     this.navigation.navigate('Login')
   }
 
+  nextStep = () => {
+    this.navigation.navigate('Register01')
+  }
+
   render() {
     return (
-      <View style={styles.introContainer}>
+      <SafeAreaView style={styles.introContainer}>
         <View style={styles.topColom}>
           <Text style={styles.title}>
             Selamat Datang
@@ -116,17 +126,17 @@ export default class Intro2 extends Component {
             data={carouselData}
             renderItem={({ item, index }) => {
               return (
-                <View key={"SwipeRender-slide#" + index} style={{flex: 1}}>
+                <View key={"SwipeRender-slide#" + index} style={styles.carouselItem}>
                   <View style={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
-                    <Text style={{ textAlign: 'justify', color: '#dedede' }}>
+                    <Text style={[styles.carouselText, {paddingTop: 10}]}>
                       { item.desc1 }
                     </Text>
-                    <Text style={{ textAlign: 'justify', color: '#dedede' }}>
+                    <Text style={styles.carouselText}>
                       { item.desc2 }
                     </Text>
                   </View>
                   <Image
-                    source={{ uri: item.uri }}
+                    source={ item.uri }
                     style={{flex: 1}}
                     resizeMode="contain"
                   />
@@ -153,7 +163,7 @@ export default class Intro2 extends Component {
 
         <View style={styles.buttonColom}>
           <TouchableNativeFeedback
-            onPress={() => console.log('do what?')}
+            onPress={() => this.nextStep()}
           >
             <View style={styles.button}>
               <Text {...tProps} style={styles.buttonText}>Mulai Sekarang</Text>
@@ -165,7 +175,7 @@ export default class Intro2 extends Component {
             Sudah punya akun? <Text style={styles.loginText} onPress={() => this.toLogin()}>Masuk</Text>
           </Text>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }
@@ -217,6 +227,18 @@ const styles = StyleSheet.create({
   carouselColom: {
     width: width,
     height: height
+  },
+  carouselItem: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // maxHeight: 350,
+    // backgroundColor: 'gray'
+  },
+  carouselText: {
+    textAlign: 'justify',
+    color: '#2a2cbb'
   },
   pagination_y: {
     // position: "absolute",
