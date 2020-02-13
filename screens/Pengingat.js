@@ -8,6 +8,8 @@ import {
 
 } from 'react-native'
 
+import { Accordion } from "native-base"
+
 import {
   MaterialIcons,
   AntDesign
@@ -68,7 +70,7 @@ export default class Pengingat extends Component {
         contactName: 'Shasa',
         contactInitial: 'S',
         trxType: 'credit',
-        trxValue: '300.000',
+        trxValue: '300.000', 
         updatedAt: '3 hari lalu'
       }
     ]
@@ -111,6 +113,12 @@ export default class Pengingat extends Component {
       }
     ]
 
+    const dataArray = [
+      { title: "Terlambat", content: <Text>Lorem ipsum dolor sit amet</Text> },
+      { title: "Hari ini", content: "Lorem ipsum dolor sit amet" },
+      { title: "Yang akan datang", content: "Lorem ipsum dolor sit amet" }
+    ];
+
     return (
       <View style={{ flex: 1 }}>
   
@@ -134,19 +142,13 @@ export default class Pengingat extends Component {
           </View>
         </View>
   
-        <View style={styles.borderGray}>
+        {/* <View style={styles.borderGray}>
           <Text style={{ fontSize: 12 }}>
             Terlambat
           </Text>
         </View>
   
-        <FlatList
-          data={ lateDate }
-          scrollEnabled={true}
-          renderItem={({ item, index }) => <ReminderCard {...item} key={index} />}
-          keyExtractor={item => item.id}
-          style={styles.contactList}
-        />
+       
   
         <View style={styles.borderGray}>
           <Text style={{ fontSize: 12 }}>
@@ -174,7 +176,9 @@ export default class Pengingat extends Component {
         renderItem={({ item, index }) => <ReminderCard {...item} key={index} />}
         keyExtractor={item => item.id}
         style={styles.contactList}
-        />
+        /> */}
+
+        <Accordion dataArray={dataArray} expanded={0}/>
   
       </View>
     )
