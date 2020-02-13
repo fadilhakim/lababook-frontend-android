@@ -33,7 +33,7 @@ import ContactAPI from "../api/contact"
 
 import { API_URL } from "react-native-dotenv"
 
-import { timeInfo }  from "../helpers/TimeFormat"
+import { timeInfo } from "../helpers/TimeFormat"
 
 import BaseStyle from "./../style/BaseStyle"
 
@@ -57,7 +57,7 @@ async function showContact() {
         NavigationService.navigate("SelectContact", {
           contacts: data
         })
-        // screen select contact 
+        // screen select contact
         //console.log(`${API_URL} => `, data)
       } else {
         alert("you have no contacts")
@@ -85,8 +85,8 @@ class Kontak extends Component {
       },
       sort: "",
       filter: "",
-      totalCredit:0,
-      totalDebit:0,
+      totalCredit: 0,
+      totalDebit: 0,
     }
 
     this.getContacts = this.getContacts.bind(this)
@@ -147,9 +147,9 @@ class Kontak extends Component {
     const _this = this
 
     this.setState({
-      contacts:[],
-      totalCredit:0,
-      totalDebit:0
+      contacts: [],
+      totalCredit: 0,
+      totalDebit: 0
     })
     const bookId = this.state.bookId
     const filter = this.state.filter
@@ -162,12 +162,12 @@ class Kontak extends Component {
 
         const data = res.data
         const newData = []
-        
+
         data.map(item => {
 
           var trxType = "credit"
 
-          if( item.totalTransaction < 0) {
+          if (item.totalTransaction > 0) {
             trxType = "debit"
           }
 
@@ -182,14 +182,14 @@ class Kontak extends Component {
             contactInitial: item.name[0],
             phoneNumber: item.phoneNumber,
             trxType: trxType, // hasil join
-            trxValue: numberFormat(item.totalTransaction), // hasil join 
+            trxValue: numberFormat(item.totalTransaction), // hasil join
             updatedAt: timeInfo(item.created_at) // hasil join dari trx
           })
         })
 
         _this.setState({
           contacts: this.state.contacts.concat(newData),
-         
+
         }, function () {
           //console.log("contact => ", this.state.contacts)
         })
@@ -205,7 +205,7 @@ class Kontak extends Component {
   handleFilterChange(value) {
     this.setState({
       filter: value
-    },() => {
+    }, () => {
       this.getContacts()
     });
   }
@@ -213,7 +213,7 @@ class Kontak extends Component {
   handleSortChange(value) {
     this.setState({
       sort: value
-    },() => {
+    }, () => {
       this.getContacts()
     });
   }
@@ -239,9 +239,9 @@ class Kontak extends Component {
               <MaterialIcons name='person' size={32} color='white' />
             </View>
             <Text style={{ fontSize: 16 }}>
-                Anda Berikan: <Text style={{ color: '#ce4165' }}> { numberFormat(this.state.totalDebit) }</Text>
+              Anda Berikan: <Text style={{ color: '#ce4165' }}> {numberFormat(this.state.totalCredit)} </Text>
               {'\n'}
-              Anda Dapatkan: <Text style={{ color: '#7dd220' }}> { numberFormat(this.state.totalCredit) }</Text>
+              Anda Dapatkan: <Text style={{ color: '#7dd220' }}> {numberFormat(this.state.totalDebit)} </Text>
             </Text>
           </View>
 
@@ -270,9 +270,9 @@ class Kontak extends Component {
                   name: item.contactName,
                   phoneNumber: item.phoneNumber,
                   contactInitial: item.contactInitial,
-                  contactId:item.id,
-                  userId:this.state.userId,
-                  totalTransaction:item.trxValue
+                  contactId: item.id,
+                  userId: this.state.userId,
+                  totalTransaction: item.trxValue
 
                 })
               }}>
@@ -299,30 +299,30 @@ class Kontak extends Component {
         >
           <View style={BaseStyle.modalContent}>
             <Form>
-            <Label  style={BaseStyle.labelStyleModal}>Urutkan dari :</Label>
+              <Label style={BaseStyle.labelStyleModal}>Urutkan dari :</Label>
               <Picker
                 mode="dropdown"
                 iosHeader="Select Filter"
                 selectedValue={this.state.sort}
-                onValueChange={(value) => this.handleSortChange(value) }
-                itemStyle={{ backgroundColor: "grey", color: "#f1f1f1", fontSize:13 }}
-                style={{color: "#000000", fontSize:13 }}
+                onValueChange={(value) => this.handleSortChange(value)}
+                itemStyle={{ backgroundColor: "grey", color: "#f1f1f1", fontSize: 13 }}
+                style={{ color: "#000000", fontSize: 13 }}
               >
                 <Picker.Item label="Terbaru" value="newest" />
                 <Picker.Item label="Terlama" value="oldest" />
                 <Picker.Item label="Terbanyak" value="key2" />
                 <Picker.Item label="Nama A-Z" value="ascName" />
               </Picker>
-              
+
               <Label style={BaseStyle.labelStyleModal}>Filter dari :</Label>
               <Picker
                 mode="dropdown"
                 iosHeader="Select Filter"
                 style={{ width: undefined }}
                 selectedValue={this.state.filter}
-                onValueChange={(value) => this.handleFilterChange(value) }
-                itemStyle={{ backgroundColor: "grey", color: "#f1f1f1", fontSize:13 }}
-                style={{color: "#000000", fontSize:13 }}
+                onValueChange={(value) => this.handleFilterChange(value)}
+                itemStyle={{ backgroundColor: "grey", color: "#f1f1f1", fontSize: 13 }}
+                style={{ color: "#000000", fontSize: 13 }}
               >
                 <Picker.Item label="Semua" value="all" />
                 <Picker.Item label="Lunas" value="paidOff" />
@@ -332,7 +332,7 @@ class Kontak extends Component {
             </Form>
 
 
-            <Button style={{marginTop:20}} title="Close Filter" onPress={() => { this.toggleModal() }}/>
+            <Button style={{ marginTop: 20 }} title="Close Filter" onPress={() => { this.toggleModal() }} />
           </View>
         </Modal>
 

@@ -5,10 +5,12 @@ import { useScreens } from 'react-native-screens'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import * as Font from 'expo-font'
+import Carousel from 'react-native-snap-carousel'
 
+import Intro from './screens/Intro'
 import Welcome from './screens/Welcome'
 import Login from './screens/Login'
-import Register from './screens/Register'
+import RegisterOld from './screens/Register/RegisterOld'
 import OTP from './screens/OTP'
 import Home from './screens/Home'
 import AuthLoading from './screens/AuthLoading'
@@ -18,6 +20,7 @@ import CaraPakai from './screens/CaraPakai'
 import DetailTransaction from './screens/DetailTransaction'
 import AddTransactions from './screens/AddTransactions'
 import SelectContact from "./components/SelectContact"
+import { RegisterType } from './screens/Register'
 
 import Test from "./screens/Test"
 
@@ -29,31 +32,20 @@ useScreens()
 
 const AuthNavigator = createStackNavigator(
   {
-    Welcome: {
-      screen: Welcome
-    },
-    Login: {
-      screen: Login
-    },
-    OTP: {
-      screen: OTP
-    },
-    AccountSetting: {
-      screen: AccountSetting
-    },
-    DetailTransaction: {
-      screen: DetailTransaction
-    },
-    CaraPakai: {
-      screen: CaraPakai
-    },
-    Test: {
-      screen: Test
-    },
-    SelectContact:{screen:SelectContact},
+    Welcome: Welcome,
+    Intro: Intro,
+    Register01: RegisterType,
+    Register02: RegisterOld,
+    Login: Login,
+    OTP: OTP,
+    AccountSetting: AccountSetting,
+    DetailTransaction: DetailTransaction,
+    CaraPakai: CaraPakai,
+    Test: Test,
+    SelectContact: SelectContact,
   },
   {
-    initialRouteName: 'Welcome',
+    initialRouteName: 'Intro',
     headerMode: 'none'
   }
 )
@@ -174,7 +166,7 @@ const Root = createAppContainer(
       AuthLoading: AuthLoading,
       Auth: AuthNavigator,
       App: AppNavigator,
-      Register: Register,
+      // RegisterOld: RegisterOld,
       AccountSetting: AccountSetting,
       CaraPakai: CaraPakai,
       DetailTransaction: DetailTransaction,
@@ -183,7 +175,7 @@ const Root = createAppContainer(
       Test: Test
     },
     {
-      initialRouteName: 'AuthLoading'
+      initialRouteName: 'Auth'
     }
   )
 )
