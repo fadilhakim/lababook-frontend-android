@@ -1,7 +1,7 @@
 import {
-   
+
     StyleSheet,
-    
+
 } from 'react-native'
 
 export default style = StyleSheet.create({
@@ -10,7 +10,7 @@ export default style = StyleSheet.create({
 	alignItems: 'stretch'
 	// justifyContent: 'space-between'
   },
-  
+
   headerBlue : {
     backgroundColor: '#2a2c7b',
     height : 85,
@@ -18,8 +18,8 @@ export default style = StyleSheet.create({
     shadowColor: '#555',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.8,
-    shadowRadius: 1,  
-  }, 
+    shadowRadius: 1,
+  },
   initialNameCircle: {
     paddingLeft: 10,
     paddingRight: 10,
@@ -80,7 +80,7 @@ export default style = StyleSheet.create({
     bottom:12
   },
   logoPhone: {
-    
+
 
   },
   divLogoBtm: {
@@ -170,19 +170,54 @@ export default style = StyleSheet.create({
   },
 
   halfModal : {
-  	height: 120
+    justifyContent: 'flex-end',
+    margin: 0,
   },
   modalContent : {
-  	height: 220,
   	backgroundColor : '#fff',
-  	alignItems: 'stretch',
-  	padding : 15
+  	padding : 20,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+  },
+  rowFilterModal: {
+    flexDirection: 'row',
+    justifyContent: "space-between",
+    alignItems: "stretch",
+  },
+  fieldSortContainerStyleModal : {
+    width: 100,
+    paddingLeft: 10,
+    paddingTop: 15,
+  },
+  fieldFilterContainerStyleModal : {
+    width: 100,
+    paddingLeft: 10,
+    paddingTop: 15,
+  },
+  listContainerStyleModal : {
+    flex: 1,
+  },
+  filterContainerStyleModal : {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: "flex-start",
+    flexWrap: 'wrap',
+    paddingTop: 10,
+  },
+  buttonContainerStyleModal: {
+    width: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderColor: '#dedede',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginRight: 20,
+    marginBottom: 10,
   },
   labelStyleModal : {
-  	fontWeight: "bold",
-  	fontSize : 15,
-  	color : '#2a2c7b'
-  }
-
+    fontWeight: 'bold'
+  },
 
 })
