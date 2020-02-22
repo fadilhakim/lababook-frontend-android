@@ -5,6 +5,7 @@ import { useScreens } from 'react-native-screens'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import * as Font from 'expo-font'
+import { MenuProvider } from 'react-native-popup-menu'
 import Carousel from 'react-native-snap-carousel'
 
 import Intro from './screens/Intro'
@@ -193,9 +194,11 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <Root ref={navigatorRef => {
-          NavigationService.setTopLevelNavigator(navigatorRef);
-        }} />
+        <MenuProvider>
+          <Root ref={navigatorRef => {
+            NavigationService.setTopLevelNavigator(navigatorRef);
+          }} />
+        </MenuProvider>
       </PersistGate>
     </Provider>
   )

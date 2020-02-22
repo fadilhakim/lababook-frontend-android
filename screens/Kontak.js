@@ -34,7 +34,7 @@ import ContactAPI from "../api/contact"
 
 import { API_URL } from "react-native-dotenv"
 
-import { timeInfo } from "../helpers/TimeFormat"
+import { timeInfo, TimeDiff } from "../helpers/TimeFormat"
 
 import BaseStyle from "./../style/BaseStyle"
 
@@ -70,6 +70,20 @@ async function showContact() {
     console.log(error)
   }
 }
+
+const filterList = [{
+  id: 'all',
+  name: 'Semua'
+},{
+  id: 'paidOff',
+  name: 'Lunas'
+},{
+  id: 'credit',
+  name: 'Berikan'
+},{
+  id: 'debit',
+  name: 'Dapatkan'
+}]
 
 class Kontak extends Component {
 
@@ -187,7 +201,7 @@ class Kontak extends Component {
             phoneNumber: item.phoneNumber,
             trxType: trxType, // hasil join
             trxValue: numberFormat(item.totalTransaction), // hasil join
-            updatedAt: timeInfo(item.created_at) // hasil join dari trx
+            updatedAt: TimeDiff(item.created_at) // hasil join dari trx
           })
         })
 
@@ -280,7 +294,7 @@ class Kontak extends Component {
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback>
               <View style={styles.topBarRightPdf}>
-                <AntDesign name='pdffile1' size={27} color='#2a2c7b' style={styles.pdf} />
+                <MaterialIcons name='picture-as-pdf' size={27} color='#2a2c7b' style={styles.pdf} />
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -359,34 +373,48 @@ class Kontak extends Component {
                     <Text style={BaseStyle.labelStyleModal}>Filter</Text>
                   </View>
                   <View style={BaseStyle.filterContainerStyleModal}>
-                    <ButtonFilter
-                      selectedButtonStyle={(value) => this.selectedButtonStyle(value)}
-                      handleFilterChange={(value) => this.handleFilterChange(value)}
-                      selectedTextStyle={(value) => this.selectedTextStyle(value)}
-                      name='Semua'
-                      id='Semua'
-                    />
-                    <ButtonFilter
-                      selectedButtonStyle={(value) => this.selectedButtonStyle(value)}
-                      handleFilterChange={(value) => this.handleFilterChange(value)}
-                      selectedTextStyle={(value) => this.selectedTextStyle(value)}
-                      name='Lunas'
-                      id='paidOff'
-                    />
-                    <ButtonFilter
-                      selectedButtonStyle={(value) => this.selectedButtonStyle(value)}
-                      handleFilterChange={(value) => this.handleFilterChange(value)}
-                      selectedTextStyle={(value) => this.selectedTextStyle(value)}
-                      name='Berikan'
-                      id='credit'
-                    />
-                    <ButtonFilter
-                      selectedButtonStyle={(value) => this.selectedButtonStyle(value)}
-                      handleFilterChange={(value) => this.handleFilterChange(value)}
-                      selectedTextStyle={(value) => this.selectedTextStyle(value)}
-                      name='Dapatkan'
-                      id='debit'
-                    />
+                    {
+                      filterList.map(({ id, name}) => {
+                        return (
+                          <ButtonFilter
+                            selectedButtonStyle={(value) => this.selectedButtonStyle(id)}
+                            handleFilterChange={(value) => this.handleFilterChange(id)}
+                            selectedTextStyle={(value) => this.selectedTextStyle(id)}
+                            name={name}
+                            id={id}
+                            key={id}
+                          />
+                        )
+                      })
+                    }
+                    {/*<ButtonFilter*/}
+                    {/*  selectedButtonStyle={(value) => this.selectedButtonStyle(value)}*/}
+                    {/*  handleFilterChange={(value) => this.handleFilterChange(value)}*/}
+                    {/*  selectedTextStyle={(value) => this.selectedTextStyle(value)}*/}
+                    {/*  name='Semua'*/}
+                    {/*  id='Semua'*/}
+                    {/*/>*/}
+                    {/*<ButtonFilter*/}
+                    {/*  selectedButtonStyle={(value) => this.selectedButtonStyle(value)}*/}
+                    {/*  handleFilterChange={(value) => this.handleFilterChange(value)}*/}
+                    {/*  selectedTextStyle={(value) => this.selectedTextStyle(value)}*/}
+                    {/*  name='Lunas'*/}
+                    {/*  id='paidOff'*/}
+                    {/*/>*/}
+                    {/*<ButtonFilter*/}
+                    {/*  selectedButtonStyle={(value) => this.selectedButtonStyle(value)}*/}
+                    {/*  handleFilterChange={(value) => this.handleFilterChange(value)}*/}
+                    {/*  selectedTextStyle={(value) => this.selectedTextStyle(value)}*/}
+                    {/*  name='Berikan'*/}
+                    {/*  id='credit'*/}
+                    {/*/>*/}
+                    {/*<ButtonFilter*/}
+                    {/*  selectedButtonStyle={(value) => this.selectedButtonStyle(value)}*/}
+                    {/*  handleFilterChange={(value) => this.handleFilterChange(value)}*/}
+                    {/*  selectedTextStyle={(value) => this.selectedTextStyle(value)}*/}
+                    {/*  name='Dapatkan'*/}
+                    {/*  id='debit'*/}
+                    {/*/>*/}
                   </View>
                 </View>
               </View>
