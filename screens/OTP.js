@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Constants from 'expo-constants'
 import { connect } from 'react-redux'
 import {
@@ -10,22 +10,25 @@ import {
   Keyboard,
   ActivityIndicator
 } from 'react-native'
+import { API_URL } from 'react-native-dotenv'
 
 import { textExtraProps as tProps } from '../config/system'
-import { confirmOTP } from '../store/actions/user'
+import { confirmOTP, loginSuccess } from '../store/actions/user'
+import { CheckOTP } from '../api/auth'
 
 function OTP (props) {
-  const { user, confirmOtp, loading, navigation } = props
+  const { user, confirmOtp, loading, navigation, loginSuccess } = props
   const refs = new Array(4).fill(null)
   const otp = new Array(4).fill(0)
 
-  console.log(user)
+  // console.log(user)
 
   const phoneNumber = user.phoneNumber
-    .replace(
-      /(\w{3})(\w{4})(\w{2,4})/,
-      '+62-$1-$2-$3'
-    )
+  // const phoneNumber = user.phoneNumber
+  //   .replace(
+  //     /(\w{3})(\w{4})(\w{2,4})/,
+  //     '+62-$1-$2-$3'
+  //   )
 
   const handleChangeOtp = (text, index) => {
     otp[index] = text
@@ -37,7 +40,37 @@ function OTP (props) {
           100
         )
       } else {
-        navigation.navigate('Home')
+        // console.log(otp.join(''))
+        // console.log("phoneNumber: ", phoneNumber)
+
+        const params = {
+          phoneNumber,
+          otp: otp.join('')
+        }
+        CheckOTP(params)
+          .then(result => {
+            console.log("result: ", result)
+            if (result.data.code === 200 && result.data.result.token !== ''){
+              const response = result.data.result
+              const userDetail = {
+                userName: response.name,
+                bookName: response.bookName,
+                phoneNumber: response.phoneNumber,
+                bookId: response.bookId,
+                token: response.token,
+                isNew: false,
+                isLoggedIn: true,
+              }
+              loginSuccess(userDetail)
+              navigation.navigate('App')
+            } else {
+              alert(`${API_URL} => Invalid token! => token:${otp.join('')}`)
+            }
+          })
+          .catch(err => {
+            alert(`${API_URL} => ${err} => token:${otp.join('')}`)
+          })
+        // navigation.navigate('Home')
         // setTimeout(
         //   () => {
         //     Keyboard.dismiss()
@@ -118,7 +151,8 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    confirmOtp: (phoneNumber, otp, cb) => dispatch(confirmOTP(phoneNumber, otp, cb))
+    confirmOtp: (phoneNumber, otp, cb) => dispatch(confirmOTP(phoneNumber, otp, cb)),
+    loginSuccess: (userDetail) => dispatch(loginSuccess(userDetail)),
   }
 }
 

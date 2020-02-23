@@ -13,9 +13,11 @@ import {
   Keyboard,
   ActivityIndicator
 } from 'react-native'
+import { API_URL } from 'react-native-dotenv'
 
 import { textExtraProps as tProps } from '../config/system'
 import { updatePhoneNumber, loginUser } from '../store/actions/user'
+import { DoLogin } from '../api/auth'
 
 function Login (props) {
   const { navigation, updatePhoneNumber, login, loading } = props
@@ -35,7 +37,22 @@ function Login (props) {
   const doLogin = () => {
     Keyboard.dismiss()
 
-    navigation.navigate('OTP')
+    updatePhoneNumber(phoneNumber)
+    return navigation.navigate('OTP')
+    console.log(phoneNumber)
+    // shoould be below
+    // DoLogin({ phoneNumber })
+    //   .then(result => {
+    //     console.log(result)
+    //     if (result.status === 200){
+    //      // update detail user here
+    //     } else {
+    //       setError(true)
+    //     }
+    //   })
+    //   .catch(err => {
+    //     alert(`${API_URL} => ${err} => token:${phoneNumber}`)
+    //   })
     // Network.getNetworkStateAsync()
     //   .then(stat => {
     //     if (stat.isInternetReachable) {

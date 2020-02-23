@@ -3,13 +3,14 @@ import axios from "axios"
 import { URLReminderList, URLReminderUpdateStatusAlarm } from '../config/url'
 
 export const GetReminderList = params => {
+    console.log(params)
     return axios.get(URLReminderList, {
         params: {
             bookId: params.bookId
         },
         headers: {
             'Content-Type': 'application/json',
-            'token': 'iniTokenLogin'
+            Authorization : 'Bearer ' + params.token
         }
     })
 }
@@ -24,7 +25,7 @@ export const UpdateReminderStatusAlarm = params => {
     return axios.post(URLReminderUpdateStatusAlarm, bodyFormData, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            'token': 'iniTokenLogin'
+            Authorization : 'Bearer ' + params.token
         }
     })
 }

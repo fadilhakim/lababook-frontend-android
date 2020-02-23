@@ -39,6 +39,8 @@ import { timeInfo, TimeDiff } from "../helpers/TimeFormat"
 import BaseStyle from "./../style/BaseStyle"
 
 import ButtonFilter from '../components/ButtonFilter'
+import { confirmOTP, loginSuccess } from '../store/actions/user'
+import { connect } from 'react-redux'
 
 // import {SelectContact} from 'react-native-select-contact'
 
@@ -92,8 +94,9 @@ class Kontak extends Component {
     this.state = {
       isModalVisible: false,
       contacts: [],
-      userId: 1, // sementara
-      bookId: 1, // sementara
+      userId: this.props.user.userName,
+      bookId: this.props.user.bookId || 1, //sementara
+      token: this.props.user.token,
       contactInput: {
         name: "",
         phoneNumber: "",
@@ -172,8 +175,9 @@ class Kontak extends Component {
     const bookId = this.state.bookId
     const filter = this.state.filter
     const sort = this.state.sort
+    const token = this.state.token
 
-    const params = { bookId, filter, sort }
+    const params = { bookId, filter, sort, token }
 
     contactApi.getContacts(params)
       .then(res => {
@@ -434,7 +438,15 @@ class Kontak extends Component {
 
 }
 
-export default Kontak
+// export default Kontak
+function mapStateToProps (state) {
+  return {
+    user: state.user,
+    loading: state.loading
+  }
+}
+
+export default connect(mapStateToProps)(Kontak)
 
 const styles = StyleSheet.create({
   topBar: {

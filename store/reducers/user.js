@@ -1,6 +1,8 @@
 import {
   UPDATE_PHONE_NUMBER,
   UPDATE_USER_NAME,
+  UPDATE_USER_DETAIL,
+  DELETE_USER_DETAIL,
   UPDATE_BOOK_NAME,
   UPDATE_BOOK_ID,
   USER_REGISTERED,
@@ -13,9 +15,10 @@ const initialStates = {
   phoneNumber: '',
   userName: '',
   bookName: '',
-  bookId:"",
+  bookId: '',
   token: '',
-  isNew: true
+  isNew: true,
+  isLoggedIn: false,
 }
 
 export default function user (state = initialStates, action) {
@@ -42,6 +45,29 @@ export default function user (state = initialStates, action) {
         bookId:action.bookId
       }
 
+    case UPDATE_USER_DETAIL:
+      console.log("action: ", action)
+      return {
+        ...state,
+        userName: action.payload.name,
+        bookName: action.payload.bookName,
+        phoneNumber: action.payload.phoneNumber,
+        bookId: action.payload.bookId,
+        token: action.payload.token,
+        isLoggedIn: action.payload.isLoggedIn,
+      }
+
+    case DELETE_USER_DETAIL:
+      return {
+        ...state,
+        userName: '',
+        bookName: '',
+        phoneNumber: '',
+        bookId: '',
+        token: '',
+        isLoggedIn: false,
+      }
+
     case USER_LOGIN:
     case USER_REGISTERED: {
       const { user } = action
@@ -54,7 +80,7 @@ export default function user (state = initialStates, action) {
     }
     case USER_ACTIVATED:
       return {
-        
+
       }
     case USER_CONFIRMED:
       return {

@@ -6,11 +6,14 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import Constants from 'expo-constants'
+import { CheckTokenIsValid } from '../api/auth'
+import { API_URL } from 'react-native-dotenv'
+import { loginUser, updatePhoneNumber } from '../store/actions/user'
 
 function AuthLoading (props) {
   const {
     navigation,
-    user: { token, isNew }
+    user: { token, isNew, isLoggedIn }
   } = props
 
   useEffect(() => {
@@ -23,7 +26,29 @@ function AuthLoading (props) {
     // } else {
     //   navigation.navigate('Auth')
     // }
-    navigation.navigate('Home')
+    // navigation.navigate('Home')
+    // console.log("token: ", token)
+    // console.log("isNew: ", isNew)
+    // console.log("isLoggedIn: ", isLoggedIn)
+    // console.log(navigation)
+    if (isLoggedIn) {
+      // navigation.navigate('App')
+      // should be belom
+      CheckTokenIsValid({ token })
+        .then(result => {
+          if (result.status === 200 && result.data.result && result.data.result === 'valid'){
+            navigation.navigate('App')
+          } else {
+            navigation.navigate('Auth')
+          }
+        })
+        .catch(err => {
+          alert(`Terjadi kesalahan saat menghubungi server!`)
+          navigation.navigate('Auth')
+        })
+    } else {
+      navigation.navigate('Auth')
+    }
   })
 
   return (
@@ -45,4 +70,15 @@ function mapStateToProps (state) {
   }
 }
 
-export default connect(mapStateToProps)(AuthLoading)
+function mapDispatchToProps (dispatch) {
+  return {
+    updatePhoneNumber: (newPhoneNumber) => {
+      dispatch(updatePhoneNumber(newPhoneNumber))
+    },
+    login: (phoneNumber, cb) => {
+      dispatch(loginUser(phoneNumber, cb))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthLoading)

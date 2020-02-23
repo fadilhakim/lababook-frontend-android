@@ -7,7 +7,17 @@ import {
   FlatList,
   Button,
   SectionList,
+  Linking,
 } from 'react-native'
+import Menu, {
+  MenuProvider,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+  renderers,
+} from 'react-native-popup-menu';
+
+const { ContextMenu, SlideInMenu, Popover } = renderers;
 import { ListItem, ButtonGroup } from 'react-native-elements'
 
 import { Accordion } from "native-base"
@@ -16,7 +26,8 @@ import { API_URL } from "react-native-dotenv"
 
 import {
   MaterialIcons,
-  AntDesign
+  MaterialCommunityIcons,
+  FontAwesome
 } from '@expo/vector-icons'
 
 import { textExtraProps as tProps } from '../config/system'
@@ -26,14 +37,17 @@ import { getReminderList } from '../api/reminder'
 import { numberFormat } from '../helpers/NumberFormat'
 import { TimeDiff } from "../helpers/TimeFormat"
 import CallNumber from "../helpers/CallNumber"
+import OpenApp from "../helpers/OpenApp"
 import { GetReminderList, UpdateReminderStatusAlarm } from '../api/reminder'
+import { connect } from 'react-redux'
 
-export default class Pengingat extends Component {
+class Pengingat extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      userId: 1, // sementara
-      bookId: 1, // sementara
+      userId: this.props.user.userName || 1, // sementara
+      bookId: this.props.user.bookId || 1, // sementara
+      token: this.props.user.token,
       transactions:[],
       dataReminder: [],
       lengthDataGroup: {
@@ -42,7 +56,8 @@ export default class Pengingat extends Component {
         incoming: 0,
       },
       onReceivingData: false,
-      statusAlarm: {}
+      statusAlarm: {},
+      renderer: ContextMenu
     }
   }
 
@@ -117,8 +132,10 @@ export default class Pengingat extends Component {
     this.setState({ onReceivingData: true })
 
     const bookId = this.state.bookId
+    const token = this.state.token
     const params = {
-      bookId
+      bookId,
+      token
     }
     GetReminderList(params)
       .then(result => {
@@ -129,11 +146,11 @@ export default class Pengingat extends Component {
             dataReminder: this.parseData(dataReturn.data)
           })
         } else {
-          alert(`${API_URL} => 'Internal Server Error!' => bookId:${bookId}`)
+          alert(`Terjadi kesalahan saat mengambil data!`)
         }
       })
       .catch(err => {
-        alert(`${API_URL} => ${err} => bookId:${bookId}`)
+        alert(`Terjadi kesalahan saat mengambil data!`)
       })
       .finally(() => this.setState({ onReceivingData: false }))
   }
@@ -155,6 +172,35 @@ export default class Pengingat extends Component {
                          onPress={() => this.updateAlarm(item.id)} />
           <MaterialIcons name='phone' size={27}
                          style={styles.iconButton} onPress={() => this.callPerson(item.phoneNumber)} />
+          <Menu
+            renderer={Popover}
+            // rendererProps={{ anchorStyle: styles.anchorStyle}}
+            // style={styles.iconButton, styles.iconMore}
+          >
+            <MenuTrigger>
+              <MaterialCommunityIcons name='dots-vertical' size={27} style={[styles.iconButton, styles.iconMore]} />
+            </MenuTrigger>
+            <MenuOptions>
+              <MenuOption value='whatsapp'
+                          onSelect={() => this.selectMore('whatsapp')}
+                          children={
+                            <View style={[styles.moreContainer, styles.whatsappContainer]}>
+                              <MaterialCommunityIcons name='whatsapp' size={24} style={styles.moreIcon} />
+                              <Text style={styles.moreText}>Whatsapp</Text>
+                            </View>
+                          }
+              />
+              <MenuOption value='sms'
+                          onSelect={() => this.selectMore('sms', item.phoneNumber)}
+                          children={
+                            <View style={[styles.moreContainer, styles.smsContainer]}>
+                              <FontAwesome name='envelope' size={24} style={styles.moreIcon} />
+                              <Text style={styles.moreText}>SMS</Text>
+                            </View>
+                          }
+              />
+            </MenuOptions>
+          </Menu>
         </>
       )
     }
@@ -164,14 +210,16 @@ export default class Pengingat extends Component {
     this.setState({ onReceivingData: true })
 
     const newAlarmStatus = this.state.statusAlarm[idData] === 'Y' ? 'N' : 'Y'
+    const token = this.state.token
     const params = {
       trxId: idData,
-      statusAlarm: newAlarmStatus
+      statusAlarm: newAlarmStatus,
+      token
     }
     UpdateReminderStatusAlarm(params)
       .then(result => {
-
-        if (result.status === 200){
+        // console.log(result)
+        if (result.status === 200 && result.data){
           const newAllStatus = {}
           Object.assign(newAllStatus, this.state.statusAlarm, {[idData]: newAlarmStatus})
 
@@ -179,17 +227,36 @@ export default class Pengingat extends Component {
             statusAlarm: newAllStatus
           })
         } else {
-          alert(`${API_URL} => 'Internal Server Error!' => trxId:${idData}`)
+          alert(`Terjadi kesalahan saat menyimpan data!`)
         }
       })
       .catch(err => {
-        alert(`${API_URL} => ${err} => trxId:${idData}`)
+        alert(`Terjadi kesalahan saat mengambil data!`)
       })
       .finally(() => this.setState({ onReceivingData: false }))
   }
 
   callPerson = (phoneNumber) => {
     CallNumber(phoneNumber)
+  }
+
+  selectMore = (type, number = '') => {
+    this.setState({ onReceivingData: true })
+    if (type === 'whatsapp') {
+      OpenApp({ type })
+        .catch((e) => {
+          // console.log("e: ", e)
+          alert(`Terjadi kesalahan saat membuka aplikasi!`)
+        })
+    } else {
+      const params = {
+        type: "sms",
+        number,
+        message: ''
+      }
+      OpenApp(params)
+    }
+    this.setState({ onReceivingData: false })
   }
 
   componentDidMount () {
@@ -265,6 +332,15 @@ export default class Pengingat extends Component {
 
 }
 
+function mapStateToProps (state) {
+  return {
+    user: state.user,
+    loading: state.loading
+  }
+}
+
+export default connect(mapStateToProps)(Pengingat)
+
 const styles = StyleSheet.create({
   topBar: {
     flexDirection: 'row',
@@ -294,11 +370,16 @@ const styles = StyleSheet.create({
   },
   pdf: {
     color: '#aaa',
-    paddingRight: 25,
+    paddingRight: 20,
   },
   iconButton: {
     color: '#444',
-    paddingRight: 10,
+    paddingRight: 5,
+    paddingLeft: 5,
+  },
+  iconMore: {
+    paddingRight: 0,
+    paddingLeft: 0,
   },
   borderGray: {
     color: '#000',
@@ -319,6 +400,31 @@ const styles = StyleSheet.create({
   },
   rightTitleStyle: {
     fontSize: 10,
+  },
+  moreContainer: {
+    flexDirection: 'row'
+  },
+  whatsappContainer: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#dedede',
+    borderStyle: 'solid',
+    paddingTop: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingBottom: 10
+  },
+  smsContainer: {
+    paddingLeft: 10,
+    paddingBottom: 10
+  },
+  moreIcon: {
+    paddingRight: 0,
+    paddingLeft: 0,
+    color: '#25D366'
+  },
+  moreText: {
+    paddingTop: 3,
+    paddingLeft: 10,
+    fontSize: 14
   }
 })
-

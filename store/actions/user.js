@@ -2,6 +2,8 @@ import {
   UPDATE_PHONE_NUMBER,
   UPDATE_USER_NAME,
   UPDATE_BOOK_NAME,
+  UPDATE_USER_DETAIL,
+  DELETE_USER_DETAIL,
   USER_REGISTERED,
   USER_LOGIN,
   USER_CONFIRMED
@@ -30,6 +32,19 @@ export function updateUserName (newUserName) {
   }
 }
 
+export function loginSuccess (userDetail) {
+  return {
+    type: UPDATE_USER_DETAIL,
+    payload: userDetail
+  }
+}
+
+export function logout () {
+  return {
+    type: DELETE_USER_DETAIL
+  }
+}
+
 export function updateBookName (newBookName) {
   return {
     type: UPDATE_BOOK_NAME,
@@ -39,7 +54,7 @@ export function updateBookName (newBookName) {
 
 export function updateBookId(newBookId) {
   return {
-    type:UPDATE_BOOK_ID,
+    type: UPDATE_BOOK_ID,
     bookId: newBookId
   }
 }

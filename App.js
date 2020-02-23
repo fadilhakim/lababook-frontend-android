@@ -164,7 +164,7 @@ const AppNavigator = createStackNavigator(
 const Root = createAppContainer(
   createSwitchNavigator(
     {
-      AuthLoading: AuthLoading,
+      Loading: AuthLoading,
       Auth: AuthNavigator,
       App: AppNavigator,
       // RegisterOld: RegisterOld,
@@ -176,7 +176,7 @@ const Root = createAppContainer(
       Test: Test
     },
     {
-      initialRouteName: 'App'
+      initialRouteName: 'Loading'
     }
   )
 )
@@ -194,7 +194,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <MenuProvider>
+        <MenuProvider backHandler={true}>
           <Root ref={navigatorRef => {
             NavigationService.setTopLevelNavigator(navigatorRef);
           }} />
