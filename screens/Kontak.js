@@ -193,7 +193,7 @@ class Kontak extends Component {
 
     contactApi.getContacts(params)
       .then(res => {
-        console.log(res)
+        // console.log(res)
 
         const data = res.data.data
         const newData = []

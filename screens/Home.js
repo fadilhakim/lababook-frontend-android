@@ -16,7 +16,7 @@ import Constanst from 'expo-constants'
 import { textExtraProps as tProps } from '../config/system'
 
 import Kontak from './Kontak'
-import Aktifitas from './AktifitasOld'
+import Aktifitas from './Aktifitas'
 import Pengingat from './Pengingat'
 
 // import DetailTransaction from "./DetailTransaction"
