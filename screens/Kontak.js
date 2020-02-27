@@ -89,13 +89,25 @@ const filterList = [{
 
 class Kontak extends Component {
 
+  /*
+  * phoneNumber: '',
+  userName: '',
+  bookName: '',
+  bookType: '',
+  bookId: '',
+  id: '',
+  token: '',
+  isNew: true,
+  isLoggedIn: false,
+  * */
   constructor(props) {
     super(props)
     this.state = {
       isModalVisible: false,
       contacts: [],
-      userId: this.props.user.userName,
-      bookId: this.props.user.bookId || 1, //sementara
+      userId: this.props.user.id,
+      bookName: this.props.user.bookName,
+      bookId: this.props.user.bookId,
       token: this.props.user.token,
       contactInput: {
         name: "",
@@ -181,8 +193,9 @@ class Kontak extends Component {
 
     contactApi.getContacts(params)
       .then(res => {
+        console.log(res)
 
-        const data = res.data
+        const data = res.data.data
         const newData = []
 
         data.map(item => {

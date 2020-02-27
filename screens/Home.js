@@ -86,7 +86,7 @@ function Home (props) {
 
           <Text {...tProps} style={styles.bookName}>
             {/*user.bookName*/}
-            Warung Mira
+            {user.bookName}
           </Text>
         </View>
 

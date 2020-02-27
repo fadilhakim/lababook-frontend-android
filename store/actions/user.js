@@ -7,6 +7,7 @@ import {
   UPDATE_USER_REGISTER,
   DELETE_USER_DETAIL,
   UPDATE_USER_OLD,
+  UPDATE_USER_NEW,
   USER_REGISTERED,
   USER_LOGIN,
   USER_CONFIRMED
@@ -79,6 +80,12 @@ export function updateBookId(newBookId) {
 export function updateUserStatus() {
   return {
     type: UPDATE_USER_OLD
+  }
+}
+
+export function updateNewUserStatus() {
+  return {
+    type: UPDATE_USER_NEW
   }
 }
 

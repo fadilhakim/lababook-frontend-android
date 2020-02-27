@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Component, useState } from 'react'
 import { connect } from 'react-redux'
 import Constants from 'expo-constants'
 import * as Network from 'expo-network'
@@ -11,148 +11,131 @@ import {
   StatusBar,
   ToastAndroid,
   Keyboard,
-  ActivityIndicator, Image
+  ActivityIndicator, Image, Alert
 } from 'react-native'
 import { API_URL } from 'react-native-dotenv'
 
 import { textExtraProps as tProps } from '../config/system'
-import { updatePhoneNumber, loginUser } from '../store/actions/user'
+import { updatePhoneNumber, updateUserStatus, loginUser } from '../store/actions/user'
 import { GetOTP } from '../api/auth'
 import { LOGIN, REGISTER_SUCCESS } from '../utils/images'
 import { MaterialIcons } from '@expo/vector-icons'
 import LoadingModal from '../helpers/LoadingModal'
+import { UPDATE_PHONE_NUMBER } from '../store/actionTypes/user'
 
-function Login (props) {
+// function Login (props) {
+class Login extends Component {
   state = {
-    loading: false
+    user: this.props.user,
+    navigation: this.props.navigation,
+    phoneNumber: '',
+    loading: false,
+    phoneNumberFirstType: true,
   }
-  const { navigation, updatePhoneNumber, login } = props
-  const [phoneNumber, setPhoneNumber] = useState('')
-  const [errMsg, setErrMsg] = useState('')
-  const [isError, setError] = useState(false)
+  updatePhoneNumber = this.props.updatePhoneNumber
+  updateUserStatus = this.props.updateUserStatus
+  // const { navigation, updatePhoneNumber, login } = props
+  // const [phoneNumber, setPhoneNumber] = useState('')
+  // const [errMsg, setErrMsg] = useState('')
+  // const [loading] = useState(false)
+  // const [phoneNumberFirstType] = useState(true)
 
-  const styleEmptyField = (field) => {
+  styleEmptyField = (field) => {
     if (this.state[field] || this.state[field+'FirstType']) return {}
     else return { borderColor: '#ff0000', borderBottomWidth: 2 }
   }
 
-  const handleRef = (ref) => {
-    if (ref && isError) ref.focus()
+  checkPhoneNumber = (target) => {
+    // console.log(target)
+    this.setState({
+      phoneNumber: target.replace(/^0+/, '').trim(),
+      phoneNumberFirstType: false
+    })
   }
 
-  const handleChangeText = (text) => {
-    setPhoneNumber(text)
-    setError(false)
+  nextStep = async () => {
+    console.log("this.state.user: ", this.state.phoneNumber)
+    if (this.state.phoneNumber) {
+      console.log(this.state.phoneNumber)
+      await this.updatePhoneNumber('+62' + this.state.phoneNumber)
+      await this.updateUserStatus()
+      this.getOtp()
+    } else {
+      this.setState({
+        phoneNumberFirstType: false,
+      })
+    }
   }
 
-  const doLogin = () => {
-    Keyboard.dismiss()
-
-    updatePhoneNumber(phoneNumber)
-    // return navigation.navigate('OTP')
-    console.log(phoneNumber)
-    // shoould be below
-    GetOTP({ phoneNumber })
+  getOtp = () => {
+    this.setState({
+      loading: true,
+    })
+    const errorMessage = 'Terjadi kesalahan saat meminta OTP!'
+    const params = {
+      phoneNumber: '+62' + this.state.phoneNumber,
+    }
+    GetOTP(params)
       .then(result => {
-        console.log(result)
-        if (result.status === 200){
-         // update detail user here
+        console.log("result getotp login: ", result)
+        if (result.data.status_code === 200 && result.data.status_message == 'OK'){
+          // Alert.alert('Success!', 'Kode OTP baru telah berhasil dikirim')
+          this.state.navigation.navigate('OTP')
         } else {
-          setError(true)
+          // alert(`${API_URL} => Invalid token! => token:${this.otp.join('')}`)
+          Alert.alert('Perhatian!', result.data.data.message ? result.data.data.message : errorMessage)
         }
       })
       .catch(err => {
-        alert(`${API_URL} => ${err} => token:${phoneNumber}`)
+        // alert(`${API_URL} => ${err} => token:${this.otp.join('')}`)
+        Alert.alert('Perhatian!', errorMessage)
       })
-    // Network.getNetworkStateAsync()
-    //   .then(stat => {
-    //     if (stat.isInternetReachable) {
-    //       login(phoneNumber, () => {
-    //         navigation.navigate('OTP')
-    //       })
-    //     } else {
-    //       ToastAndroid.showWithGravity(
-    //         'Anda tidak terhubung ke Internet',
-    //         ToastAndroid.LONG,
-    //         ToastAndroid.BOTTOM
-    //       )
-    //     }
-    //   })
-    //   .catch(error => {
-    //     ToastAndroid.showWithGravity(
-    //       error.message,
-    //       ToastAndroid.LONG,
-    //       ToastAndroid.BOTTOM
-    //     )
-    //   })
+      .finally(() => this.setState({ loading: false }))
   }
 
-  return (
-    <View style={styles.container}>
-      <LoadingModal showLoading={this.state.loading} loadingMessage='Menyimpan data...' />
-      <View style={styles.logoContainer}>
-        <Image source={ LOGIN } style={styles.logo} resizeMode="contain" />
-      </View>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>
-          LABABOOK
-        </Text>
-      </View>
-      <View style={styles.formContainer}>
-        <View style={[styles.rowField, styleEmptyField('phoneNumber')]}>
-          <View style={styles.iconField}>
-            <MaterialIcons name='phone-iphone' size={30} color='#aaa' />
-          </View>
-          <View style={styles.labelField}>
-            <Text style={styles.labelText}>+62</Text>
-          </View>
-          <View style={styles.inputGroupNo}>
-            <TextInput style={styles.inputField} placeholder='no telepon'
-                       keyboardType='number-pad'
-                       value={this.state.phoneNumber}
-                       onChangeText={(value) => this.checkPhoneNumber(value)}
-            />
+  render () {
+    console.log("this.state.user: ", this.state.user)
+    return (
+      <View style={styles.container}>
+        <LoadingModal showLoading={this.state.loading} loadingMessage='Meminta OTP...' />
+        <View style={styles.logoContainer}>
+          <Image source={ LOGIN } style={styles.logo} resizeMode="contain" />
+        </View>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>
+            LABABOOK
+          </Text>
+        </View>
+        <View style={styles.formContainer}>
+          <View style={[styles.rowField, this.styleEmptyField('phoneNumber')]}>
+            <View style={styles.iconField}>
+              <MaterialIcons name='phone-iphone' size={30} color='#aaa' />
+            </View>
+            <View style={styles.labelField}>
+              <Text style={styles.labelText}>+62</Text>
+            </View>
+            <View style={styles.inputGroupNo}>
+              <TextInput style={styles.inputField} placeholder='no telepon'
+                         keyboardType='number-pad'
+                         value={this.state.phoneNumber}
+                         onChangeText={(value) => this.checkPhoneNumber(value)}
+              />
+            </View>
           </View>
         </View>
+        <View style={styles.buttonContainer}>
+          <TouchableNativeFeedback
+            // disabled={true}
+            onPress={() => this.nextStep()}
+          >
+            <View style={styles.buttonNext}>
+              <Text {...tProps} style={styles.buttonText}>Login</Text>
+            </View>
+          </TouchableNativeFeedback>
+        </View>
       </View>
-      {/*<View style={{ width: '100%' }}>*/}
-
-      {/*  <Text {...tProps} style={styles.phoneLabel}>*/}
-      {/*    Nomor Handphone*/}
-      {/*  </Text>*/}
-      {/*  {*/}
-      {/*    isError && (*/}
-      {/*      <Text {...tProps} style={styles.errorPhone}>*/}
-      {/*        {errMsg}*/}
-      {/*      </Text>*/}
-      {/*    )*/}
-      {/*  }*/}
-      {/*  <TextInput*/}
-      {/*    autoFocus={true}*/}
-      {/*    keyboardAppearance='default'*/}
-      {/*    keyboardType='number-pad'*/}
-      {/*    onChangeText={text => handleChangeText(text)}*/}
-      {/*    style={!isError ? styles.phone : styles.phoneError}*/}
-      {/*    ref={handleRef}*/}
-      {/*  />*/}
-      {/*  <TouchableNativeFeedback*/}
-      {/*    onPress={() => doLogin()}*/}
-      {/*  >*/}
-      {/*    <View style={styles.button}>*/}
-      {/*      <Text {...tProps} style={styles.buttonText}>Verifikasi</Text>*/}
-      {/*    </View>*/}
-      {/*  </TouchableNativeFeedback>*/}
-      {/*  <View style={styles.info}>*/}
-      {/*    <Text {...tProps} style={styles.infoText}>*/}
-      {/*      Tidak bisa masuk HP Anda tidak terdaftar*/}
-      {/*    </Text>*/}
-      {/*    <Text {...tProps} style={styles.infoLink}>*/}
-      {/*      Hubungi Kami*/}
-      {/*    </Text>*/}
-      {/*  </View>*/}
-      {/*</View>*/}
-    </View>
-  )
+    )
+  }
 }
 
 function mapStateToProps (state) {
@@ -165,6 +148,9 @@ function mapDispatchToProps (dispatch) {
   return {
     updatePhoneNumber: (newPhoneNumber) => {
       dispatch(updatePhoneNumber(newPhoneNumber))
+    },
+    updateUserStatus: () => {
+      dispatch(updateUserStatus())
     },
     login: (phoneNumber, cb) => {
       dispatch(loginUser(phoneNumber, cb))
@@ -243,4 +229,20 @@ const styles = StyleSheet.create({
     // paddingBottom: 20,
     fontSize: 18,
   },
+  buttonNext: {
+    backgroundColor: '#2a2cbb',
+    // padding: 12,
+    width: 270,
+    height: 50,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+  },
+  buttonContainer: {
+    marginTop: 40
+  }
 })

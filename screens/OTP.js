@@ -31,11 +31,12 @@ class OTP extends Component {
       confirmOtp: this.props.confirmOtp,
       loading: false,
       navigation: this.props.navigation,
-      loginSuccess: this.props.loginSuccess,
+      // loginSuccess: this.props.loginSuccess,
       imageHeight: new Animated.Value(180),
       loadingMessage: 'Verifikasi data...'
       // refs: new Array(4).fill(0)
     }
+  loginSuccess = this.props.loginSuccess
     // const phoneNumber = user.phoneNumber
     //   .replace(
     //     /(\w{3})(\w{4})(\w{2,4})/,
@@ -68,7 +69,8 @@ class OTP extends Component {
     }
   }
 
-  nextStep = () => {
+   nextStep = async () => {
+  // async nextStep (){
     this.setState({
       loading: true,
       loadingMessage: 'Verifikasi data...'
@@ -79,7 +81,7 @@ class OTP extends Component {
       otp: this.otp.join('')
     }
     LoginUser(params)
-      .then(result => {
+      .then(async result => {
         console.log("result: ", result)
           /*
           * "data": Object {
@@ -106,13 +108,15 @@ class OTP extends Component {
           const userDetail = {
             userName: response.user.name,
             bookName: response.book.bookName,
+            bookType: response.book.bookType,
             phoneNumber: response.user.phoneNumber,
             bookId: response.book.id,
             token: response.token,
             isNew: this.state.user.isNew,
             isLoggedIn: true,
+            id: response.user.id,
           }
-          loginSuccess(userDetail)
+          await this.loginSuccess(userDetail)
           if(this.state.user.isNew)
             this.state.navigation.navigate('Register03')
           else
@@ -158,7 +162,7 @@ class OTP extends Component {
 
   componentWillUnmount = () => {
     this.keyboardDidShowListener.remove()
-    this.keyboardDidShowListener.remove()
+    this.keyboardDidHideListener.remove()
   }
 
   _keyboardWillShow = (event) => {
@@ -181,7 +185,7 @@ class OTP extends Component {
   }
 
   render () {
-    console.log("this.state.imageHeight: ", this.state.user)
+    // console.log("this.state.imageHeight: ", this.state.user)
     return (
       <View style={styles.container}>
         <LoadingModal showLoading={this.state.loading} loadingMessage={this.state.loadingMessage} />

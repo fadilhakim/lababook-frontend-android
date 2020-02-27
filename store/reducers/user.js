@@ -7,6 +7,7 @@ import {
   UPDATE_BOOK_NAME,
   UPDATE_BOOK_ID,
   UPDATE_USER_OLD,
+  UPDATE_USER_NEW,
   USER_REGISTERED,
   USER_ACTIVATED,
   USER_LOGIN,
@@ -55,15 +56,17 @@ export default function user (state = initialStates, action) {
       }
 
     case UPDATE_USER_LOGIN:
+      console.log("action: ", action)
       return {
-        ...state,
-        userName: action.payload.name,
+        userName: action.payload.userName,
         bookName: action.payload.bookName,
         bookType: action.payload.bookType,
         phoneNumber: action.payload.phoneNumber,
         bookId: action.payload.bookId,
+        id: action.payload.id,
         token: action.payload.token,
         isLoggedIn: action.payload.isLoggedIn,
+        isNew: action.payload.isNew,
       }
 
     case UPDATE_USER_REGISTER:
@@ -107,6 +110,11 @@ export default function user (state = initialStates, action) {
       return {
         ...state,
         isNew: false
+      }
+    case UPDATE_USER_NEW:
+      return {
+        ...state,
+        isNew: true
       }
     default:
       return state
