@@ -17,6 +17,8 @@ import {
   TYPE_4
 } from '../../utils/images'
 import { textExtraProps as tProps } from '../../config/system'
+import { connect } from 'react-redux'
+import { updateBookType } from '../../store/actions/user'
 // import { textExtraProps as tProps } from '../../config/system'
 // import { Image } from 'react-native-web'
 
@@ -35,11 +37,16 @@ const dataType = [{
     text: 'Lainnya'
 }]
 
-export default class RegisterType extends Component {
+class RegisterType extends Component {
   state = {
-    selected: null
+    selected: null,
+    selectedType: '',
+    user: this.props.user,
+    // updateBookType: this.props.updateBookType
   }
-  navigation = this.props.navigation
+  navigation  = this.props.navigation
+  updateBookType  = this.props.updateBookType
+  // navigation = this.props.navigation
 
   selectedStyle = (index) => {
     if(this.state.selected == index) {
@@ -52,15 +59,30 @@ export default class RegisterType extends Component {
     }
   }
 
+  selectBookType = (index) => {
+    this.setState({
+      selected: index,
+      selectedType: dataType[index].text
+    })
+  }
+
   nextStep = () => {
-    if(this.state.selected){
+    // console.log("this.state.selected: ", this.state.selected)
+    // console.log("this.state.selectedType: ", this.state.selectedType)
+    if(this.state.selectedType){
+      // console.log("this.state.user: ", this.state.user)
+      this.updateBookType(this.state.selectedType)
       this.navigation.navigate('Register02')
+
+      // console.log("this.state.user: ", this.state.user)
     }else{
       Alert.alert("Perhatian!", 'Harap pilih salah satu jenis usaha Anda!')
     }
   }
 
   render () {
+    // console.log("this.state.selected: ", this.state.selected)
+    // console.log("this.state.user: ", this.state.user)
     return (
       <SafeAreaView style={styles.container}>
         <Text style={styles.title}>
@@ -69,7 +91,7 @@ export default class RegisterType extends Component {
         <View style={styles.containerRow}>
           <View style={styles.containerIcon}>
             <TouchableNativeFeedback
-              onPress={() => this.setState({ selected: 0 })}
+              onPress={() => this.selectBookType(0)}
             >
               <View style={[styles.iconBox, this.selectedStyle(0)]}>
                 <Image
@@ -84,7 +106,7 @@ export default class RegisterType extends Component {
 
           <View style={styles.containerIcon}>
             <TouchableNativeFeedback
-              onPress={() => this.setState({ selected: 1 })}
+              onPress={() => this.selectBookType(1)}
             >
               <View style={[styles.iconBox, styles.iconBox1, this.selectedStyle(1)]}>
                 <Image
@@ -101,7 +123,7 @@ export default class RegisterType extends Component {
         <View style={styles.containerRow}>
           <View style={styles.containerIcon}>
             <TouchableNativeFeedback
-              onPress={() => this.setState({ selected: 2 })}
+              onPress={() => this.selectBookType(2)}
             >
               <View style={[styles.iconBox, this.selectedStyle(2)]}>
                 <Image
@@ -116,7 +138,7 @@ export default class RegisterType extends Component {
 
           <View style={styles.containerIcon}>
             <TouchableNativeFeedback
-              onPress={() => this.setState({ selected: 3 })}
+              onPress={() => this.selectBookType(3)}
             >
               <View style={[styles.iconBox, styles.iconBox3, this.selectedStyle(3)]}>
                 <Image
@@ -142,6 +164,21 @@ export default class RegisterType extends Component {
     )
   }
 }
+
+function mapStateToProps (state) {
+  return {
+    user: state.user,
+    loading: state.loading
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    updateBookType: (bookType) => dispatch(updateBookType(bookType)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterType)
 
 const styles = StyleSheet.create({
   container: {

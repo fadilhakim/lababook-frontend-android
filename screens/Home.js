@@ -5,7 +5,7 @@ import {
   StyleSheet,
   StatusBar,
   TouchableNativeFeedback,
-  Image  
+  Image
 } from 'react-native'
 import { Ionicons, Foundation, SimpleLineIcons } from '@expo/vector-icons'
 import { connect } from 'react-redux'
@@ -16,7 +16,7 @@ import Constanst from 'expo-constants'
 import { textExtraProps as tProps } from '../config/system'
 
 import Kontak from './Kontak'
-import Aktifitas from './Aktifitas'
+import Aktifitas from './AktifitasOld'
 import Pengingat from './Pengingat'
 
 // import DetailTransaction from "./DetailTransaction"

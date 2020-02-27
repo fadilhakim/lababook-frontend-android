@@ -39,7 +39,7 @@ import { timeInfo, TimeDiff } from "../helpers/TimeFormat"
 import BaseStyle from "./../style/BaseStyle"
 
 import ButtonFilter from '../components/ButtonFilter'
-import { confirmOTP, loginSuccess } from '../store/actions/user'
+// import { confirmOTP, loginSuccess } from '../store/actions/user'
 import { connect } from 'react-redux'
 
 // import {SelectContact} from 'react-native-select-contact'

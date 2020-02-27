@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Component, useState } from 'react'
 import Constants from 'expo-constants'
 import { connect } from 'react-redux'
 import {
@@ -8,30 +8,49 @@ import {
   TextInput,
   StatusBar,
   Keyboard,
-  ActivityIndicator
+  ActivityIndicator,
+  Animated,
+  SafeAreaView,
+  Image, TouchableNativeFeedback, Alert,
 } from 'react-native'
 import { API_URL } from 'react-native-dotenv'
 
 import { textExtraProps as tProps } from '../config/system'
 import { confirmOTP, loginSuccess } from '../store/actions/user'
-import { CheckOTP } from '../api/auth'
+import { LoginUser, GetOTP } from '../api/auth'
+import { OTP_LOGO, } from '../utils/images'
+import LoadingModal from '../helpers/LoadingModal'
 
-function OTP (props) {
-  const { user, confirmOtp, loading, navigation, loginSuccess } = props
-  const refs = new Array(4).fill(null)
-  const otp = new Array(4).fill(0)
+// function OTP (props) {
+refs = new Array(4).fill(null)
+class OTP extends Component {
+  // constructor (props) {
+  //   super()
+    state = {
+      user: this.props.user,
+      confirmOtp: this.props.confirmOtp,
+      loading: false,
+      navigation: this.props.navigation,
+      loginSuccess: this.props.loginSuccess,
+      imageHeight: new Animated.Value(180),
+      loadingMessage: 'Verifikasi data...'
+      // refs: new Array(4).fill(0)
+    }
+    // const phoneNumber = user.phoneNumber
+    //   .replace(
+    //     /(\w{3})(\w{4})(\w{2,4})/,
+    //     '+62-$1-$2-$3'
+    //   )
+  // }
+  // refs = new Array(4).fill(null)
+  otp = new Array(4).fill(0)
+  phoneNumber = this.state.user.phoneNumber
 
-  // console.log(user)
+  IMAGE_HEIGHT = 180
+  IMAGE_HEIGHT_SMALL = 50
 
-  const phoneNumber = user.phoneNumber
-  // const phoneNumber = user.phoneNumber
-  //   .replace(
-  //     /(\w{3})(\w{4})(\w{2,4})/,
-  //     '+62-$1-$2-$3'
-  //   )
-
-  const handleChangeOtp = (text, index) => {
-    otp[index] = text
+  handleChangeOtp = (text, index) => {
+    this.otp[index] = text
 
     if (text) {
       if (index + 1 < refs.length) {
@@ -39,52 +58,6 @@ function OTP (props) {
           () => refs[index + 1].focus(),
           100
         )
-      } else {
-        // console.log(otp.join(''))
-        // console.log("phoneNumber: ", phoneNumber)
-
-        const params = {
-          phoneNumber,
-          otp: otp.join('')
-        }
-        CheckOTP(params)
-          .then(result => {
-            console.log("result: ", result)
-            if (result.data.code === 200 && result.data.result.token !== ''){
-              const response = result.data.result
-              const userDetail = {
-                userName: response.name,
-                bookName: response.bookName,
-                phoneNumber: response.phoneNumber,
-                bookId: response.bookId,
-                token: response.token,
-                isNew: false,
-                isLoggedIn: true,
-              }
-              loginSuccess(userDetail)
-              navigation.navigate('App')
-            } else {
-              alert(`${API_URL} => Invalid token! => token:${otp.join('')}`)
-            }
-          })
-          .catch(err => {
-            alert(`${API_URL} => ${err} => token:${otp.join('')}`)
-          })
-        // navigation.navigate('Home')
-        // setTimeout(
-        //   () => {
-        //     Keyboard.dismiss()
-        //     confirmOtp(
-        //       user.phoneNumber,
-        //       otp.join(''),
-        //       () => {
-        //         // navigation.navigate('AuthLoading')
-        //         navigation.navigate('Home')
-        //       }
-        //     )
-        //   },
-        //   100
-        // )
       }
     } else {
       if (index - 1 >= 0) {
@@ -95,16 +68,133 @@ function OTP (props) {
     }
   }
 
-  return (
-    <View style={styles.container}>
-      <StatusBar barStyle='dark-content' style={styles.statusBar}/>
-      <View style={{ width: '100%', alignItems: 'center' }}>
-        <Text {...tProps} style={styles.phoneLabelTop}>
-          Masukkan OTP 4 digit yang dikirimkan
-        </Text>
-        <Text {...tProps} style={styles.phoneLabelBottom}>
-          ke <Text {...tProps} style={{ color: '#222' }}>{phoneNumber}</Text>
-        </Text>
+  nextStep = () => {
+    this.setState({
+      loading: true,
+      loadingMessage: 'Verifikasi data...'
+    })
+    const errorMessage = 'Terjadi kesalahan saat verifikasi data!'
+    const params = {
+      phoneNumber: this.phoneNumber,
+      otp: this.otp.join('')
+    }
+    LoginUser(params)
+      .then(result => {
+        console.log("result: ", result)
+          /*
+          * "data": Object {
+              "result": Object {
+                "message": "OK",
+                "token": "WUB2eHaJlzSKpdOQdP3RHj14FT1ggX6dqW4wBxs1o0EIdFr7LD8mub6cAFy8VCjAXmyAdGva5sERdVY2",
+                "user": Object {
+                  "created_at": "2020-02-27 11:02:53",
+                  "id": 11,
+                  "name": "Wawan 2",
+                  "phoneNumber": "+6282125516876",
+                  "profilePic": null,
+                  "tokenId": "WUB2eHaJlzSKpdOQdP3RHj14FT1ggX6dqW4wBxs1o0EIdFr7LD8mub6cAFy8VCjAXmyAdGva5sERdVY2",
+                  "updated_at": "2020-02-27 11:09:40",
+                },
+              },
+              "status_code": 200,
+              "status_message": "OK",
+            },
+
+          * */
+        if (result.data.status_message === "OK" && result.data.result && result.data.result.token !== ''){
+          const response = result.data.result
+          const userDetail = {
+            userName: response.user.name,
+            bookName: response.book.bookName,
+            phoneNumber: response.user.phoneNumber,
+            bookId: response.book.id,
+            token: response.token,
+            isNew: this.state.user.isNew,
+            isLoggedIn: true,
+          }
+          loginSuccess(userDetail)
+          if(this.state.user.isNew)
+            this.state.navigation.navigate('Register03')
+          else
+            this.state.navigation.navigate('App')
+        } else {
+          // alert(`${API_URL} => Invalid token! => token:${this.otp.join('')}`)
+          Alert.alert('Perhatian!', data.data.data.message ? data.data.data.message : errorMessage)
+        }
+      })
+      .catch(err => {
+        console.log("err: ", err)
+        // alert(`${API_URL} => ${err} => token:${this.otp.join('')}`)
+        Alert.alert('Perhatian!', errorMessage)
+      })
+      .finally(() => this.setState({ loading: false }))
+  }
+
+  resendOTP = () => {
+    this.setState({
+      loading: true,
+      loadingMessage: 'Mengirim OTP...'
+    })
+    const errorMessage = 'Terjadi kesalahan saat meminta OTP!'
+    const params = {
+      phoneNumber: this.phoneNumber,
+    }
+    GetOTP(params)
+      .then(result => {
+        console.log("result: ", result.data)
+        if (result.data.status_code === 200 && result.data.status_message == 'OK'){
+          Alert.alert('Success!', 'Kode OTP baru telah berhasil dikirim')
+        } else {
+          // alert(`${API_URL} => Invalid token! => token:${this.otp.join('')}`)
+          Alert.alert('Perhatian!', data.data.data.message ? data.data.data.message : errorMessage)
+        }
+      })
+      .catch(err => {
+        // alert(`${API_URL} => ${err} => token:${this.otp.join('')}`)
+        Alert.alert('Perhatian!', errorMessage)
+      })
+      .finally(() => this.setState({ loading: false }))
+  }
+
+  componentWillUnmount = () => {
+    this.keyboardDidShowListener.remove()
+    this.keyboardDidShowListener.remove()
+  }
+
+  _keyboardWillShow = (event) => {
+    Animated.timing(this.state.imageHeight, {
+      duration: 200,
+      toValue: this.IMAGE_HEIGHT_SMALL,
+    }).start()
+  }
+
+  _keyboardWillHide = (event) => {
+    Animated.timing(this.state.imageHeight, {
+      duration: 200,
+      toValue: this.IMAGE_HEIGHT,
+    }).start()
+  }
+
+  componentWillMount () {
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardWillShow)
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardWillHide)
+  }
+
+  render () {
+    console.log("this.state.imageHeight: ", this.state.user)
+    return (
+      <View style={styles.container}>
+        <LoadingModal showLoading={this.state.loading} loadingMessage={this.state.loadingMessage} />
+        <View style={styles.logoContainer}>
+          {/*<Image source={ OTP_LOGO } resizeMode="contain" />*/}
+          <Animated.Image source={OTP_LOGO} resizeMode="contain" style={{ height:  this.state.imageHeight }}/>
+        </View>
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>Kode Verifikasi</Text>
+        </View>
+        <View style={styles.subtitleContainer}>
+          <Text style={styles.subtitle}>Kode verifikasi telah terkirim. Mohon periksa kotak masuk SMS anda</Text>
+        </View>
         <View style={styles.otpView}>
           {
             new Array(4).fill(0).map((val, index) => {
@@ -116,42 +206,40 @@ function OTP (props) {
                   secureTextEntry
                   autoFocus={index === 0}
                   ref={ref => { refs[index] = ref }}
-                  onChangeText={text => handleChangeOtp(text, index)}
+                  onChangeText={text => this.handleChangeOtp(text, index)}
                   style={styles.otpInput}
                 />
               )
             })
           }
         </View>
-        <View style={styles.info}>
-          <Text {...tProps} style={styles.infoText}>
-            Nomor ponsel salah?
-          </Text>
-          <Text {...tProps} style={styles.infoLink}>
-            Minta kode baru
-          </Text>
+        <View style={styles.buttonContainer}>
+          <TouchableNativeFeedback
+            // disabled={true}
+            onPress={() => this.nextStep()}
+          >
+            <View style={styles.buttonNext}>
+              <Text {...tProps} style={styles.buttonText}>Verifikasi Kode</Text>
+            </View>
+          </TouchableNativeFeedback>
         </View>
-        {
-          loading && <View style={{ flexDirection: 'row', marginTop: 10 }}>
-            <ActivityIndicator color='#444' size={16}/>
-            <Text {...tProps}> Mengonfirmasi OTP</Text>
-          </View>
-        }
+        <View style={styles.moreContainer}>
+          <Text>Tidak menerima kode verifikasi? <Text style={styles.textResend} onPress={() => this.resendOTP()}>Kirim ulang</Text></Text>
+        </View>
       </View>
-    </View>
-  )
+    )
+  }
 }
 
 function mapStateToProps (state) {
   return {
     user: state.user,
-    loading: state.loading
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    confirmOtp: (phoneNumber, otp, cb) => dispatch(confirmOTP(phoneNumber, otp, cb)),
+    // confirmOtp: (phoneNumber, otp, cb) => dispatch(confirmOTP(phoneNumber, otp, cb)),
     loginSuccess: (userDetail) => dispatch(loginSuccess(userDetail)),
   }
 }
@@ -161,65 +249,82 @@ export default connect(mapStateToProps, mapDispatchToProps)(OTP)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    padding: Constants.statusBarHeight
+    // backgroundColor: '#0f0',
+    flexDirection: 'column',
+    alignItems: 'center',
+    alignContent: 'center',
+    // verticalAlign: 'middle',
+    // justifyContent: 'space-between',
+    // padding: Constants.statusBarHeight
   },
-  statusBar: {
-    backgroundColor: 'white'
+  logoContainer: {
+    // backgroundColor: 'red',
+    marginTop: '20%',
   },
-  phoneLabelTop: {
-    color: '#888',
+  titleContainer: {
+    marginTop: 40,
+  },
+  title: {
+    fontSize: 24,
     fontWeight: '500',
-    fontSize: 18,
-    marginTop: 170
   },
-  phoneLabelBottom: {
-    color: '#888',
-    fontWeight: '500',
-    fontSize: 18,
-    paddingBottom: 20
+  subtitleContainer: {
+    marginTop: 10,
+    width: 300,
+  },
+  subtitle: {
+    textAlign: 'center',
+    fontSize: 14,
+    color: '#aaa'
   },
   otpView: {
-    flex: 1,
+    // flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 50
+    marginTop: 15
   },
   otpInput: {
     borderRadius: 2,
-    backgroundColor: '#eee',
-    margin: 10,
+    backgroundColor: '#fff',
+    borderColor: '#eee',
+    borderRadius: 10,
+    borderWidth: 1,
+    margin: 5,
     padding: 10,
-    height: 60,
-    width: 60,
+    height: 50,
+    width: 50,
     textAlign: 'center',
     color: 'black',
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: 'bold'
+  },
+  buttonContainer: {
+    marginTop: 30
+  },
+  buttonNext: {
+    backgroundColor: '#2a2cbb',
+    // padding: 12,
+    width: 270,
+    height: 50,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
   },
   errorPhone: {
     fontSize: 14,
     color: '#f25a5a',
     fontWeight: 'bold'
   },
-  info: {
-    alignItems: 'center',
-    marginTop: 50
+  moreContainer: {
+    marginTop: 15
   },
-  infoText: {
-    fontSize: 16,
-    borderBottomWidth: 2,
-    borderBottomColor: '#888',
-    color: '#888',
-    fontWeight: 'bold'
-  },
-  infoLink: {
-    marginTop: 5,
-    fontSize: 16,
-    color: '#f25a5a',
+  textResend: {
+    color: '#149914',
     fontWeight: 'bold'
   }
 })

@@ -8,12 +8,13 @@ import { connect } from 'react-redux'
 import Constants from 'expo-constants'
 import { CheckTokenIsValid } from '../api/auth'
 import { API_URL } from 'react-native-dotenv'
-import { loginUser, updatePhoneNumber } from '../store/actions/user'
+import { logout, updatePhoneNumber } from '../store/actions/user'
 
 function AuthLoading (props) {
   const {
     navigation,
-    user: { token, isNew, isLoggedIn }
+    user: { token, isNew, isLoggedIn },
+    logout
   } = props
 
   useEffect(() => {
@@ -39,6 +40,8 @@ function AuthLoading (props) {
           if (result.status === 200 && result.data.result && result.data.result === 'valid'){
             navigation.navigate('App')
           } else {
+            logout()
+            // console.log(user)
             navigation.navigate('Auth')
           }
         })
@@ -75,8 +78,8 @@ function mapDispatchToProps (dispatch) {
     updatePhoneNumber: (newPhoneNumber) => {
       dispatch(updatePhoneNumber(newPhoneNumber))
     },
-    login: (phoneNumber, cb) => {
-      dispatch(loginUser(phoneNumber, cb))
+    logout: () => {
+      dispatch(logout())
     }
   }
 }

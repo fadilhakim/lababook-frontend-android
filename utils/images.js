@@ -9,3 +9,10 @@ export const TYPE_1 = require('../assets/grocery.png')
 export const TYPE_2 = require('../assets/cafe.png')
 export const TYPE_3 = require('../assets/workshop.png')
 export const TYPE_4 = require('../assets/other.png')
+
+export const OTP_LOGO = require('../assets/otp.png')
+
+export const REGISTER_SUCCESS = require('../assets/congratulation.png')
+export const REGISTER_THUMB_SUCCESS = require('../assets/congralutation_thumb.png')
+
+export const LOGIN = require('../assets/icon.png')

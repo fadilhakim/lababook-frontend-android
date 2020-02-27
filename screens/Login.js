@@ -11,19 +11,30 @@ import {
   StatusBar,
   ToastAndroid,
   Keyboard,
-  ActivityIndicator
+  ActivityIndicator, Image
 } from 'react-native'
 import { API_URL } from 'react-native-dotenv'
 
 import { textExtraProps as tProps } from '../config/system'
 import { updatePhoneNumber, loginUser } from '../store/actions/user'
-import { DoLogin } from '../api/auth'
+import { GetOTP } from '../api/auth'
+import { LOGIN, REGISTER_SUCCESS } from '../utils/images'
+import { MaterialIcons } from '@expo/vector-icons'
+import LoadingModal from '../helpers/LoadingModal'
 
 function Login (props) {
-  const { navigation, updatePhoneNumber, login, loading } = props
+  state = {
+    loading: false
+  }
+  const { navigation, updatePhoneNumber, login } = props
   const [phoneNumber, setPhoneNumber] = useState('')
   const [errMsg, setErrMsg] = useState('')
   const [isError, setError] = useState(false)
+
+  const styleEmptyField = (field) => {
+    if (this.state[field] || this.state[field+'FirstType']) return {}
+    else return { borderColor: '#ff0000', borderBottomWidth: 2 }
+  }
 
   const handleRef = (ref) => {
     if (ref && isError) ref.focus()
@@ -38,21 +49,21 @@ function Login (props) {
     Keyboard.dismiss()
 
     updatePhoneNumber(phoneNumber)
-    return navigation.navigate('OTP')
+    // return navigation.navigate('OTP')
     console.log(phoneNumber)
     // shoould be below
-    // DoLogin({ phoneNumber })
-    //   .then(result => {
-    //     console.log(result)
-    //     if (result.status === 200){
-    //      // update detail user here
-    //     } else {
-    //       setError(true)
-    //     }
-    //   })
-    //   .catch(err => {
-    //     alert(`${API_URL} => ${err} => token:${phoneNumber}`)
-    //   })
+    GetOTP({ phoneNumber })
+      .then(result => {
+        console.log(result)
+        if (result.status === 200){
+         // update detail user here
+        } else {
+          setError(true)
+        }
+      })
+      .catch(err => {
+        alert(`${API_URL} => ${err} => token:${phoneNumber}`)
+      })
     // Network.getNetworkStateAsync()
     //   .then(stat => {
     //     if (stat.isInternetReachable) {
@@ -78,58 +89,75 @@ function Login (props) {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle='dark-content' style={styles.statusBar}/>
-      <View style={{ width: '100%' }}>
-        <Text {...tProps} style={styles.title}>
-          Lababook
+      <LoadingModal showLoading={this.state.loading} loadingMessage='Menyimpan data...' />
+      <View style={styles.logoContainer}>
+        <Image source={ LOGIN } style={styles.logo} resizeMode="contain" />
+      </View>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>
+          LABABOOK
         </Text>
-        <Text {...tProps} style={styles.phoneLabel}>
-          Nomor Handphone
-        </Text>
-        {
-          isError && (
-            <Text {...tProps} style={styles.errorPhone}>
-              {errMsg}
-            </Text>
-          )
-        }
-        <TextInput
-          autoFocus={true}
-          keyboardAppearance='default'
-          keyboardType='number-pad'
-          onChangeText={text => handleChangeText(text)}
-          style={!isError ? styles.phone : styles.phoneError}
-          ref={handleRef}
-        />
-        {
-          loading && <View style={{ flexDirection: 'row', marginTop: 10 }}>
-            <ActivityIndicator color='#444' size={16}/>
-            <Text {...tProps}> Mengecek nomor handphone</Text>
+      </View>
+      <View style={styles.formContainer}>
+        <View style={[styles.rowField, styleEmptyField('phoneNumber')]}>
+          <View style={styles.iconField}>
+            <MaterialIcons name='phone-iphone' size={30} color='#aaa' />
           </View>
-        }
-        <TouchableNativeFeedback
-          onPress={() => doLogin()}
-        >
-          <View style={styles.button}>
-            <Text {...tProps} style={styles.buttonText}>Verifikasi</Text>
+          <View style={styles.labelField}>
+            <Text style={styles.labelText}>+62</Text>
           </View>
-        </TouchableNativeFeedback>
-        <View style={styles.info}>
-          <Text {...tProps} style={styles.infoText}>
-            Tidak bisa masuk HP Anda tidak terdaftar
-          </Text>
-          <Text {...tProps} style={styles.infoLink}>
-            Hubungi Kami
-          </Text>
+          <View style={styles.inputGroupNo}>
+            <TextInput style={styles.inputField} placeholder='no telepon'
+                       keyboardType='number-pad'
+                       value={this.state.phoneNumber}
+                       onChangeText={(value) => this.checkPhoneNumber(value)}
+            />
+          </View>
         </View>
       </View>
+      {/*<View style={{ width: '100%' }}>*/}
+
+      {/*  <Text {...tProps} style={styles.phoneLabel}>*/}
+      {/*    Nomor Handphone*/}
+      {/*  </Text>*/}
+      {/*  {*/}
+      {/*    isError && (*/}
+      {/*      <Text {...tProps} style={styles.errorPhone}>*/}
+      {/*        {errMsg}*/}
+      {/*      </Text>*/}
+      {/*    )*/}
+      {/*  }*/}
+      {/*  <TextInput*/}
+      {/*    autoFocus={true}*/}
+      {/*    keyboardAppearance='default'*/}
+      {/*    keyboardType='number-pad'*/}
+      {/*    onChangeText={text => handleChangeText(text)}*/}
+      {/*    style={!isError ? styles.phone : styles.phoneError}*/}
+      {/*    ref={handleRef}*/}
+      {/*  />*/}
+      {/*  <TouchableNativeFeedback*/}
+      {/*    onPress={() => doLogin()}*/}
+      {/*  >*/}
+      {/*    <View style={styles.button}>*/}
+      {/*      <Text {...tProps} style={styles.buttonText}>Verifikasi</Text>*/}
+      {/*    </View>*/}
+      {/*  </TouchableNativeFeedback>*/}
+      {/*  <View style={styles.info}>*/}
+      {/*    <Text {...tProps} style={styles.infoText}>*/}
+      {/*      Tidak bisa masuk HP Anda tidak terdaftar*/}
+      {/*    </Text>*/}
+      {/*    <Text {...tProps} style={styles.infoLink}>*/}
+      {/*      Hubungi Kami*/}
+      {/*    </Text>*/}
+      {/*  </View>*/}
+      {/*</View>*/}
     </View>
   )
 }
 
 function mapStateToProps (state) {
   return {
-    loading: state.loading
+    user: state.user
   }
 }
 
@@ -149,75 +177,70 @@ export default connect(mapStateToProps, mapDispatchToProps)(Login)
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    padding: Constants.statusBarHeight
+    // backgroundColor: '#0f0',
+    flexDirection: 'column',
+    alignItems: 'center',
+    alignContent: 'center',
   },
-  statusBar: {
-    backgroundColor: 'white'
+  logoContainer: {
+    // backgroundColor: 'red',
+    marginTop: '20%',
+    height: 80,
+    // borderWidth: 1,
+    // borderColor: 'red'
+  },
+  logo: {
+    height: 80,
+  },
+  titleContainer: {
+
   },
   title: {
     color: '#2a2c7b',
     fontWeight: 'bold',
     fontSize: 24,
-    paddingBottom: 20,
-    paddingTop: 200
   },
-  phoneLabel: {
-    color: '#444',
-    fontWeight: '500',
-    fontSize: 14
+  formContainer: {
+    marginTop: 80,
   },
-  phone: {
-    width: '100%',
-    borderBottomColor: '#2a2c7b',
-    borderBottomWidth: 2,
-    paddingTop: 4,
-    paddingBottom: 4,
-    fontSize: 18
+  rowField: {
+    borderBottomWidth: 0.5,
+    borderColor: '#aaa',
+    margin: 10,
+    paddingBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-start'
   },
-  phoneError: {
-    width: '100%',
-    borderBottomColor: '#f25a5a',
-    borderBottomWidth: 2,
-    paddingTop: 4,
-    paddingBottom: 4,
-    fontSize: 18
-  },
-  button: {
-    backgroundColor: '#2a2c7b',
-    padding: 12,
-    borderRadius: 4,
+  iconField: {
+    marginRight: 10,
+    // backgroundColor: '#eee',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    marginTop: 150
+    width: 30,
   },
-  buttonText: {
-    color: 'white',
+  labelField: {
+    // backgroundColor: '#dadada',
+    justifyContent: 'center',
+    // paddingRight: 10,
+    borderRightColor: '#aaa',
+    borderRightWidth: 0.5,
+    borderStyle: 'solid',
+  },
+  labelText: {
     fontSize: 18,
-    fontWeight: 'bold'
+    width: 40,
+    // marginRight: 10,
   },
-  info: {
-    alignItems: 'center',
-    paddingTop: 20
+  inputGroupNo: {
+    width: 200,
+    marginLeft: 7,
+    marginRight: 10,
+    // backgroundColor: '#efefef',
   },
-  infoText: {
-    fontSize: 16,
-    borderBottomWidth: 2,
-    borderBottomColor: '#444',
-    // textDecorationLine: 'underline',
-    color: '#444',
-    fontWeight: 'bold'
+  inputField: {
+    // backgroundColor: 'green',
+    justifyContent: 'center',
+    // paddingBottom: 20,
+    fontSize: 18,
   },
-  infoLink: {
-    marginTop: 5,
-    fontSize: 16,
-    color: '#f25a5a',
-    fontWeight: 'bold'
-  },
-  errorPhone: {
-    fontSize: 14,
-    color: '#f25a5a',
-    fontWeight: 'bold'
-  }
 })
