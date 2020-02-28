@@ -138,11 +138,11 @@ export function confirmOTP (phoneNumber, otp, cb) {
     checkOtp(phoneNumber, otp)
       .then(data => {
         syncActions([
-          () => dispatch({
-            type: USER_CONFIRMED,
-            token: data.token,
-            isNew: data.isNew
-          }),
+          // () => dispatch({
+          //   type: USER_CONFIRMED,
+          //   token: data.token,
+          //   isNew: data.isNew
+          // }),
           () => dispatch({
             type: HIDE_LOADING
           }),
