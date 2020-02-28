@@ -2,8 +2,12 @@ import {
   UPDATE_PHONE_NUMBER,
   UPDATE_USER_NAME,
   UPDATE_BOOK_NAME,
-  UPDATE_USER_DETAIL,
+  UPDATE_BOOK_TYPE,
+  UPDATE_USER_LOGIN,
+  UPDATE_USER_REGISTER,
   DELETE_USER_DETAIL,
+  UPDATE_USER_OLD,
+  UPDATE_USER_NEW,
   USER_REGISTERED,
   USER_LOGIN,
   USER_CONFIRMED
@@ -34,7 +38,14 @@ export function updateUserName (newUserName) {
 
 export function loginSuccess (userDetail) {
   return {
-    type: UPDATE_USER_DETAIL,
+    type: UPDATE_USER_LOGIN,
+    payload: userDetail
+  }
+}
+
+export function registerSuccess (userDetail) {
+  return {
+    type: UPDATE_USER_REGISTER,
     payload: userDetail
   }
 }
@@ -52,10 +63,29 @@ export function updateBookName (newBookName) {
   }
 }
 
+export function updateBookType (newBookType) {
+  return {
+    type: UPDATE_BOOK_TYPE,
+    bookType: newBookType
+  }
+}
+
 export function updateBookId(newBookId) {
   return {
     type: UPDATE_BOOK_ID,
     bookId: newBookId
+  }
+}
+
+export function updateUserStatus() {
+  return {
+    type: UPDATE_USER_OLD
+  }
+}
+
+export function updateNewUserStatus() {
+  return {
+    type: UPDATE_USER_NEW
   }
 }
 
@@ -108,11 +138,11 @@ export function confirmOTP (phoneNumber, otp, cb) {
     checkOtp(phoneNumber, otp)
       .then(data => {
         syncActions([
-          () => dispatch({
-            type: USER_CONFIRMED,
-            token: data.token,
-            isNew: data.isNew
-          }),
+          // () => dispatch({
+          //   type: USER_CONFIRMED,
+          //   token: data.token,
+          //   isNew: data.isNew
+          // }),
           () => dispatch({
             type: HIDE_LOADING
           }),

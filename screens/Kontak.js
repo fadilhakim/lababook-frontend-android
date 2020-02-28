@@ -39,7 +39,7 @@ import { timeInfo, TimeDiff } from "../helpers/TimeFormat"
 import BaseStyle from "./../style/BaseStyle"
 
 import ButtonFilter from '../components/ButtonFilter'
-import { confirmOTP, loginSuccess } from '../store/actions/user'
+// import { confirmOTP, loginSuccess } from '../store/actions/user'
 import { connect } from 'react-redux'
 
 // import {SelectContact} from 'react-native-select-contact'
@@ -89,14 +89,26 @@ const filterList = [{
 
 class Kontak extends Component {
 
+  /*
+  * phoneNumber: '',
+  userName: '',
+  bookName: '',
+  bookType: '',
+  bookId: '',
+  id: '',
+  token: '',
+  isNew: true,
+  isLoggedIn: false,
+  * */
   constructor(props) {
     super(props)
     this.state = {
       isModalVisible: false,
       contacts: [],
-      userId: this.props.user.userName,
-      bookId: this.props.user.bookId || 1, //sementara
-      token: this.props.user.token,
+      userId: props.user.id,
+      bookName: props.user.bookName,
+      bookId: props.user.bookId,
+      token: props.user.token,
       contactInput: {
         name: "",
         phoneNumber: "",
@@ -181,8 +193,9 @@ class Kontak extends Component {
 
     contactApi.getContacts(params)
       .then(res => {
+        console.log('res contact: ', res)
 
-        const data = res.data
+        const data = res.data.data
         const newData = []
 
         data.map(item => {
@@ -220,6 +233,7 @@ class Kontak extends Component {
 
       })
       .catch(err => {
+        console.log('error contact', err)
         alert(`${API_URL} => ${err} => bookId:${bookId}`)
       })
   }

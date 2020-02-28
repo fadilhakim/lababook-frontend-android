@@ -5,7 +5,7 @@ import {
   StyleSheet,
   StatusBar,
   TouchableNativeFeedback,
-  Image  
+  Image
 } from 'react-native'
 import { Ionicons, Foundation, SimpleLineIcons } from '@expo/vector-icons'
 import { connect } from 'react-redux'
@@ -86,7 +86,7 @@ function Home (props) {
 
           <Text {...tProps} style={styles.bookName}>
             {/*user.bookName*/}
-            Warung Mira
+            {user.bookName}
           </Text>
         </View>
 

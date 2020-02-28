@@ -1,267 +1,485 @@
-import React from 'react'
-import { View, Text, StyleSheet, TextInput, TouchableNativeFeedback,ScrollView } from 'react-native'
-import { Table, Row, Rows } from 'react-native-table-component'
-import { DatePicker, Content, Icon, Picker, Form } from "native-base"
+import React, { Component } from 'react'
+import {
+  Platform,
+  StyleSheet,
+  View,
+  Text, TouchableWithoutFeedback, ActivityIndicator,
+  SafeAreaView, ScrollView, Alert
+} from 'react-native'
+import { MaterialIcons } from '@expo/vector-icons'
+import DatePicker from 'react-native-datepicker'
+// import DateTimePickerModal from '@react-native-community/datetimepicker'
+// import DateTimePickerModal from "@react-native-community/react-native-datetimepicker"
 
 import TransactionAPI from "./../api/transaction"
-import {numberFormat} from "../helpers/NumberFormat"
+import { numberFormat } from "../helpers/NumberFormat"
+import { TimeFull, FormatDateFilter, LookUpDate } from '../helpers/TimeFormat'
+import LoadingModal from '../helpers/LoadingModal'
+import { Icon, Item, Picker } from 'native-base'
+import { connect } from 'react-redux'
 
-import { textExtraProps as tProps } from '../config/system'
-
-export default class Aktifitas extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      bookId:1, // sementara
-      userId:1, // sementara,
-      sort:"",
-      startDate:"",
-      endDate:"",
-      totalDebit:0,
-      totalCredit:0,
-      countTransaction:0,
-      tableHead: [],
-      tableData: [
-   
-      ],
-      selected : ""
-    };
-
-    this.filter = this.filter.bind(this)
+class Aktifitas extends Component {
+  state = {
+    bookId: this.props.user.bookId,
+    token: this.props.user.token,
+    dataTable: null,
+    totalDebit: 0,
+    totalCredit: 0,
+    totalData: 0,
+    startDate: new Date(),
+    endDate: new Date(),
+    selected: 'today'
   }
+  objTrx = new TransactionAPI()
 
-  componentDidMount() {
+  parseData = (dataRows) => {
+    let totalDebit = 0
+    let totalCredit = 0
+    const newRows = dataRows.map((data, index) => {
+      let amountDebit = ''
+      let amountCredit = ''
+      if (data.type === 'debit'){
+        totalDebit += data.amount
+        amountDebit = numberFormat(data.amount)
+      }else{
+        totalCredit += data.amount
+        amountCredit = numberFormat(data.amount)
+      }
 
-    this.filter()
-  }
-
-  handleSortChange(value) {
+      return (
+        <View style={styles.rowTotal} key={index}>
+          <View style={[styles.row, styles.totalFirst]}>
+            <Text>{data.contactName}</Text>
+            <Text style={styles.subTitle}>{ TimeFull(data.trx_created_at) }</Text>
+          </View>
+          <View style={[styles.row, styles.totalCenter]}>
+            <Text style={[styles.titleRowDebit]}>{ amountDebit }</Text>
+          </View>
+          <View style={[styles.row, styles.totalLast]}>
+            <Text style={[styles.titleRowCredit]}>{ amountCredit }</Text>
+          </View>
+        </View>
+      )
+    })
     this.setState({
-      sort:value
-    },() => {
-      this.filter()
+      totalDebit: totalDebit,
+      totalCredit: totalCredit,
+      totalData: dataRows.length,
+      dataTable: newRows,
     })
   }
 
-  handleStartDate(value) {
-    this.setState({
-      startDate:value
-    },() => {
-      this.filter()
-    })
-  }
-
-  handleEndDate(value) {
-    this.setState({
-      endDate:value
-    },() => this.filter())
-  }
-
-  filter() {
-
-    const { navigation } = this.props
-    const params = this.props.navigation.state.params
-    const _this = this
-
-    const objTrx = new TransactionAPI() 
-
-    bookId = this.state.bookId 
-
+  getData = () => {
     const param = {
-      bookId:bookId,
-      sort:this.state.sort,
-      startDate:this.state.startDate,
-      endDate:this.state.endDate
+      bookId: this.state.bookId, // untuk test = 1
+      sort: 'newest', // newest
+      startDate: this.state.startDate,
+      endDate: this.state.endDate,
+      token: this.state.token, // untuk test = 'WUB2eHaJlzSKpdOQdP3RHj14FT1ggX6dqW4wBxs1o0EIdFr7LD8mub6cAFy8VCjAXmyAdGva5sERdVY2'
     }
-
-    objTrx.getTransactionByBook(param)
-    .then(res => {
-
-      this.setState({
-        countTransaction:0,
-        totalCredit:0,
-        totalDebit:0,
-        tableHead:[],
-        tableData:[]
-      })
-
-      const resultdata = res.data
-
-      const dtHeader= ["Total \n "]
-      const dtTable = []
-
-      resultdata.map((item) => {
-        var row = []
-
-        if( item.type === "debit") {
-          row.push(item.contactName+"\n"+item.trx_created_at,numberFormat(item.amount),"")
-          
-          _this.setState({
-            totalDebit: this.state.totalDebit + item.amount,
-            totalTransaction: this.state.totalTransaction + item.amount
-          })
-        } else{
-          row.push(item.contactName+"\n"+item.trx_created_at,"",numberFormat(item.amount))
-          _this.setState({
-            totalCredit: this.state.totalCredit + item.amount,
-            totalTransaction: this.state.totalTransaction + item.amount
-          })
+    console.log('param aktivity: ', param)
+    this.objTrx.getTransactionByBook(param)
+      .then(result => {
+        console.log("result aktivity: ", result)
+        // console.log("result aktivity: ", result.data.status_message)
+        if(result.data.status_message == "OK"){
+          // this.setState({
+          //   dataTable: result.data.data
+          // })
+          this.parseData(result.data.data)
+        }else {
+          Alert.alert('Perhatian!', 'Terjadi kesalahan saat mengambil data!')
         }
-        
-        dtTable.push(row)
-        _this.setState({
-          countTransaction:this.state.countTransaction + 1
+      })
+      .catch(err => {
+        Alert.alert('Error!', `Terjadi kesalahan saat mengambil data!`)
+      })
+  }
+
+  handleSelectChange = async (val) => {
+    switch ( val ) {
+      case 'all':
+        await this.setState({
+          startDate: '1991-01-01',
+          endDate: '2992-12-31',
+          selected: val,
         })
-      })
+        break
+      case 'today':
+        await this.setState({
+          startDate: new Date(),
+          endDate: new Date(),
+          selected: val,
+        })
+        break
+      case 'lastweek':
+        await this.setState({
+          startDate: LookUpDate(new Date(), val),
+          endDate: new Date(),
+          selected: val,
+        })
+        break
+      case 'lastmonth':
+        await this.setState({
+          startDate: LookUpDate(new Date(), val),
+          endDate: new Date(),
+          selected: val,
+        })
+        break
+      default:
+        this.setState({
+          selected: val,
+        })
+        break
+    }
+    this.getData()
+  }
 
-      dtHeader[0] += _this.state.countTransaction+" Transaksi"
-      dtHeader.push(`Anda Berikan \n ${ numberFormat(this.state.totalDebit)}`, `Anda Dapatkan \n ${numberFormat(this.state.totalCredit)}`)
+  handleDateChange = (someDate, type) => {
+    console.log(someDate)
+    if (type == 'startDate') {
       this.setState({
-      
-        tableHead:this.state.tableHead.concat(dtHeader),
-        tableData:this.state.tableData.concat(dtTable),
-       
+        startDate: someDate,
+        selected: 'other'
       })
-      
-    })
-    .catch(err => {
-      console.log( err )
-    })
+    } else {
+      this.setState({
+        endDate: someDate,
+        selected: 'other'
+      })
+    }
+    this.getData()
   }
 
-  render() { 
-    const state = this.state
+  componentDidMount () {
+    this.getData()
+  }
+
+  render() {
     return (
-      <View>
-        
-     
-        <View style  = {styles.topAct}>
-          <Text style={{ fontSize: 16, paddingLeft : 8 , fontWeight : 'bold'}}>
-              Aktifitas : 
-          </Text>
-          <Picker
-              mode="dropdown"
-              iosHeader="Select your SIM"
-              iosIcon={<Icon name="arrow-down" />}
-              style={{ posisiton : 'absolute', left : 10, top : -14  }}
-              selectedValue={ this.state.sort }
-              onValueChange={ (value) => this.handleSortChange(value) }
-            >
-              <Picker.Item label="Terbaru" value="newest" />
-              <Picker.Item label="Terlama" value="oldest" />
-              <Picker.Item label="Terbanyak" value="descAmount" />
-              <Picker.Item label="A - Z" value="ascName" />
-            </Picker>
-        </View>
-     
+      <View style={styles.container}>
+        {/*<ActivityIndicator color='#0000ff' size="large" style={styles.loadingIndicator} />*/}
         <View style={styles.topBar}>
-          
-          <View style={styles.topBarLeft}>
-            <DatePicker
-              defaultDate={new Date()}
-              // minimumDate={new Date(2018, 1, 1)}
-              maximumDate={new Date()}
-              locale={"id"}
-              timeZoneOffsetInMinutes={undefined}
-              modalTransparent={false}
-              animationType={"fade"}
-              androidMode={"default"}
-              placeHolderText="start date :"
-              textStyle={{ color: "green" }}
-              placeHolderTextStyle={{ color: "#2a2c7b" }}
-              onDateChange={ (value) => { this.handleStartDate(value) } }
-              disabled={false}
-              />
-          
-          </View>
-
-          <View style={styles.topBarRight}>
-          
-              <View style={styles.topBarRightPdf}>
-                <DatePicker
-                  defaultDate={new Date()}
-                  // minimumDate={new Date(2018, 1, 1)}
-                  maximumDate={new Date()}
-                  locale={"id"}
-                  timeZoneOffsetInMinutes={undefined}
-                  modalTransparent={false}
-                  animationType={"fade"}
-                  androidMode={"default"}
-                  placeHolderText="end date :"
-                  textStyle={{ color: "green" }}
-                  placeHolderTextStyle={{ color: "#2a2c7b" }}
-                  onDateChange={ (value) => { this.handleEndDate(value) }}
-                  disabled={false}
-                />
+          <View style={[styles.topBarLeft, {paddingLeft: 12, paddingRight: 20}]}>
+            <View style={{paddingBottom: 5, height: 40, flexDirection: 'row', borderBottomColor: '#f3f3f3', borderBottomWidth: 2,}}>
+              <View style={{justifyContent: 'flex-end', paddingBottom: 3,}}>
+                <Text style={{fontSize: 16}}>Aktifitas : </Text>
               </View>
-            
+              <View style={{flex: 1,}}>
+                <Item picker style={{borderColor: "transparent"}}>
+                  <Picker
+                    mode="dropdown"
+                    iosIcon={<Icon name="arrow-down" />}
+                    style={{ width: undefined, height: 40, fontSize: 12, border: 0 }}
+                    placeholder="Urutkan dari"
+                    placeholderStyle={{ color: "#bfc6ea" }}
+                    placeholderIconColor="#007aff"
+                    selectedValue={this.state.selected}
+                    onValueChange={this.handleSelectChange.bind(this)}
+                  >
+                    <Picker.Item label="Semua" value="all" />
+                    <Picker.Item label="Hari ini" value="today" />
+                    <Picker.Item label="Minggu lalu" value="lastweek" />
+                    <Picker.Item label="Bulan lalu" value="lastmonth" />
+                    <Picker.Item label="Lainnya" value="other" />
+                  </Picker>
+                </Item>
+              </View>
+            </View>
+            <View style={{paddingTop: 5, flexDirection: 'row'}}>
+              {/*<View style={{flex: 1, paddingBottom: 5, marginRight: 20, borderBottomColor: '#f3f3f3', borderBottomWidth: 2, }}>*/}
+              {/*  <MaterialIcons name='date-range' size={14} />*/}
+              {/*</View>*/}
+              <View style={{flex: 1, flexDirection: 'row', marginRight: 40, alignItems: 'center', justifyContent: 'flex-start', paddingBottom: 5, paddingTop: 5, borderBottomColor: '#f3f3f3', borderBottomWidth: 2, }}>
+                <MaterialIcons name='date-range' size={14} />
+                <View style={{ position: 'absolute', marginLeft: 20}} >
+                  <Text>{FormatDateFilter(this.state.startDate).toString()}</Text>
+                </View>
+                <DatePicker date={this.state.startDate}
+                            showIcon={false}
+                            placeholder=""
+                            mode="date"
+                            format="YYYY-MM-DD"
+                            maxDate={this.state.endDate}
+                            customStyles={{
+                              dateInput: {
+                                borderWidth: 0,
+                              },
+                              dateText: {
+                                marginTop: 0,
+                                color: 'white',
+                                fontSize: 12,
+                              },
+                              placeholderText: {
+                                marginTop: 0,
+                                // right: 10,
+                                color: 'white',
+                                fontSize: 12,
+                              }
+                            }
+                            }
+                            onDateChange={date => this.handleDateChange(date, 'startDate')}
+                            placeholderTextColor="white"
+                            underlineColorAndroid={'rgba(0,0,0,0)'}
+                            style={{
+                              height: 20,
+                              // width: 170,
+                              paddingLeft: 0,
+                              backgroundColor: 'rgba(0,0,0,0)'
+                            }}
+                />
+
+              </View>
+              <View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', paddingBottom: 5, paddingTop: 5, borderBottomColor: '#f3f3f3', borderBottomWidth: 2, }}>
+                <MaterialIcons name='date-range' size={14} />
+                <View style={{ position: 'absolute', marginLeft: 20}} >
+                  <Text>{FormatDateFilter(this.state.endDate).toString()}</Text>
+                </View>
+                <DatePicker date={this.state.endDate}
+                            showIcon={false}
+                            placeholder=""
+                            mode="date"
+                            format="YYYY-MM-DD"
+                            minDate={this.state.startDate}
+                            customStyles={{
+                              dateInput: {
+                                borderWidth: 0,
+                                // height: 50,
+                                // width: 170,
+                                // right: 30,
+                              },
+                              dateText: {
+                                marginTop: 0,
+                                color: 'white',
+                                fontSize: 12,
+                              },
+                              placeholderText: {
+                                marginTop: 0,
+                                // right: 10,
+                                color: 'white',
+                                fontSize: 12,
+                              }
+                            }
+                            }
+                            onDateChange={date => this.handleDateChange(date, 'endDate')}
+                            placeholderTextColor="white"
+                            underlineColorAndroid={'rgba(0,0,0,0)'}
+                            style={{
+                              height: 20,
+                              // width: 170,
+                              paddingLeft: 0,
+                              backgroundColor: 'rgba(0,0,0,0)'
+                            }}
+                />
+
+              </View>
+            </View>
+          </View>
+
+          <TouchableWithoutFeedback>
+            <View style={styles.pdfContainer}>
+              <MaterialIcons name='picture-as-pdf' size={27} style={styles.pdf} onPress={this.onExportPDF} />
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
+
+        <View style={styles.rowHeader}>
+          <View style={[styles.header, styles.headerFirst]}>
+            <Text style={styles.titleText}>Total</Text>
+          </View>
+          <View style={[styles.header, styles.headerCenter]}>
+            <Text style={[styles.titleText, styles.textCenter]}>Anda Berikan</Text>
+          </View>
+          <View style={[styles.header, styles.headerLast]}>
+            <Text style={[styles.titleText, styles.textCenter]}>Anda Dapatkan</Text>
+          </View>
+        </View>
+        <View style={styles.rowTotal}>
+          <View style={[styles.total, styles.totalFirst]}>
+            <Text style={[styles.titleText]}>{ this.state.totalData } Transaksi</Text>
+          </View>
+          <View style={[styles.total, styles.totalCenter]}>
+            <Text style={[styles.titleText, styles.titleRowDebit]}>{ numberFormat(this.state.totalDebit) }</Text>
+          </View>
+          <View style={[styles.total, styles.totalLast]}>
+            <Text style={[styles.titleText, styles.titleRowCredit]}>{ numberFormat(this.state.totalCredit) }</Text>
           </View>
         </View>
 
-
-     
-            {/* <Text>
-              Date: {this.state.chosenDate.toString().substr(4, 12)}
-            </Text> */}
-        <View>
-           
-              <Table style={{marginBottom:100}}>
-                <Row data={state.tableHead} style={styles.head} textStyle={styles.text} />
-                <ScrollView >
-                {
-                  this.state.tableData.map((rowData, index) => {
-                    return <Row
-                      key={index}
-                      data={rowData}
-                      textStyle={{ textAlign: "left", borderRightColor: "#f3f3f3", borderRightWidth: 3, paddingLeft: 5 }}
-                      style={[{ backgroundColor: 'white', minHeight: 20, alignItems: 'center', paddingLeft: 5, paddingTop : 8, paddingBottom : 8 }, index % 2 && { backgroundColor: "#F7F6E7", minHeight: 20, alignItems: 'center', paddingLeft: 5, paddingTop : 8, paddingBottom : 8 }]}
-                    ></Row>
-                  })
-                }
-                <View style={{height:100}}>
-
-                </View>
-                </ScrollView>
-                {/* <Rows data={state.tableData} textStyle={styles.text} style={ styles.Rows }/> */}
-              </Table>
-              
-            
-        </View>
-       
+        <ScrollView>
+          {/*<View style={styles.loadingContainer}>*/}
+          {/*  <ActivityIndicator color='#000' size="large" style={styles.loadingIndicator} />*/}
+          {/*</View>*/}
+          { this.state.dataTable }
+        </ScrollView>
       </View>
-    )
+  )
   }
-
 }
 
-const styles = StyleSheet.create({
-  topAct : {
-    flexDirection : 'row',
-    justifyContent: 'flex-end'
-  },
+function mapStateToProps (state) {
+  return {
+    user: state.user,
+    loading: state.loading
+  }
+}
 
+export default connect(mapStateToProps)(Aktifitas)
+
+const styles = StyleSheet.create({
+  container: {
+    ...Platform.select({
+      ios: {
+        paddingTop: 20
+      },
+      android: {}
+    }),
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    // alignContent: 'center',
+    // backgroundColor: 'red'
+  },
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: '#fefefe',
+    marginTop: 20,
+    position: 'absolute'
+  },
+  loadingIndicator: {
+    // position: 'absolute',
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    margin: 'auto'
+  },
   topBar: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
     borderBottomWidth: 5,
     borderBottomColor: '#f3f3f3',
-    paddingBottom: 6
+    paddingBottom: 6,
+    // marginBottom: 5,
   },
   topBarLeft: {
-    flexDirection: 'row'
+    flex: 1,
+    flexDirection: 'column',
   },
-  topBarRight: {
-    flexDirection: 'row'
+  textHeader: {
+    fontSize: 16,
+    color: '#000',
+    paddingLeft: 15,
+  },
+  textColorHeader: {
+    color: '#ce4165',
+  },
+  boldText: {
+    fontWeight: 'bold',
+  },
+  pdfContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+  },
+  pdf: {
+    color: '#aaa',
+    paddingRight: 20,
   },
 
-  container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
-  head: { height: 50, backgroundColor: '#f1f8ff', paddingLeft: 5 },
-  text: { paddingLeft: 5, textAlign: "left"},
-  Rows: {
-
-    borderBottomColor: "white",
-    backgroundColor: "white",
-    borderRightColor: "black"
+  rowHeader: {
+    // flex: 1,
+    // height: 40,
+    flexDirection: 'row',
+    // alignItems: 'stretch',
+    // // alignContent: 'stretch',
+    // justifyContent: 'space-between',
+    // backgroundColor: 'red'
+  },
+  header: {
+    // flex: 1,
+    // marginTop: 0,
+    backgroundColor: '#fff',
+    padding: 10,
+    borderWidth: 2,
+    borderColor: '#f3f3f3'
+  },
+  headerFirst: {
+    flex: 1,
+  },
+  headerCenter: {
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    width: 130,
+    textAlign: 'center',
+  },
+  headerLast: {
+    width: 130,
+    textAlign: 'center',
+  },
+  rowTotal: {
+    // flex: 1,
+    // height: 40,
+    flexDirection: 'row',
+    // alignItems: 'stretch',
+    // // alignContent: 'stretch',
+    // justifyContent: 'space-between',
+    // backgroundColor: 'red'
+  },
+  totalFirst: {
+    flex: 1
+  },
+  total: {
+    // marginTop: 0,
+    backgroundColor: '#eee',
+    padding: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderWidth: 1,
+    borderColor: '#f3f3f3',
+    borderTopWidth: 0,
+  },
+  totalCenter: {
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    width: 130,
+  },
+  totalLast: {
+    width: 130,
+  },
+  titleText: {
+    fontWeight: 'bold',
+  },
+  titleRowCredit: {
+    color: '#0a0',
+    textAlign: 'right',
+  },
+  titleRowDebit: {
+    color: '#a00',
+    textAlign: 'right',
+  },
+  textCenter: {
+    textAlign: 'center',
+  },
+  rowFirst: {
+    flex: 1,
+  },
+  row: {
+    // marginTop: 0,
+    padding: 10,
+    borderWidth: 2,
+    borderColor: '#f3f3f3',
+    borderTopWidth: 0,
+  },
+  rowCenter: {
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+    width: 160,
+  },
+  rowLast: {
+    width: 160,
+  },
+  subTitle: {
+    color: '#aaa',
+    fontSize: 12,
   }
 });

@@ -3,11 +3,11 @@ import axios from "axios"
 import { api } from '../config/url'
 
 export default class TransactionAPI {
-    
+
     getTransaction() {
-       
+
         return axios.get(api+"/transactions",{
-           
+
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -16,7 +16,7 @@ export default class TransactionAPI {
 
     getTransactionByBook( param ) {
 
-        const bookId = param.bookId 
+        const bookId = param.bookId
         const sort = param.sort
         const startDate = param.startDate
         const endDate = param.endDate
@@ -29,7 +29,8 @@ export default class TransactionAPI {
                 endDate:endDate
             },
             headers:{
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization : 'Bearer ' + param.token
             }
         })
     }
@@ -40,7 +41,8 @@ export default class TransactionAPI {
                 contactId:contactId
             },
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization : 'Bearer ' + param.token
             }
         })
     }
@@ -59,7 +61,8 @@ export default class TransactionAPI {
         //console.log("check => ",api+"/contact/create", dt)
 
         return axios.post(api+"/transaction/create",dt,{
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            Authorization : 'Bearer ' + param.token
         })
     }
 

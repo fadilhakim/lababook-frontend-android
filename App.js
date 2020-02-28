@@ -11,7 +11,10 @@ import Carousel from 'react-native-snap-carousel'
 import Intro from './screens/Intro'
 import Welcome from './screens/Welcome'
 import Login from './screens/Login'
-import RegisterOld from './screens/Register/RegisterOld'
+// import RegisterOld from './screens/Register/RegisterOld'
+// import RegisterName from './screens/Register/RegisterName'
+// import { RegisterType } from './screens/Register'
+import {RegisterName, RegisterType, RegisterOld, RegisterSuccess} from './screens/Register'
 import OTP from './screens/OTP'
 import Home from './screens/Home'
 import AuthLoading from './screens/AuthLoading'
@@ -21,7 +24,6 @@ import CaraPakai from './screens/CaraPakai'
 import DetailTransaction from './screens/DetailTransaction'
 import AddTransactions from './screens/AddTransactions'
 import SelectContact from "./components/SelectContact"
-import { RegisterType } from './screens/Register'
 
 import Test from "./screens/Test"
 
@@ -36,7 +38,8 @@ const AuthNavigator = createStackNavigator(
     Welcome: Welcome,
     Intro: Intro,
     Register01: RegisterType,
-    Register02: RegisterOld,
+    Register02: RegisterName,
+    Register03: RegisterSuccess,
     Login: Login,
     OTP: OTP,
     AccountSetting: AccountSetting,
@@ -46,7 +49,7 @@ const AuthNavigator = createStackNavigator(
     SelectContact: SelectContact,
   },
   {
-    initialRouteName: 'Intro',
+    initialRouteName: 'Intro', // intro
     headerMode: 'none'
   }
 )
@@ -176,7 +179,7 @@ const Root = createAppContainer(
       Test: Test
     },
     {
-      initialRouteName: 'Loading'
+      initialRouteName: 'Loading' //Loading
     }
   )
 )
