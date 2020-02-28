@@ -4,7 +4,7 @@ import {
   StyleSheet,
   View,
   Text, TouchableWithoutFeedback, ActivityIndicator,
-  SafeAreaView, ScrollView,
+  SafeAreaView, ScrollView, Alert
 } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import DatePicker from 'react-native-datepicker'
@@ -20,8 +20,8 @@ import { connect } from 'react-redux'
 
 class Aktifitas extends Component {
   state = {
-    bookId: this.props.bookId,
-    token: this.props.token,
+    bookId: this.props.user.bookId,
+    token: this.props.user.token,
     dataTable: null,
     totalDebit: 0,
     totalCredit: 0,
@@ -77,9 +77,10 @@ class Aktifitas extends Component {
       endDate: this.state.endDate,
       token: this.state.token, // untuk test = 'WUB2eHaJlzSKpdOQdP3RHj14FT1ggX6dqW4wBxs1o0EIdFr7LD8mub6cAFy8VCjAXmyAdGva5sERdVY2'
     }
+    console.log('param aktivity: ', param)
     this.objTrx.getTransactionByBook(param)
       .then(result => {
-        // console.log("result aktivity: ", result.data)
+        console.log("result aktivity: ", result)
         // console.log("result aktivity: ", result.data.status_message)
         if(result.data.status_message == "OK"){
           // this.setState({
@@ -89,6 +90,9 @@ class Aktifitas extends Component {
         }else {
           Alert.alert('Perhatian!', 'Terjadi kesalahan saat mengambil data!')
         }
+      })
+      .catch(err => {
+        Alert.alert('Error!', `Terjadi kesalahan saat mengambil data!`)
       })
   }
 

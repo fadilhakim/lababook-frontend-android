@@ -54,7 +54,7 @@ class Login extends Component {
   }
 
   nextStep = async () => {
-    console.log("this.state.user: ", this.state.phoneNumber)
+    // console.log("this.state.user: ", this.state.phoneNumber)
     if (this.state.phoneNumber) {
       console.log(this.state.phoneNumber)
       await this.updatePhoneNumber('+62' + this.state.phoneNumber)
@@ -77,7 +77,7 @@ class Login extends Component {
     }
     GetOTP(params)
       .then(result => {
-        console.log("result getotp login: ", result)
+        // console.log("result getotp login: ", result)
         if (result.data.status_code === 200 && result.data.status_message == 'OK'){
           // Alert.alert('Success!', 'Kode OTP baru telah berhasil dikirim')
           this.state.navigation.navigate('OTP')
@@ -94,7 +94,7 @@ class Login extends Component {
   }
 
   render () {
-    console.log("this.state.user: ", this.state.user)
+    // console.log("this.state.user: ", this.state.user)
     return (
       <View style={styles.container}>
         <LoadingModal showLoading={this.state.loading} loadingMessage='Meminta OTP...' />

@@ -105,10 +105,10 @@ class Kontak extends Component {
     this.state = {
       isModalVisible: false,
       contacts: [],
-      userId: this.props.user.id,
-      bookName: this.props.user.bookName,
-      bookId: this.props.user.bookId,
-      token: this.props.user.token,
+      userId: props.user.id,
+      bookName: props.user.bookName,
+      bookId: props.user.bookId,
+      token: props.user.token,
       contactInput: {
         name: "",
         phoneNumber: "",
@@ -193,7 +193,7 @@ class Kontak extends Component {
 
     contactApi.getContacts(params)
       .then(res => {
-        // console.log(res)
+        console.log('res contact: ', res)
 
         const data = res.data.data
         const newData = []
@@ -233,6 +233,7 @@ class Kontak extends Component {
 
       })
       .catch(err => {
+        console.log('error contact', err)
         alert(`${API_URL} => ${err} => bookId:${bookId}`)
       })
   }

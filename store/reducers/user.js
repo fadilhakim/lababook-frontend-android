@@ -56,8 +56,9 @@ export default function user (state = initialStates, action) {
       }
 
     case UPDATE_USER_LOGIN:
-      console.log("action: ", action)
+      console.log("action UPDATE_USER_LOGIN: ", action)
       return {
+        ...state,
         userName: action.payload.userName,
         bookName: action.payload.bookName,
         bookType: action.payload.bookType,
