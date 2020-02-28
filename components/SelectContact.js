@@ -19,12 +19,14 @@ class SelectContact extends Component {
             contacts: [],
             contactBackup:[],
             searchInput: "",
-            userId: 1, // sementara
-            bookId: 1, // sementara
+            userId: 0,
+            bookId:0,
+            token: "",
         }
 
         //this.searchContact = this.searchContact.bind(this)
         this.handleSearchInput = this.handleSearchInput.bind(this)
+        this.addContact = this.addContact.bind(this)
     }
 
     componentDidMount() {
@@ -57,7 +59,10 @@ class SelectContact extends Component {
 
         this.setState({
             contacts: this.state.contacts.concat(newData),
-            contactBackup: this.state.contactBackup.concat( newData )
+            contactBackup: this.state.contactBackup.concat( newData ),
+            bookId:params.bookId,
+            userId:params.userId,
+            token:params.token
         })
         // for(i = 0; i < newData.length; i++) {
         //     console.log("===>", newData[i])
@@ -71,6 +76,8 @@ class SelectContact extends Component {
         
         const contactApi = new ContactAPI()
         //const confirmation = confirm("Are you sure want to add "+name+" ?")
+
+        console.log("token addContact => ",this.state.token)
 
         // Works on both Android and iOS
         Alert.alert(
@@ -89,6 +96,8 @@ class SelectContact extends Component {
                         phoneNumber:item.phoneNumber,
                         userId:this.state.userId,
                         bookId:this.state.bookId,
+                        token:this.state.token
+                        
                     }
             
                     return contactApi.createContact(data)

@@ -44,34 +44,6 @@ import { connect } from 'react-redux'
 
 // import {SelectContact} from 'react-native-select-contact'
 
-async function showContact() {
-  try {
-    const { status } = await Permissions.askAsync(Permissions.CONTACTS)
-
-    if (status === 'granted') {
-      const { data } = await Contacts.getContactsAsync({
-        fields: [
-          Contacts.Fields.Name,
-          Contacts.Fields.PhoneNumbers
-        ]
-      })
-
-      if (data.length > 0) {
-
-        //alert("you have "+data.length+" contacts ")
-        NavigationService.navigate("SelectContact", {
-          contacts: data
-        })
-        // screen select contact
-        //console.log(`${API_URL} => `, data)
-      } else {
-        alert("you have no contacts")
-      }
-    }
-  } catch (error) {
-    console.log(error)
-  }
-}
 
 const filterList = [{
   id: 'all',
@@ -126,10 +98,48 @@ class Kontak extends Component {
     this.toggleModal = this.toggleModal.bind(this)
     this.getSWpeopleApi = this.getSWpeopleApi.bind(this)
     this.getPhoneNumber = this.getPhoneNumber.bind(this)
+    this.showContact = this.showContact.bind(this)
 
     this.handleFilterChange = this.handleFilterChange.bind(this)
     this.handleSortChange = this.handleSortChange.bind(this)
   }
+
+  async showContact() {
+
+    console.log("token showContact => ", this.state.token)
+
+    try {
+      const { status } = await Permissions.askAsync(Permissions.CONTACTS)
+  
+      if (status === 'granted') {
+        const { data } = await Contacts.getContactsAsync({
+          fields: [
+            Contacts.Fields.Name,
+            Contacts.Fields.PhoneNumbers
+          ]
+        })
+  
+        if (data.length > 0) {
+  
+          //alert("you have "+data.length+" contacts ")
+          NavigationService.navigate("SelectContact", {
+            userId: this.state.userId,
+           
+            bookId: this.state.bookId,
+            token: this.state.token,
+            contacts: data
+          })
+          // screen select contact
+          //console.log(`${API_URL} => `, data)
+        } else {
+          alert("you have no contacts")
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  
 
   getPhoneNumber() {
     return SelectContact.openContactSelection()
@@ -438,7 +448,7 @@ class Kontak extends Component {
               </View>
         </Modal>
 
-        <TouchableWithoutFeedback onPress={() => showContact()}>
+        <TouchableWithoutFeedback onPress={() => this.showContact()}>
           <View style={styles.addContactBtn}>
             <AntDesign name='plus' size={24} style={{ color: '#fff', fontWeight: 'bold' }} />
             <Text style={styles.addContactBtnText}>

@@ -30,8 +30,11 @@ export default  class ContactAPI {
         //console.log("check => ",api+"/contact/create", dt)
 
         return axios.post(api+"/contact/create",dt,{
-            'Content-Type': 'application/json',
-            Authorization : 'Bearer ' + data.token
+            headers:{
+                'Content-Type': 'application/json',
+                Authorization : 'Bearer ' + data.token
+            }
+           
         })
     }
 

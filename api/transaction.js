@@ -61,8 +61,11 @@ export default class TransactionAPI {
         //console.log("check => ",api+"/contact/create", dt)
 
         return axios.post(api+"/transaction/create",dt,{
-            'Content-Type': 'application/json',
-            Authorization : 'Bearer ' + param.token
+            headers:{
+                'Content-Type': 'application/json',
+                Authorization : 'Bearer ' + data.token
+            }
+           
         })
     }
 
