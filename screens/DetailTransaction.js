@@ -46,7 +46,7 @@ class DetailTransaction extends Component {
       userId: params.userId
     })
 
-    transactionApi.getTransactionByContact(params.contactId)
+    transactionApi.getTransactionByContact(params)
       .then(res => {
 
 

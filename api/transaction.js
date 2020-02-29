@@ -35,10 +35,10 @@ export default class TransactionAPI {
         })
     }
 
-    getTransactionByContact(contactId) {
+    getTransactionByContact(param) {
         return axios.get(api+"/transaction/contact",{
             params:{
-                contactId:contactId
+                contactId:param.contactId
             },
             headers: {
                 'Content-Type': 'application/json',

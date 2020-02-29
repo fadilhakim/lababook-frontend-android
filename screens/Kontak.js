@@ -341,7 +341,8 @@ class Kontak extends Component {
                   contactInitial: item.contactInitial,
                   contactId: item.id,
                   userId: this.state.userId,
-                  totalTransaction: item.trxValue
+                  totalTransaction: item.trxValue,
+                  token:this.state.token
 
                 })
               }}>
