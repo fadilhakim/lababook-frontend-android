@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 
 import { Ionicons, Foundation, SimpleLineIcons } from '@expo/vector-icons'
+import NavigationService from '../helpers/NavigationService';
 
 export default class AccForm extends React.Component {
 	render(){
@@ -32,7 +33,7 @@ export default class AccForm extends React.Component {
 				<TextInput style={styles.formInput} placeholder="nama buku"> Warung Mira </TextInput>
 				<Text style={styles.formLabel}>No Hp Yang Terdaftar :</Text>
 				<TextInput style={styles.formInput} placeholder="no hp"> +6281-3103-1231 </TextInput>
-				<Button onPress={() => goBack()} title="Edit" />
+				<Button onPress={() => {}} title="Edit" />
 			</View>
 		); 
 	}

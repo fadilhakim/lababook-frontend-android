@@ -332,6 +332,7 @@ class Kontak extends Component {
           data={this.state.contacts}
           scrollEnabled={true}
           renderItem={({ item, index }) => {
+            //console.log("item ==> ", item, "state ==> ", this.state)
             return (
               <TouchableNativeFeedback onPress={() => {
                 NavigationService.navigate("DetailTransaction", {

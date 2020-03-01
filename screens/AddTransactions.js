@@ -37,8 +37,8 @@ class DetailTransaction extends Component {
         // date:"",
         dueDate: "",
         transactionType: "",
-        contactId: "",
-        userId: ""
+        contactId: props.contactId,
+        userId: props.userId
       }
     }
 
@@ -109,9 +109,10 @@ class DetailTransaction extends Component {
       type: input.transactionType,
       amount: input.amount,
       description: input.description,
-      userId: input.userId,
+      userId: params.userId,
       contactId: input.contactId,
-      dueDate: input.dueDate
+      dueDate: input.dueDate,
+      token:params.token, 
       //date:input.date
     }
 
@@ -153,7 +154,8 @@ class DetailTransaction extends Component {
                   contactInitial: params.contactInitial,
                   contactId: params.contactId,
                   userId: this.state.input.userId,
-                  totalTransaction: params.totalTransaction
+                  totalTransaction: params.totalTransaction,
+                  token: params.token
 
                 })
               }
@@ -260,7 +262,8 @@ class DetailTransaction extends Component {
                 contactInitial: params.contactInitial,
                 contactId: params.contactId,
                 userId: this.state.userId,
-                totalTransaction: params.totalTransaction
+                totalTransaction: params.totalTransaction,
+                token:params.token
               })
             }}>
               <View>

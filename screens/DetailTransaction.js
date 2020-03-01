@@ -19,12 +19,12 @@ import TransactionAPI from "./../api/transaction"
 
 class DetailTransaction extends Component {
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
 
     this.state = {
       contactTransactions: [],
-      userId: "",
+      userId: props.userId,
       totalDebit: 0,
       totalCredit: 0,
       totalTransaction: 0,
@@ -43,8 +43,12 @@ class DetailTransaction extends Component {
     const params = this.props.navigation.state.params
 
     this.setState({
-      userId: params.userId
+      userId: params.userId,
+      contactId: params.contactId,
+
     })
+
+    console.log("DetailTransaction ==> ", params)
 
     transactionApi.getTransactionByContact(params)
       .then(res => {
@@ -53,7 +57,10 @@ class DetailTransaction extends Component {
         const dtHeader = ["Total"]
         const dtTable = []
 
-        res.data.map((item) => {
+
+        //console.log("getTransactionByContact ===> ",res.data.data, res.data.data.length, typeof(res.data))
+
+        res.data.data.forEach((item) => {
           var row = []
 
           if (item.type === "debit") {
@@ -74,6 +81,7 @@ class DetailTransaction extends Component {
 
 
           dtTable.push(row)
+          console.log(item)
         })
 
         dtHeader.push(`Anda Berikan \n ${numberFormat(this.state.totalCredit)}`, `Anda Dapatkan \n ${numberFormat(this.state.totalDebit)}`)
@@ -164,7 +172,8 @@ class DetailTransaction extends Component {
               contactInitial: params.contactInitial,
               contactId: params.contactId,
               userId: this.state.userId,
-              totalTransaction: params.totalTransaction
+              totalTransaction: params.totalTransaction,
+              token:params.token
             })
           }}>
             <View style={BaseStyle.btnBerikan}><Text style={BaseStyle.btnText}>ANDA BERIKAN</Text></View>
@@ -178,7 +187,8 @@ class DetailTransaction extends Component {
               contactId: params.contactId,
               userId: params.userId,
               totalTransaction: params.totalTransaction,
-              userId: this.state.userId
+              userId: this.state.userId,
+              token:params.token
             })
           }}>
             <View onPress={() => { NavigationService.navigate("Home") }} style={BaseStyle.btnDapatkan}>
