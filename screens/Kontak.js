@@ -7,11 +7,12 @@ import {
   TouchableWithoutFeedback,
   TouchableNativeFeedback,
   FlatList,
-
-  Button
+  Dimensions,
+  Button,
+  TextInput,
 } from 'react-native'
 import {
-  Content, Icon, Picker, Form, Label
+  Content, Icon, Picker, Form, Label, Item
 } from 'native-base'
 
 import {
@@ -36,6 +37,8 @@ import { API_URL } from "react-native-dotenv"
 import { timeInfo } from "../helpers/TimeFormat"
 
 import BaseStyle from "./../style/BaseStyle"
+
+import ButtonFilter from '../components/ButtonFilter'
 
 // import {SelectContact} from 'react-native-select-contact'
 
@@ -87,6 +90,7 @@ class Kontak extends Component {
       filter: "",
       totalCredit: 0,
       totalDebit: 0,
+      // screenWidth: Dimensions.get('window').width,
     }
 
     this.getContacts = this.getContacts.bind(this)
@@ -202,6 +206,29 @@ class Kontak extends Component {
       })
   }
 
+  selectedButtonStyle = (value) => {
+    if(this.state.filter == value) {
+      return {
+        backgroundColor: '#7dd220',
+        borderColor: '#7dd220',
+        borderWidth: 1,
+      }
+    }else{
+      return {}
+    }
+  }
+
+  selectedTextStyle = (value) => {
+    if(this.state.filter == value) {
+      return {
+        fontWeight: 'bold',
+        color: '#fff',
+      }
+    }else{
+      return {}
+    }
+  }
+
   handleFilterChange(value) {
     this.setState({
       filter: value
@@ -294,46 +321,75 @@ class Kontak extends Component {
         <Modal
           style={BaseStyle.halfModal}
           isVisible={this.state.isModalVisible}
-          animationIn='slideInUp'
-          animationOut='slideOutDown'
+          onBackButtonPress={() => { this.toggleModal() }}
+          onBackdropPress={() => { this.toggleModal() }}
+          // swipeDirection={['up', 'left', 'right', 'down']}
+          // animationIn='slideInUp'
+          // animationOut='slideOutDown'
+          // onModalShow={() => setTimeout(() => this.toggleModal(), 2000)}
+          avoidKeyboard={true}
         >
-          <View style={BaseStyle.modalContent}>
-            <Form>
-              <Label style={BaseStyle.labelStyleModal}>Urutkan dari :</Label>
-              <Picker
-                mode="dropdown"
-                iosHeader="Select Filter"
-                selectedValue={this.state.sort}
-                onValueChange={(value) => this.handleSortChange(value)}
-                itemStyle={{ backgroundColor: "grey", color: "#f1f1f1", fontSize: 13 }}
-                style={{ color: "#000000", fontSize: 13 }}
-              >
-                <Picker.Item label="Terbaru" value="newest" />
-                <Picker.Item label="Terlama" value="oldest" />
-                <Picker.Item label="Terbanyak" value="key2" />
-                <Picker.Item label="Nama A-Z" value="ascName" />
-              </Picker>
-
-              <Label style={BaseStyle.labelStyleModal}>Filter dari :</Label>
-              <Picker
-                mode="dropdown"
-                iosHeader="Select Filter"
-                style={{ width: undefined }}
-                selectedValue={this.state.filter}
-                onValueChange={(value) => this.handleFilterChange(value)}
-                itemStyle={{ backgroundColor: "grey", color: "#f1f1f1", fontSize: 13 }}
-                style={{ color: "#000000", fontSize: 13 }}
-              >
-                <Picker.Item label="Semua" value="all" />
-                <Picker.Item label="Lunas" value="paidOff" />
-                <Picker.Item label="Berikan" value="credit" />
-                <Picker.Item label="Dapatkan" value="debit" />
-              </Picker>
-            </Form>
-
-
-            <Button style={{ marginTop: 20 }} title="Close Filter" onPress={() => { this.toggleModal() }} />
-          </View>
+              <View style={BaseStyle.modalContent}>
+                <View style={BaseStyle.rowFilterModal}>
+                  <View style={BaseStyle.fieldSortContainerStyleModal}>
+                    <Text style={BaseStyle.labelStyleModal}>Urutkan</Text>
+                  </View>
+                  <View style={BaseStyle.listContainerStyleModal}>
+                    <Item picker>
+                      <Picker
+                        mode="dropdown"
+                        iosIcon={<Icon name="arrow-down" />}
+                        style={{ width: undefined }}
+                        placeholder="Urutkan dari"
+                        placeholderStyle={{ color: "#bfc6ea" }}
+                        placeholderIconColor="#007aff"
+                        selectedValue={this.state.sort}
+                        onValueChange={this.handleSortChange.bind(this)}
+                      >
+                        <Picker.Item label="Terbaru" value="newest" />
+                        <Picker.Item label="Terlama" value="oldest" />
+                        <Picker.Item label="Terbanyak" value="key2" />
+                        <Picker.Item label="Nama A-Z" value="ascName" />
+                      </Picker>
+                    </Item>
+                  </View>
+                </View>
+                <View style={BaseStyle.rowFilterModal}>
+                  <View style={BaseStyle.fieldFilterContainerStyleModal}>
+                    <Text style={BaseStyle.labelStyleModal}>Filter</Text>
+                  </View>
+                  <View style={BaseStyle.filterContainerStyleModal}>
+                    <ButtonFilter
+                      selectedButtonStyle={(value) => this.selectedButtonStyle(value)}
+                      handleFilterChange={(value) => this.handleFilterChange(value)}
+                      selectedTextStyle={(value) => this.selectedTextStyle(value)}
+                      name='Semua'
+                      id='Semua'
+                    />
+                    <ButtonFilter
+                      selectedButtonStyle={(value) => this.selectedButtonStyle(value)}
+                      handleFilterChange={(value) => this.handleFilterChange(value)}
+                      selectedTextStyle={(value) => this.selectedTextStyle(value)}
+                      name='Lunas'
+                      id='paidOff'
+                    />
+                    <ButtonFilter
+                      selectedButtonStyle={(value) => this.selectedButtonStyle(value)}
+                      handleFilterChange={(value) => this.handleFilterChange(value)}
+                      selectedTextStyle={(value) => this.selectedTextStyle(value)}
+                      name='Berikan'
+                      id='credit'
+                    />
+                    <ButtonFilter
+                      selectedButtonStyle={(value) => this.selectedButtonStyle(value)}
+                      handleFilterChange={(value) => this.handleFilterChange(value)}
+                      selectedTextStyle={(value) => this.selectedTextStyle(value)}
+                      name='Dapatkan'
+                      id='debit'
+                    />
+                  </View>
+                </View>
+              </View>
         </Modal>
 
         <TouchableWithoutFeedback onPress={() => showContact()}>

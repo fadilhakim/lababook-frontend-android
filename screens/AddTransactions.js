@@ -290,7 +290,7 @@ class DetailTransaction extends Component {
           <Form style={BaseStyle.formTransaction}>
             <Item style={BaseStyle.inputItem}>
               <Icon style={BaseStyle.inputIcon} active name='md-pricetag' />
-              <Input placeholder="Jumlah" onChangeText={(val) => { this.handleAmountChange(val) }} />
+              <Input type="number" placeholder="Jumlah" onChangeText={(val) => { this.handleAmountChange(val) }} />
             </Item>
             <Item style={BaseStyle.inputItem}>
               <Icon style={BaseStyle.inputIcon} active name='md-text' />
