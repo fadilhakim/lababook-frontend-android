@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 
 import { FontAwesome } from '@expo/vector-icons'
+import Constants from 'expo-constants'
 
 function Settings(props) {
   const { navigation } = props
@@ -111,7 +112,7 @@ function Settings(props) {
             </View>
           </View>
         </TouchableNativeFeedback>
-        
+
         <TouchableNativeFeedback>
           <View style={styles.settingItem}>
             <View style={styles.settingItemLeft}>
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'stretch',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   settingTop: {
     alignItems: 'stretch',
