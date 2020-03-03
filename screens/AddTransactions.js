@@ -6,7 +6,8 @@ import {
   TouchableNativeFeedback,
   AsyncStorage,
   Share,
-  Alert
+  Alert,
+  Platform
 } from 'react-native'
 import {
   Container, Header, Content, Form, Item, Input, Label, Left, Body,
@@ -293,7 +294,7 @@ class DetailTransaction extends Component {
           <Form style={BaseStyle.formTransaction}>
             <Item style={BaseStyle.inputItem}>
               <Icon style={BaseStyle.inputIcon} active name='md-pricetag' />
-              <Input type="number" placeholder="Jumlah" onChangeText={(val) => { this.handleAmountChange(val) }} />
+              <Input returnKeyType={(Platform.OS === 'ios') ? 'done' : 'next'} keyboardType="number-pad" type="number" placeholder="Jumlah" onChangeText={(val) => { this.handleAmountChange(val) }} />
             </Item>
             <Item style={BaseStyle.inputItem}>
               <Icon style={BaseStyle.inputIcon} active name='md-text' />
@@ -311,8 +312,6 @@ class DetailTransaction extends Component {
               <Icon style={BaseStyle.inputIcon} active name='ios-camera' />
               <Input placeholder="Lampiran Gambar" />
             </Item>
-
-            <Text>{this.state.input.dueDate}</Text>
 
           </Form>
 
