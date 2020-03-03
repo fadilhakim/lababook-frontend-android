@@ -1,6 +1,7 @@
 import {
   UPDATE_PHONE_NUMBER,
   UPDATE_USER_NAME,
+  UPDATE_USER_PROFILE,
   UPDATE_BOOK_NAME,
   UPDATE_BOOK_TYPE,
   UPDATE_USER_LOGIN,
@@ -80,6 +81,14 @@ export function updateBookId(newBookId) {
 export function updateUserStatus() {
   return {
     type: UPDATE_USER_OLD
+  }
+}
+
+export function updateUserProfile(updateDetail) {
+  return {
+    type: UPDATE_USER_PROFILE,
+    bookName: updateDetail.bookName,
+    userName: updateDetail.userName,
   }
 }
 

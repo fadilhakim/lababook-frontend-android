@@ -2,6 +2,7 @@ import {
   UPDATE_PHONE_NUMBER,
   UPDATE_USER_NAME,
   UPDATE_USER_LOGIN,
+  UPDATE_USER_PROFILE,
   UPDATE_USER_REGISTER,
   DELETE_USER_DETAIL,
   UPDATE_BOOK_NAME,
@@ -42,6 +43,12 @@ export default function user (state = initialStates, action) {
       return {
         ...state,
         bookName: action.bookName
+      }
+    case UPDATE_USER_PROFILE:
+      return {
+        ...state,
+        bookName: action.bookName,
+        userName: action.userName
       }
     case UPDATE_BOOK_TYPE:
       return {

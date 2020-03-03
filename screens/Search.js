@@ -42,6 +42,7 @@ import ButtonFilter from '../components/ButtonFilter'
 // import { confirmOTP, loginSuccess } from '../store/actions/user'
 import { connect } from 'react-redux'
 import SearchBar from 'react-native-searchbar'
+import { getStatusBarHeight } from "react-native-status-bar-height"
 
 // import {SelectContact} from 'react-native-select-contact'
 
@@ -78,6 +79,7 @@ class Kontak extends Component {
     this.state = {
       isModalVisible: false,
       contacts: [],
+      searchContacts: [],
       userId: props.user.id,
       bookName: props.user.bookName,
       bookId: props.user.bookId,
@@ -92,9 +94,11 @@ class Kontak extends Component {
       filter: "",
       totalCredit: 0,
       totalDebit: 0,
+      statusBarHeight: 0,
       // screenWidth: Dimensions.get('window').width,
     }
 
+    this.searchBar = null
     this.getContacts = this.getContacts.bind(this)
     this.toggleModal = this.toggleModal.bind(this)
     this.getSWpeopleApi = this.getSWpeopleApi.bind(this)
@@ -165,10 +169,12 @@ class Kontak extends Component {
   };
 
   componentDidMount() {
+    const newHeight = getStatusBarHeight() || 32
+    this.setState({
+      statusBarHeight: newHeight
+    })
 
     this.getContacts()
-    //this.getSWpeopleApi()
-
   }
 
   getSWpeopleApi() {
@@ -235,6 +241,7 @@ class Kontak extends Component {
 
         _this.setState({
           contacts: this.state.contacts.concat(newData),
+          searchContacts: this.state.contacts.concat(newData),
 
         }, function () {
           //console.log("contact => ", this.state.contacts)
@@ -288,6 +295,13 @@ class Kontak extends Component {
     });
   }
 
+  handlerSearchBar = values => {
+    // console.log("Values: ", values)
+    this.setState({
+      searchContacts: values
+    })
+  }
+
   render() {
 
     // const data = [{
@@ -302,35 +316,20 @@ class Kontak extends Component {
     // }]
 
     return (
-      <View style={{ flex: 1 }}>
-        <View style={styles.topBar}>
-          <View style={styles.topBarLeft}>
-            <View style={styles.personBg}>
-              <MaterialIcons name='person' size={32} color='white' />
-            </View>
-            <Text style={{ fontSize: 16 }}>
-              Anda Berikan: <Text style={{ color: '#ce4165' }}> {numberFormat(this.state.totalCredit)} </Text>
-              {'\n'}
-              Anda Dapatkan: <Text style={{ color: '#7dd220' }}> {numberFormat(this.state.totalDebit)} </Text>
-            </Text>
-          </View>
+      <View style={{ flex: 1, marginTop: this.state.statusBarHeight}}>
 
-          <View style={styles.topBarRight}>
-            <TouchableWithoutFeedback onPress={() => { this.toggleModal() }} >
-              <View style={styles.topBarRightFilter}>
-                <MaterialIcons name='filter-list' size={27} color='#2a2c7b' style={styles.filter} />
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback>
-              <View style={styles.topBarRightPdf}>
-                <MaterialIcons name='picture-as-pdf' size={27} color='#2a2c7b' style={styles.pdf} />
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-        </View>
+        <SearchBar
+          ref={(ref) => this.searchBar = ref}
+          data={this.state.contacts}
+          handleResults={(results) => this.handlerSearchBar(results)}
+          onBack={() => NavigationService.navigate('Home')}
+          placeholder={'Cari'}
+          showOnLoad={true}
+          allDataOnEmptySearch={true}
+        />
 
         <FlatList
-          data={this.state.contacts}
+          data={this.state.searchContacts}
           scrollEnabled={true}
           renderItem={({ item, index }) => {
             //console.log("item ==> ", item, "state ==> ", this.state)
@@ -356,109 +355,8 @@ class Kontak extends Component {
             )
           }}
           keyExtractor={item => item.id}
-          style={styles.contactList}
+          style={[styles.contactList, {marginTop: this.state.statusBarHeight+40}]}
         />
-
-        {/* <TouchableNativeFeedback onPress={() => {  NavigationService.navigate("Test") }}>
-            <Text> Test Page </Text>
-        </TouchableNativeFeedback> */}
-
-        <Modal
-          style={BaseStyle.halfModal}
-          isVisible={this.state.isModalVisible}
-          onBackButtonPress={() => { this.toggleModal() }}
-          onBackdropPress={() => { this.toggleModal() }}
-          // swipeDirection={['up', 'left', 'right', 'down']}
-          // animationIn='slideInUp'
-          // animationOut='slideOutDown'
-          // onModalShow={() => setTimeout(() => this.toggleModal(), 2000)}
-          avoidKeyboard={true}
-        >
-              <View style={BaseStyle.modalContent}>
-                <View style={BaseStyle.rowFilterModal}>
-                  <View style={BaseStyle.fieldSortContainerStyleModal}>
-                    <Text style={BaseStyle.labelStyleModal}>Urutkan</Text>
-                  </View>
-                  <View style={BaseStyle.listContainerStyleModal}>
-                    <Item picker>
-                      <Picker
-                        mode="dropdown"
-                        iosIcon={<Icon name="arrow-down" />}
-                        style={{ width: undefined }}
-                        placeholder="Urutkan dari"
-                        placeholderStyle={{ color: "#bfc6ea" }}
-                        placeholderIconColor="#007aff"
-                        selectedValue={this.state.sort}
-                        onValueChange={this.handleSortChange.bind(this)}
-                      >
-                        <Picker.Item label="Terbaru" value="newest" />
-                        <Picker.Item label="Terlama" value="oldest" />
-                        <Picker.Item label="Terbanyak" value="key2" />
-                        <Picker.Item label="Nama A-Z" value="ascName" />
-                      </Picker>
-                    </Item>
-                  </View>
-                </View>
-                <View style={BaseStyle.rowFilterModal}>
-                  <View style={BaseStyle.fieldFilterContainerStyleModal}>
-                    <Text style={BaseStyle.labelStyleModal}>Filter</Text>
-                  </View>
-                  <View style={BaseStyle.filterContainerStyleModal}>
-                    {
-                      filterList.map(({ id, name}) => {
-                        return (
-                          <ButtonFilter
-                            selectedButtonStyle={(value) => this.selectedButtonStyle(id)}
-                            handleFilterChange={(value) => this.handleFilterChange(id)}
-                            selectedTextStyle={(value) => this.selectedTextStyle(id)}
-                            name={name}
-                            id={id}
-                            key={id}
-                          />
-                        )
-                      })
-                    }
-                    {/*<ButtonFilter*/}
-                    {/*  selectedButtonStyle={(value) => this.selectedButtonStyle(value)}*/}
-                    {/*  handleFilterChange={(value) => this.handleFilterChange(value)}*/}
-                    {/*  selectedTextStyle={(value) => this.selectedTextStyle(value)}*/}
-                    {/*  name='Semua'*/}
-                    {/*  id='Semua'*/}
-                    {/*/>*/}
-                    {/*<ButtonFilter*/}
-                    {/*  selectedButtonStyle={(value) => this.selectedButtonStyle(value)}*/}
-                    {/*  handleFilterChange={(value) => this.handleFilterChange(value)}*/}
-                    {/*  selectedTextStyle={(value) => this.selectedTextStyle(value)}*/}
-                    {/*  name='Lunas'*/}
-                    {/*  id='paidOff'*/}
-                    {/*/>*/}
-                    {/*<ButtonFilter*/}
-                    {/*  selectedButtonStyle={(value) => this.selectedButtonStyle(value)}*/}
-                    {/*  handleFilterChange={(value) => this.handleFilterChange(value)}*/}
-                    {/*  selectedTextStyle={(value) => this.selectedTextStyle(value)}*/}
-                    {/*  name='Berikan'*/}
-                    {/*  id='credit'*/}
-                    {/*/>*/}
-                    {/*<ButtonFilter*/}
-                    {/*  selectedButtonStyle={(value) => this.selectedButtonStyle(value)}*/}
-                    {/*  handleFilterChange={(value) => this.handleFilterChange(value)}*/}
-                    {/*  selectedTextStyle={(value) => this.selectedTextStyle(value)}*/}
-                    {/*  name='Dapatkan'*/}
-                    {/*  id='debit'*/}
-                    {/*/>*/}
-                  </View>
-                </View>
-              </View>
-        </Modal>
-
-        <TouchableWithoutFeedback onPress={() => this.showContact()}>
-          <View style={styles.addContactBtn}>
-            <AntDesign name='plus' size={24} style={{ color: '#fff', fontWeight: 'bold' }} />
-            <Text style={styles.addContactBtnText}>
-              Tambah Kontak
-            </Text>
-          </View>
-        </TouchableWithoutFeedback>
       </View>
     )
   }

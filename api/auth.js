@@ -1,6 +1,6 @@
 import axios from "axios"
 
-import { URLGetOTP, URLLogin, URLRegister, URLCheckToken } from '../config/url'
+import { URLGetOTP, URLLogin, URLRegister, URLUpdateProfile, URLCheckToken } from '../config/url'
 
 export const CheckTokenIsValid = params => {
     let bodyFormData = new FormData() // for Content-Type: multipart/form-data
@@ -51,6 +51,22 @@ export const LoginUser = params => {
     return axios.post(URLLogin, bodyFormData, {
         headers: {
             'Content-Type': 'multipart/form-data',
+        }
+    })
+}
+
+export const UpdateProfile = params => {
+    let bodyFormData = new FormData()
+
+    bodyFormData.append('userId', params.userId)
+    bodyFormData.append('name', params.name)
+    bodyFormData.append('bookId', params.bookId)
+    bodyFormData.append('bookName', params.bookName)
+
+    return axios.post(URLUpdateProfile, bodyFormData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization : 'Bearer ' + params.token
         }
     })
 }

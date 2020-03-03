@@ -182,7 +182,7 @@ class Pengingat extends Component {
             </MenuTrigger>
             <MenuOptions>
               <MenuOption value='whatsapp'
-                          onSelect={() => this.selectMore('whatsapp')}
+                          onSelect={() => this.selectMore('whatsapp', item.phoneNumber)}
                           children={
                             <View style={[styles.moreContainer, styles.whatsappContainer]}>
                               <MaterialCommunityIcons name='whatsapp' size={24} style={styles.moreIcon} />
@@ -243,10 +243,10 @@ class Pengingat extends Component {
   selectMore = (type, number = '') => {
     this.setState({ onReceivingData: true })
     if (type === 'whatsapp') {
-      OpenApp({ type })
+      OpenApp({ type, number })
         .catch((e) => {
-          // console.log("e: ", e)
-          alert(`Terjadi kesalahan saat membuka aplikasi!`)
+          console.log("e: ", e)
+          alert(`Terjadi kesalahan saat membuka aplikasi! ${e}`)
         })
     } else {
       const params = {
