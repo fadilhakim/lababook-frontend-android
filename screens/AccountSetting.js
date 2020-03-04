@@ -7,16 +7,37 @@ import {
   TouchableNativeFeedback,
   SafeAreaView,
   Alert,
-  AsyncStorage, FormLabel, FormInput, FormValidationMessage, TextInput, StatusBar
+  Image,
+  AsyncStorage,
+  FormLabel,
+  FormInput,
+  FormValidationMessage,
+  TextInput,
+  StatusBar,
+  YellowBox,
 } from 'react-native'
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons'
-import { updateUserProfile } from '../store/actions/user'
 import { connect } from 'react-redux'
+import * as ImagePicker from 'expo-image-picker'
+import * as firebase from 'firebase'
+import _ from 'lodash'
+
+import { updateUserProfile } from '../store/actions/user'
 import { textExtraProps as tProps } from '../config/system'
 import LoadingModal from '../helpers/LoadingModal'
 import { UpdateProfile } from '../api/auth'
 import Constants from 'expo-constants'
+import { firebaseConfig } from '../config/firebaseConfig'
+// import Image from 'react-native-web/src/exports/Image'
 // import AccForm from '../components/AccForm'
+
+YellowBox.ignoreWarnings(['Setting a timer']);
+const _console = _.clone(console);
+console.warn = message => {
+  if (message.indexOf('Setting a timer') <= -1) {
+    _console.warn(message);
+  }
+}
 
 class AccountSetting extends Component {
   state = {
@@ -28,6 +49,8 @@ class AccountSetting extends Component {
     nameIsEditable: false,
     bookNameIsEditable: false,
     user: this.props.user,
+    urlImage: '',
+    loadingMessage: 'Menyimpan data...'
   }
 
   refName = null
@@ -51,7 +74,10 @@ class AccountSetting extends Component {
 
   saveField = (field) => {
     if(this.state.name && this.state.bookName){
-      this.setState({ loading: true })
+      this.setState({
+        loading: true,
+        loadingMessage: 'Menyimpan data...'
+      })
 
       const params = {
         userId: this.state.user.id,
@@ -62,9 +88,6 @@ class AccountSetting extends Component {
       }
       UpdateProfile(params)
         .then(async (result) => {
-          console.log(result)
-          console.log(result.data.data)
-          console.log(result.data.data.status_message == "OK")
           if(result.data && result.data.status_message == "OK"){
             await this.setState({
               nameIsEditable: false,
@@ -118,20 +141,87 @@ class AccountSetting extends Component {
     })
   }
 
+  showImagePicker = async () => {
+    let result = await ImagePicker.launchCameraAsync()
+
+    if(!result.cancelled) {
+      this.setState({
+        loading: true,
+        loadingMessage: 'Menyimpan foto...'
+      })
+      this.uploadImage(result.uri)
+        .then((res) => {
+          this.loadImageURL()
+        })
+        .catch((err) => {
+          Alert.alert('Perhatian', 'Terjadi kesalahan saat menyimpan gambar!\n' + err)
+        })
+        .finally(() => this.setState({ loading: false }))
+    }
+  }
+
+  uploadImage = async (uri) => {
+    const response = await fetch(uri)
+    const blob = await response.blob()
+
+    let ref = firebase.storage().ref().child('img-users/users_' + this.state.user.id )
+    return ref.put(blob)
+  }
+
+  loadImageURL = () => {
+    const ref = firebase.storage().ref().child('img-users/users_' + this.state.user.id)
+
+    ref.getDownloadURL()
+      .then(data => {
+        this.setState({ urlImage: data })
+      })
+      .catch(err => {
+        console.log("Error fetching image: ", err)
+      })
+  }
+
+  showImageUser = () => {
+    if(this.state.urlImage) {
+      return (
+        <Image style={{
+          width: 150,
+          height: 150,
+          borderRadius: 150,
+          // flex: 1,
+          // resizeMode: 'cover',
+        }} source={{ uri: this.state.urlImage }}/>
+      )
+    }else{
+      return (
+        <Text style={{color:'#fff', fontWeight:'bold', fontSize: 70}}>
+          {this.state.name[0]}
+        </Text>
+      )
+    }
+  }
+
+  async componentDidMount () {
+    if(!firebase.apps.length){
+      await firebase.initializeApp(firebaseConfig)
+      this.loadImageURL()
+    }
+  }
+
   render (){
     return (
       <SafeAreaView style={styles.container}>
         {/*<StatusBar barStyle='dark-content' style={{height: Constants.statusBarHeight}}/>*/}
-        <LoadingModal showLoading={this.state.loading} loadingMessage='Menyimpan data...' />
+        <LoadingModal showLoading={this.state.loading} loadingMessage={this.state.loadingMessage} />
         <View style={styles.formDiv}>
           <View style={styles.initialNameCircle}>
-            <Text style={{color:'#fff', fontWeight:'bold', fontSize: 70}}>{this.state.name[0]}</Text>
+            { this.showImageUser() }
             <View style={styles.divLogo}>
               <Ionicons
                 name='md-camera'
                 size={20}
                 color='#fff'
                 style={styles.logoCamera}
+                onPress={() => this.showImagePicker()}
               />
             </View>
           </View>
