@@ -43,7 +43,7 @@ const carouselData = [{
   desc1: 'Selamat datang di Lababook.',
   desc2: 'Selamatkan diri dari harapan kosong mereka yang berhutang padamu',
   uri: CAROUSEL_4
-}
+}]
 
 export default class Intro2 extends Component {
   state = {
