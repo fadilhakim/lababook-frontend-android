@@ -24,7 +24,7 @@ function Settings(props) {
     try {
       const result = await Share.share({
         message:
-          'I share lababook for you to record a Transactions between us',
+          'Download Lababook untuk mencatat hutang-piutang kamu di : http://lababook.com/',
       });
 
       if (result.action === Share.sharedAction) {
@@ -69,7 +69,7 @@ function Settings(props) {
             </View>
           </View>
         </TouchableNativeFeedback>
-
+        {/*
         <TouchableNativeFeedback onPress={() => navigation.navigate('CaraPakai')}>
           <View style={styles.settingItem}>
             <View style={styles.settingItemLeft}>
@@ -90,8 +90,9 @@ function Settings(props) {
             </View>
           </View>
         </TouchableNativeFeedback>
+        */}
 
-        <TouchableNativeFeedback  onPress={() => Linking.openURL('https://api.whatsapp.com/send?phone=+6281295009910&text=Halo')}>
+        <TouchableNativeFeedback  onPress={() => Linking.openURL('https://api.whatsapp.com/send?phone=+6281295009910')}>
           <View style={styles.settingItem}>
             <View style={styles.settingItemLeft}>
               <FontAwesome
@@ -133,7 +134,7 @@ function Settings(props) {
           </View>
         </TouchableNativeFeedback>
       </View>
-
+      {/*
       <View style={styles.settingBottom}>
         <TouchableNativeFeedback onPress={() => signOut()}>
           <View style={styles.logOutBtn}>
@@ -152,6 +153,7 @@ function Settings(props) {
 
         </View>
       </View>
+      */}
     </View>
   )
 }
