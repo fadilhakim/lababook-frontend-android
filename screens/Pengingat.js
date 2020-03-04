@@ -8,6 +8,7 @@ import {
   Button,
   SectionList,
   Linking,
+  Alert,
 } from 'react-native'
 import Menu, {
   MenuProvider,
@@ -23,6 +24,8 @@ import { ListItem, ButtonGroup } from 'react-native-elements'
 import { Accordion } from "native-base"
 import TouchableScale from 'react-native-touchable-scale'
 import { API_URL } from "react-native-dotenv"
+import FileDownload from 'js-file-download'
+// import RNFetchBlobFile from 'rn-fetch-blob'
 
 import {
   MaterialIcons,
@@ -38,8 +41,9 @@ import { numberFormat } from '../helpers/NumberFormat'
 import { TimeDiff } from "../helpers/TimeFormat"
 import CallNumber from "../helpers/CallNumber"
 import OpenApp from "../helpers/OpenApp"
-import { GetReminderList, UpdateReminderStatusAlarm } from '../api/reminder'
+import { GetPDFFile, GetReminderList, UpdateReminderStatusAlarm } from '../api/reminder'
 import { connect } from 'react-redux'
+import { URL } from 'react-native/Libraries/Blob/URL'
 
 class Pengingat extends Component {
   constructor(props) {
@@ -146,17 +150,47 @@ class Pengingat extends Component {
             dataReminder: this.parseData(dataReturn.data)
           })
         } else {
-          alert(`Terjadi kesalahan saat mengambil data!`)
+          Alert.alert('Perhatian!',`Terjadi kesalahan saat mengambil data!`)
         }
       })
       .catch(err => {
-        alert(`Terjadi kesalahan saat mengambil data!`)
+        Alert.alert('Perhatian!',`Terjadi kesalahan saat mengambil data!`)
       })
       .finally(() => this.setState({ onReceivingData: false }))
   }
 
   onExportPDF = () => {
     console.log('exporting')
+    this.setState({ onReceivingData: true })
+
+    const bookId = this.state.bookId
+    const token = this.state.token
+    const params = {
+      bookId,
+      token
+    }
+
+    GetPDFFile(params)
+      .then(result => {
+        console.log("PDF: ", result)
+        console.log("PDF data: ", result.data)
+        let reader = new FileReader();
+        reader.readAsDataURL(result.data);
+        reader.onloadend = function() {
+          const base64data = reader.result;
+          console.log(base64data);
+        }
+        // const blob = new Blob([result.data], {type: 'application/pdf'})
+        // const urlBlob = URL.createObjectURL(blob)
+        // console.log("blob: ", blob)
+        // console.log("urlBlob: ", urlBlob)
+        // FileDownload(urlBlob, 'Pengingat.pdf')
+      })
+      .catch(err => {
+        console.log("PDF: ", err)
+        Alert.alert('Perhatian!', `Terjadi kesalahan saat mengunduh file!`)
+      })
+      .finally(() => this.setState({ onReceivingData: false }))
   }
 
   statusAlarm = (idData) => {
@@ -227,11 +261,11 @@ class Pengingat extends Component {
             statusAlarm: newAllStatus
           })
         } else {
-          alert(`Terjadi kesalahan saat menyimpan data!`)
+          Alert.alert('Perhatian!', `Terjadi kesalahan saat menyimpan data!`)
         }
       })
       .catch(err => {
-        alert(`Terjadi kesalahan saat mengambil data!`)
+        Alert.alert('Perhatian!', `Terjadi kesalahan saat mengambil data!`)
       })
       .finally(() => this.setState({ onReceivingData: false }))
   }
@@ -246,7 +280,7 @@ class Pengingat extends Component {
       OpenApp({ type, number })
         .catch((e) => {
           console.log("e: ", e)
-          alert(`Terjadi kesalahan saat membuka aplikasi! ${e}`)
+          Alert.alert('Perhatian!', `Terjadi kesalahan saat membuka aplikasi! ${e}`)
         })
     } else {
       const params = {

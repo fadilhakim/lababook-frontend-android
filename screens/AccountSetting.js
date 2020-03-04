@@ -201,6 +201,7 @@ class AccountSetting extends Component {
   }
 
   async componentDidMount () {
+    console.log(this.state.user)
     if(!firebase.apps.length){
       await firebase.initializeApp(firebaseConfig)
       this.loadImageURL()
@@ -241,7 +242,7 @@ class AccountSetting extends Component {
                            onChangeText={(value) => this.onValueChange('name', value)}
                 />
               </View>
-              <View>
+              <View style={styles.editIcon}>
                 { this.lastIcon('name')}
               </View>
             </View>
@@ -260,7 +261,7 @@ class AccountSetting extends Component {
                            onChangeText={(value) => this.onValueChange('bookName', value)}
                 />
               </View>
-              <View>
+              <View style={styles.editIcon}>
                 { this.lastIcon('bookName')}
               </View>
             </View>
@@ -401,6 +402,9 @@ const styles = StyleSheet.create({
     width: 247,
     marginRight: 10,
     // backgroundColor: '#ababab',
+  },
+  editIcon: {
+    width: 30,
   },
   inputField: {
     // backgroundColor: 'green',

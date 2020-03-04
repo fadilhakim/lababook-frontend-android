@@ -9,5 +9,7 @@ export const URLGetOTP = api + '/getOtp'
 export const URLRegister = api + '/register'
 export const URLUpdateProfile = api + '/user/update'
 export const URLCheckToken = api + '/checkToken'
+
 export const URLReminderList = api + '/transaction/reminder'
+export const URLReminderPDF = api + '/transaction/reminder/pdf-report'
 export const URLReminderUpdateStatusAlarm = api + '/transaction/update-status-alarm'

@@ -166,7 +166,7 @@ const AppNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'AccountSetting', //Home
+    initialRouteName: 'Home', //Home
     headerMode: 'screen'
   }
 )
