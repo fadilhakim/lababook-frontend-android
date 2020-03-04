@@ -166,7 +166,7 @@ const AppNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Home', //Home
+    initialRouteName: 'AccountSetting', //Home
     headerMode: 'screen'
   }
 )
@@ -186,7 +186,7 @@ const Root = createAppContainer(
       Test: Test
     },
     {
-      initialRouteName: 'Loading' //Loading
+      initialRouteName: 'App' //Loading
     }
   )
 )
