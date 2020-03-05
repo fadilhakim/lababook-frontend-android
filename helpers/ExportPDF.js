@@ -20,8 +20,8 @@ export default ExportPDF = (urlDownload, fileName) => {
             const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
             if(status === 'granted') {
               const asset = await MediaLibrary.createAssetAsync(stat.uri)
-              await MediaLibrary.createAlbumAsync("Download", asset, false)
-              Alert.alert('Sukses!', 'Data telah berhasil disimpan difolder Download!')
+              MediaLibrary.createAlbumAsync("Download", asset, false)
+              Alert.alert('Sukses!', 'Data telah berhasil disimpan di folder Download!')
             } else {
               Alert.alert('ERROR!', 'Aplikasi tidak diizinkan untuk menyimpan data!')
             }
