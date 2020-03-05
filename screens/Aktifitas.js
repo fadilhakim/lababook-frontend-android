@@ -151,6 +151,10 @@ class Aktifitas extends Component {
     this.getData()
   }
 
+  onExportPDF = () => {
+
+  }
+
   componentDidMount () {
     this.getData()
   }

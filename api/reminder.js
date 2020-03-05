@@ -36,9 +36,9 @@ export const GetPDFFile = params => {
         params: {
             bookId: params.bookId
         },
-        responseType: 'blob',
+        // responseType: 'base64',
         headers: {
-            'Content-Type': 'application/json',
+            // 'Content-Type': 'application/json',
             Authorization : 'Bearer ' + params.token,
             // 'Response-Type': 'blob'
         }

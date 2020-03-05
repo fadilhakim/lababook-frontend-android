@@ -26,6 +26,9 @@ import TouchableScale from 'react-native-touchable-scale'
 import { API_URL } from "react-native-dotenv"
 import FileDownload from 'js-file-download'
 // import RNFetchBlobFile from 'rn-fetch-blob'
+import * as FileSystem from 'expo-file-system'
+import * as MediaLibrary from 'expo-media-library'
+import * as Permissions from 'expo-permissions'
 
 import {
   MaterialIcons,
@@ -44,12 +47,16 @@ import OpenApp from "../helpers/OpenApp"
 import { GetPDFFile, GetReminderList, UpdateReminderStatusAlarm } from '../api/reminder'
 import { connect } from 'react-redux'
 import { URL } from 'react-native/Libraries/Blob/URL'
+import * as firebase from 'firebase'
+import { firebaseConfig } from '../config/firebaseConfig'
+import ExportPDF from '../helpers/ExportPDF'
+import Base64 from 'base-64'
 
 class Pengingat extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      userId: this.props.user.userName || 1, // sementara
+      userId: this.props.user.id || 1, // sementara
       bookId: this.props.user.bookId || 1, // sementara
       token: this.props.user.token,
       transactions:[],
@@ -171,20 +178,15 @@ class Pengingat extends Component {
     }
 
     GetPDFFile(params)
-      .then(result => {
+      .then(async result => {
         console.log("PDF: ", result)
         console.log("PDF data: ", result.data)
-        let reader = new FileReader();
-        reader.readAsDataURL(result.data);
-        reader.onloadend = function() {
-          const base64data = reader.result;
-          console.log(base64data);
+        if(result.data) {
+          ExportPDF(result.data, 'Pengingat.pdf')
+          // Alert.alert('Sukses!', 'Data telah berhasil disimpan difolder Download!')
+        } else {
+          Alert.alert('Perhatian!', 'File PDF tidak dapat diunduh!')
         }
-        // const blob = new Blob([result.data], {type: 'application/pdf'})
-        // const urlBlob = URL.createObjectURL(blob)
-        // console.log("blob: ", blob)
-        // console.log("urlBlob: ", urlBlob)
-        // FileDownload(urlBlob, 'Pengingat.pdf')
       })
       .catch(err => {
         console.log("PDF: ", err)
@@ -295,6 +297,9 @@ class Pengingat extends Component {
 
   componentDidMount () {
     this.getData()
+    if(!firebase.apps.length){
+      firebase.initializeApp(firebaseConfig)
+    }
   }
 
   render () {
