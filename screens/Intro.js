@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     // backgroundColor: 'gray'
   },
   carouselText: {
-    textAlign: 'justify',
+    textAlign: 'center',
     color: '#2a2cbb'
   },
   pagination_y: {

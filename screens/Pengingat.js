@@ -26,6 +26,7 @@ import TouchableScale from 'react-native-touchable-scale'
 import { API_URL } from "react-native-dotenv"
 import FileDownload from 'js-file-download'
 // import RNFetchBlobFile from 'rn-fetch-blob'
+import * as FileSystem from 'expo-file-system'
 
 import {
   MaterialIcons,
@@ -44,6 +45,7 @@ import OpenApp from "../helpers/OpenApp"
 import { GetPDFFile, GetReminderList, UpdateReminderStatusAlarm } from '../api/reminder'
 import { connect } from 'react-redux'
 import { URL } from 'react-native/Libraries/Blob/URL'
+// import { FileSystem } from 'expo/build/removed.web'
 
 class Pengingat extends Component {
   constructor(props) {
@@ -175,10 +177,23 @@ class Pengingat extends Component {
         console.log("PDF: ", result)
         console.log("PDF data: ", result.data)
         let reader = new FileReader();
+        const fileUri = FileSystem.documentDirectory + 'Pengingat.pdf'
         reader.readAsDataURL(result.data);
         reader.onloadend = function() {
           const base64data = reader.result;
           console.log(base64data);
+
+          FileSystem.writeAsStringAsync(
+            fileUri,
+            base64data,
+            {
+              encoding: 'base64'
+            }
+          )
+          // FileSystem.downloadAsync(
+          //   `data:application/pdf;base64,${base64data}`,
+          //   fileUri
+          // )
         }
         // const blob = new Blob([result.data], {type: 'application/pdf'})
         // const urlBlob = URL.createObjectURL(blob)
