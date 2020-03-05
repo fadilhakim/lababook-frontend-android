@@ -38,8 +38,21 @@ export default  class ContactAPI {
         })
     }
 
-    deleteContact() {
+    deleteContact(data) {
 
+        const dt = {
+            contactId:data.contactId
+        }
+
+        console.log(" from API => "+data)
+
+        return axios.post(api+"/contact/delete",dt,{
+            headers:{
+                'Content-Type': 'application/json',
+                Authorization : 'Bearer ' + data.token
+            }
+           
+        })
     }
 
 }

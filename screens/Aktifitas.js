@@ -17,6 +17,7 @@ import { TimeFull, FormatDateFilter, LookUpDate } from '../helpers/TimeFormat'
 import LoadingModal from '../helpers/LoadingModal'
 import { Icon, Item, Picker } from 'native-base'
 import { connect } from 'react-redux'
+import ExportPDF from '../helpers/ExportPDF'
 
 class Aktifitas extends Component {
   state = {
@@ -28,7 +29,9 @@ class Aktifitas extends Component {
     totalData: 0,
     startDate: new Date(),
     endDate: new Date(),
-    selected: 'today'
+    selected: 'today',
+    loading: false,
+    loadingMessage: 'Mengambil data...'
   }
   objTrx = new TransactionAPI()
 
@@ -70,6 +73,10 @@ class Aktifitas extends Component {
   }
 
   getData = () => {
+    this.setState({
+      loading: true,
+      loadingMessage: 'Mengambil data...'
+    })
     const param = {
       bookId: this.state.bookId, // untuk test = 1
       sort: 'newest', // newest
@@ -94,6 +101,7 @@ class Aktifitas extends Component {
       .catch(err => {
         Alert.alert('Error!', `Terjadi kesalahan saat mengambil data!`)
       })
+      .finally(() => this.setState({ loading: false }))
   }
 
   handleSelectChange = async (val) => {
@@ -151,6 +159,37 @@ class Aktifitas extends Component {
     this.getData()
   }
 
+  onExportPDF = () => {
+    this.setState({
+      loading: true,
+      loadingMessage: 'Mengunduh data...'
+    })
+    const params = {
+      bookId: this.state.bookId,
+      sort: 'newest',
+      startDate: this.state.startDate,
+      endDate: this.state.endDate,
+      token: this.state.token,
+    }
+
+    this.objTrx.getPDFLink(params)
+      .then(async result => {
+        console.log("PDF: ", result)
+        console.log("PDF data: ", result.data)
+        if(result.data) {
+          ExportPDF(result.data, 'LABABOOK - Aktivitas.pdf')
+          // Alert.alert('Sukses!', 'Data telah berhasil disimpan difolder Download!')
+        } else {
+          Alert.alert('Perhatian!', 'File PDF tidak dapat diunduh!')
+        }
+      })
+      .catch(err => {
+        console.log("PDF: ", err)
+        Alert.alert('Perhatian!', `Terjadi kesalahan saat mengunduh file!`)
+      })
+      .finally(() => this.setState({ loading: false }))
+  }
+
   componentDidMount () {
     this.getData()
   }
@@ -158,6 +197,7 @@ class Aktifitas extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <LoadingModal showLoading={this.state.loading} loadingMessage={this.state.loadingMessage} />
         {/*<ActivityIndicator color='#0000ff' size="large" style={styles.loadingIndicator} />*/}
         <View style={styles.topBar}>
           <View style={[styles.topBarLeft, {paddingLeft: 12, paddingRight: 20}]}>

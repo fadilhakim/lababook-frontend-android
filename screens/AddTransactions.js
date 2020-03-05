@@ -308,10 +308,10 @@ class DetailTransaction extends Component {
 
             </Item>
             {dueDateElement}
-            <Item style={BaseStyle.inputItem}>
+            {/* <Item style={BaseStyle.inputItem}>
               <Icon style={BaseStyle.inputIcon} active name='ios-camera' />
               <Input placeholder="Lampiran Gambar" />
-            </Item>
+            </Item> */}
 
           </Form>
 

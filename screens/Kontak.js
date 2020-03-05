@@ -10,6 +10,7 @@ import {
   Dimensions,
   Button,
   TextInput,
+  Alert
 } from 'react-native'
 import {
   Content, Icon, Picker, Form, Label, Item
@@ -141,6 +142,48 @@ class Kontak extends Component {
     }
   }
 
+  contactDelete(contact) {
+
+    const contactApi = new ContactAPI()
+    const _this = this 
+
+    Alert.alert(
+        'Hapus Kontak',
+        `Anda yakin ingin menghapus kontak ${contact.name} ?`,
+        [
+          
+            {
+                text: 'Tidak',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+            },
+            {text: 'Ya', onPress: () => {
+                const data = {
+                   contactId:contact.id,
+                   token:this.state.token
+                    
+                }
+        
+                return contactApi.deleteContact(data)
+                .then( res => {
+                    if( res.status_message === "OK") {
+                        alert("Hapus data sukses")
+                        _this.getContacts()
+                    } else {
+                        alert( res.data.data )
+                    }
+                    
+                })
+                .catch( err => {
+                  console.log( err )
+                    //alert(" terjadi kesalahan : "+err)
+                })
+                //alert("Yes Pressed")
+            }},
+        ],
+        {cancelable: false},
+    );
+  }
 
   getPhoneNumber() {
     return SelectContact.openContactSelection()
@@ -335,19 +378,25 @@ class Kontak extends Component {
           renderItem={({ item, index }) => {
             //console.log("item ==> ", item, "state ==> ", this.state)
             return (
-              <TouchableNativeFeedback onPress={() => {
-                NavigationService.navigate("DetailTransaction", {
+              <TouchableNativeFeedback 
+                onPress={() => {
+                    NavigationService.navigate("DetailTransaction", {
 
-                  name: item.contactName,
-                  phoneNumber: item.phoneNumber,
-                  contactInitial: item.contactInitial,
-                  contactId: item.id,
-                  userId: this.state.userId,
-                  totalTransaction: item.trxValue,
-                  token:this.state.token
+                      name: item.contactName,
+                      phoneNumber: item.phoneNumber,
+                      contactInitial: item.contactInitial,
+                      contactId: item.id,
+                      userId: this.state.userId,
+                      totalTransaction: item.trxValue,
+                      token:this.state.token
 
-                })
-              }}>
+                    })
+                  }} 
+                 
+                 onLongPress={() =>{ 
+                   this.contactDelete( item)
+                 
+                 }} >
                 <View>
                   <ContactCard {...item} />
                 </View>

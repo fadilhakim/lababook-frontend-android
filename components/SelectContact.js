@@ -81,16 +81,16 @@ class SelectContact extends Component {
 
         // Works on both Android and iOS
         Alert.alert(
-            'Add Contact',
-            `Are you sure want to add ${item.name} ?`,
+            'Tambah Kontat',
+            `Anda yakin ingin menambah kontak ${item.name} ?`,
             [
                
                 {
-                    text: 'Cancel',
+                    text: 'Tidak',
                     onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel',
                 },
-                {text: 'Yes', onPress: () => {
+                {text: 'Ya', onPress: () => {
                     const data = {
                         name:item.name,
                         phoneNumber:item.phoneNumber,
@@ -102,7 +102,12 @@ class SelectContact extends Component {
             
                     return contactApi.createContact(data)
                     .then( res => {
-                        NavigationService.navigate("Home")
+                        if( res.status_message === "OK") {
+                            NavigationService.navigate("Home")
+                        } else {
+                            alert( res.data.data )
+                        }
+                        
                     })
                     .catch( err => {
                         console.log( err )

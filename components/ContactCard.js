@@ -22,6 +22,8 @@ function ContactCard(props) {
 
   }
 
+  
+
   const Component = (
     <View style={styles.contact}>
       <View style={styles.contactLeft}>

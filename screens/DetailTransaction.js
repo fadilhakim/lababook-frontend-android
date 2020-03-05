@@ -14,6 +14,7 @@ import { Table, Row, Rows } from 'react-native-table-component'
 import NavigationService from '../helpers/NavigationService';
 import { numberFormat } from "../helpers/NumberFormat";
 import BaseStyle from "./../style/BaseStyle"
+import CallNumber from "../helpers/CallNumber"
 
 import TransactionAPI from "./../api/transaction"
 
@@ -32,7 +33,18 @@ class DetailTransaction extends Component {
       tableData: [
 
       ],
+      lastReminder:"-"
     }
+  }
+
+  checkEmptyObj(obj) {
+    for(var key in obj) {
+      if(obj.hasOwnProperty(key)) {
+        return false
+      }
+    }
+
+    return true
   }
 
   componentDidMount() {
@@ -60,7 +72,15 @@ class DetailTransaction extends Component {
 
         //console.log("getTransactionByContact ===> ",res.data.data, res.data.data.length, typeof(res.data))
 
-        res.data.data.forEach((item) => {
+        const checkEmptyData = this.checkEmptyObj(res.data.data.lastReminder);
+
+        if(!checkEmptyData) {
+          this.setState({
+            lastReminder:res.data.data.lastReminder.dueDate
+          })
+        }
+
+        res.data.data.transactions.forEach((item) => {
           var row = []
 
           if (item.type === "debit") {
@@ -96,6 +116,10 @@ class DetailTransaction extends Component {
         alert(err)
       })
 
+  }
+
+  callPerson = (phoneNumber) => {
+    CallNumber(phoneNumber)
   }
 
   signOut() {
@@ -151,12 +175,13 @@ class DetailTransaction extends Component {
               size={25}
               color='#fff'
               style={BaseStyle.logoPhone}
+              onPress={ () => this.callPerson(params.phoneNumber)}
             />
           </View>
         </View>
         <View style={BaseStyle.headerBtm}>
           <Text>Total : {numberFormat(this.state.totalTransaction)} </Text>
-          <Text>Pengingat : - </Text>
+          <Text>Pengingat : { this.state.lastReminder } </Text>
         </View>
 
         {dataTransaction}
