@@ -152,7 +152,7 @@ class Aktifitas extends Component {
   }
 
   onExportPDF = () => {
-    
+
   }
 
   componentDidMount () {

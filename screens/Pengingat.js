@@ -182,8 +182,8 @@ class Pengingat extends Component {
         console.log("PDF: ", result)
         console.log("PDF data: ", result.data)
         if(result.data) {
-          await ExportPDF(result.data, 'Pengingat.pdf')
-          Alert.alert('Sukses!', 'Data telah berhasil disimpan difolder Download!')
+          ExportPDF(result.data, 'Pengingat.pdf')
+          // Alert.alert('Sukses!', 'Data telah berhasil disimpan difolder Download!')
         } else {
           Alert.alert('Perhatian!', 'File PDF tidak dapat diunduh!')
         }

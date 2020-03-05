@@ -21,6 +21,7 @@ export default ExportPDF = (urlDownload, fileName) => {
             if(status === 'granted') {
               const asset = await MediaLibrary.createAssetAsync(stat.uri)
               await MediaLibrary.createAlbumAsync("Download", asset, false)
+              Alert.alert('Sukses!', 'Data telah berhasil disimpan difolder Download!')
             } else {
               Alert.alert('ERROR!', 'Aplikasi tidak diizinkan untuk menyimpan data!')
             }
