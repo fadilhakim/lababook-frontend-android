@@ -168,7 +168,7 @@ class Kontak extends Component {
                 .then( res => {
                     if( res.status_message === "OK") {
                         alert("Hapus data sukses")
-                        _this.getContacts()
+                        //_this.getContacts()
                     } else {
                         alert( res.data.data )
                     }

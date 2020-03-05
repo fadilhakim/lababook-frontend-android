@@ -186,7 +186,7 @@ const Root = createAppContainer(
       Test: Test
     },
     {
-      initialRouteName: 'App' //Loading
+      initialRouteName: 'Loading' // default Loading
     }
   )
 )
