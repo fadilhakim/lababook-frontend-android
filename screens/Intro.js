@@ -123,7 +123,7 @@ export default class Intro2 extends Component {
                     <Text style={[styles.carouselText, {paddingTop: 10}]}>
                       { item.desc1 }
                     </Text>
-                    <Text style={styles.carouselText}>
+                    <Text style={[styles.carouselText, { paddingBottom: 10}]}>
                       { item.desc2 }
                     </Text>
                   </View>
@@ -229,8 +229,9 @@ const styles = StyleSheet.create({
     // backgroundColor: 'gray'
   },
   carouselText: {
-    textAlign: 'justify',
-    color: '#2a2cbb'
+    textAlign: 'center',
+    color: '#2a2cbb',
+    fontSize: 15
   },
   pagination_y: {
     // position: "absolute",

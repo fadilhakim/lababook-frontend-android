@@ -399,7 +399,8 @@ const styles = StyleSheet.create({
     // backgroundColor: '#efefef',
   },
   inputGroup: {
-    width: 247,
+    // width: 247,
+    flex: 1,
     marginRight: 10,
     // backgroundColor: '#ababab',
   },
