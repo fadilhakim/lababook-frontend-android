@@ -44,7 +44,7 @@ export default  class ContactAPI {
             contactId:data.contactId
         }
 
-        console.log(" from API => "+data)
+        console.log(" from API => ",data)
 
         return axios.post(api+"/contact/delete",dt,{
             headers:{

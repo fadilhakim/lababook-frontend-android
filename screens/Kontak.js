@@ -104,6 +104,7 @@ class Kontak extends Component {
 
     this.handleFilterChange = this.handleFilterChange.bind(this)
     this.handleSortChange = this.handleSortChange.bind(this)
+    this.contactDelete = this.contactDelete.bind(this)
   }
 
   async showContact() {
@@ -158,6 +159,12 @@ class Kontak extends Component {
                 style: 'cancel',
             },
             {text: 'Ya', onPress: () => {
+                
+                const __this = _this
+                //const anotherThis = this 
+                //console.log( "__this => ",__this.state.contacts[0])
+                //console.log( "_this => ",_this.state.contacts[0])
+
                 const data = {
                    contactId:contact.id,
                    token:this.state.token
@@ -166,9 +173,20 @@ class Kontak extends Component {
         
                 return contactApi.deleteContact(data)
                 .then( res => {
-                    if( res.status_message === "OK") {
+                    
+                    const ___this = __this
+
+                    if( res.data.status_message === "OK") {
                         alert("Hapus data sukses")
-                        //_this.getContacts()
+                        //console.log( "anotherThis => ", anotherThis.state.contacts[0])
+                        // this.setState({
+                        //   refresh:1
+                        // },() => {
+                        //   //console.log("this state => ", anotherThis.state.contacts[0])
+                        // })
+                        ___this.getContacts()
+                        //this.getContacts()
+                        
                     } else {
                         alert( res.data.data )
                     }
@@ -229,6 +247,7 @@ class Kontak extends Component {
   }
 
   getContacts() {
+    console.log("getContact run ....")
     const contactApi = new ContactAPI()
 
     const _this = this

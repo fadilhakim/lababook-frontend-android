@@ -81,7 +81,7 @@ class SelectContact extends Component {
 
         // Works on both Android and iOS
         Alert.alert(
-            'Tambah Kontat',
+            'Tambah Kontak',
             `Anda yakin ingin menambah kontak ${item.name} ?`,
             [
                
@@ -102,10 +102,11 @@ class SelectContact extends Component {
             
                     return contactApi.createContact(data)
                     .then( res => {
-                        if( res.status_message === "OK") {
+                        if( res.data.status_message === "OK") {
+                            alert("Tambah Kontak berhasil")
                             NavigationService.navigate("Home")
                         } else {
-                            alert( res.data.data )
+                            alert( JSON.stringify(res.data.data) )
                         }
                         
                     })
