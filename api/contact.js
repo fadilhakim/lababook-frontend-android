@@ -55,4 +55,24 @@ export default  class ContactAPI {
         })
     }
 
+    getPDFLink( param ) {
+
+        const bookId = param.bookId
+        const sort = param.sort
+       
+
+        return axios.get(api+"/contact/pdf-report",{
+            params:{
+                bookId:bookId,
+                sort:sort,
+              
+            },
+            headers:{
+                // 'Content-Type': 'application/json',
+                Authorization : 'Bearer ' + param.token
+            }
+        })
+    }
+
+
 }

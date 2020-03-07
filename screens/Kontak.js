@@ -36,6 +36,7 @@ import ContactAPI from "../api/contact"
 import { API_URL } from "react-native-dotenv"
 
 import { timeInfo, TimeDiff } from "../helpers/TimeFormat"
+import ExportPDF from '../helpers/ExportPDF'
 
 import BaseStyle from "./../style/BaseStyle"
 
@@ -107,6 +108,8 @@ class Kontak extends Component {
     this.contactDelete = this.contactDelete.bind(this)
   }
 
+  objContact = new ContactAPI()
+
   async showContact() {
 
     console.log("token showContact => ", this.state.token)
@@ -142,6 +145,38 @@ class Kontak extends Component {
       console.log(error)
     }
   }
+
+  onExportPDF = () => {
+    this.setState({
+      loading: true,
+      loadingMessage: 'Mengunduh data...'
+    })
+    const params = {
+      bookId: this.state.bookId,
+      sort: this.state.sort,
+      filter:this.state.filter,
+     
+      token: this.state.token,
+    }
+
+    this.objContact.getPDFLink(params)
+      .then(async result => {
+        console.log("PDF: ", result)
+        console.log("PDF data: ", result.data)
+        if(result.data) {
+          ExportPDF(result.data, 'LABABOOK - Kontak.pdf')
+          // Alert.alert('Sukses!', 'Data telah berhasil disimpan difolder Download!')
+        } else {
+          Alert.alert('Perhatian!', 'File PDF tidak dapat diunduh!')
+        }
+      })
+      .catch(err => {
+        console.log("PDF: ", err)
+        Alert.alert('Perhatian!', `Terjadi kesalahan saat mengunduh file!`)
+      })
+      .finally(() => this.setState({ loading: false }))
+  }
+
 
   contactDelete(contact) {
 
@@ -252,11 +287,7 @@ class Kontak extends Component {
 
     const _this = this
 
-    this.setState({
-      contacts: [],
-      totalCredit: 0,
-      totalDebit: 0
-    })
+   
     const bookId = this.state.bookId
     const filter = this.state.filter
     const sort = this.state.sort
@@ -266,6 +297,13 @@ class Kontak extends Component {
 
     contactApi.getContacts(params)
       .then(res => {
+
+        this.setState({
+          contacts: [],
+          totalCredit: 0,
+          totalDebit: 0
+        })
+
         console.log('res contact: ', res)
 
         const data = res.data.data
@@ -385,7 +423,7 @@ class Kontak extends Component {
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback>
               <View style={styles.topBarRightPdf}>
-                <MaterialIcons name='picture-as-pdf' size={27} color='#2a2c7b' style={styles.pdf} />
+                <MaterialIcons name='picture-as-pdf' size={27} color='#2a2c7b' style={styles.pdf} onPress={this.onExportPDF} />
               </View>
             </TouchableWithoutFeedback>
           </View>

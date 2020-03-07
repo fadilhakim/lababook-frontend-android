@@ -188,11 +188,17 @@ class DetailTransaction extends Component {
 
     const params = this.props.navigation.state.params
     var trxType = params.transactionType === "debit" ? "hutang" : "piutang"
+    var message = ""
+
+    if(trxType == "debit") {
+      message = `Halo ${params.name} tanggal jatuh tempo kamu ${this.state.input.dueDate}, sebesar ${this.state.input.amount}`
+    } else {
+      message = `Halo ${params.name} saya ${JSON.stringify(this.props.user)} berhutang ke kamu sebesar ${this.state.input.amount}`
+    }
 
     try {
       const result = await Share.share({
-        message:
-          params.name + ' ini ' + trxType + ' kamu',
+        message:message
       });
 
       if (result.action === Share.sharedAction) {
@@ -238,10 +244,6 @@ class DetailTransaction extends Component {
 
     </Item>
 
-    if (params.transactionType === "debit") {
-      dueDateElement = <Text>{""}</Text>
-    }
-
     var headerBackground = styles.headerRed
     var btnSave = styles.btnBerikan
 
@@ -262,7 +264,7 @@ class DetailTransaction extends Component {
                 phoneNumber: params.phoneNumber,
                 contactInitial: params.contactInitial,
                 contactId: params.contactId,
-                userId: this.state.userId,
+                userId: this.state.input.userId,
                 totalTransaction: params.totalTransaction,
                 token:params.token
               })
