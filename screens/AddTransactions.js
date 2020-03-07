@@ -19,6 +19,8 @@ import BaseStyle from "./../style/BaseStyle"
 
 import TransactionAPI from "./../api/transaction"
 
+import { numberFormat } from "../helpers/NumberFormat"
+
 import * as Font from 'expo-font'
 
 Font.loadAsync({
@@ -135,7 +137,7 @@ class DetailTransaction extends Component {
         { cancelable: false },
       );
 
-      return false
+      return false;
     }
 
     return transactionApi.createTransactions(data)
@@ -186,14 +188,16 @@ class DetailTransaction extends Component {
 
   onShare = async () => {
 
-    const params = this.props.navigation.state.params
-    var trxType = params.transactionType === "debit" ? "hutang" : "piutang"
-    var message = ""
-
+    const params = this.props.navigation.state.params;
+    var trxType = params.transactionType === "debit" ? "hutang" : "piutang";
+    var message = "";
+    var nameUser = this.props.user ? this.props.user.userName : "";
+    var thisAmount = numberFormat(this.state.input.amount);
+    // var nf = new Intl.NumberFormat();
     if(trxType == "debit") {
-      message = `Halo ${params.name} tanggal jatuh tempo kamu ${this.state.input.dueDate}, sebesar ${this.state.input.amount}`
+      message = `Halo ${params.name}, tanggal jatuh tempo kamu ${this.state.input.dueDate}, sebesar ${thisAmount}`
     } else {
-      message = `Halo ${params.name} saya ${JSON.stringify(this.props.user)} berhutang ke kamu sebesar ${this.state.input.amount}`
+      message = `Halo ${params.name}, saya ${nameUser} berhutang ke kamu sebesar ${thisAmount}`;
     }
 
     try {
