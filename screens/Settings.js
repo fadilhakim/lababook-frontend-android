@@ -20,26 +20,26 @@ function Settings(props) {
       .then(() => navigation.navigate('AuthLoading'))
   }
 
-  this.onShare = async () => {
-    try {
-      const result = await Share.share({
-        message:
-          'Download Lababook untuk mencatat hutang-piutang kamu di : http://lababook.com/',
-      });
+  // this.onShare = async () => {
+  //   try {
+  //     const result = await Share.share({
+  //       message:
+  //         'Download Lababook untuk mencatat hutang-piutang kamu di : http://lababook.com/',
+  //     });
 
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      alert(error.message);
-    }
-  };
+  //     if (result.action === Share.sharedAction) {
+  //       if (result.activityType) {
+  //         // shared with activity type of result.activityType
+  //       } else {
+  //         // shared
+  //       }
+  //     } else if (result.action === Share.dismissedAction) {
+  //       // dismissed
+  //     }
+  //   } catch (error) {
+  //     alert(error.message);
+  //   }
+  // };
 
 
   return (
@@ -113,7 +113,7 @@ function Settings(props) {
           </View>
         </TouchableNativeFeedback>
 
-        <TouchableNativeFeedback>
+        {/* <TouchableNativeFeedback>
           <View style={styles.settingItem}>
             <View style={styles.settingItemLeft}>
               <FontAwesome
@@ -132,7 +132,7 @@ function Settings(props) {
               />
             </View>
           </View>
-        </TouchableNativeFeedback>
+        </TouchableNativeFeedback> */}
       </View>
       {/*
       <View style={styles.settingBottom}>

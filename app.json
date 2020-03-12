@@ -27,7 +27,10 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.giyanta.lababook"
+      "package": "com.giyanta.lababook",
+      "versionCode":1,
+      "permissions":[],
+      "icon":"./assets/lababook_icon.png"
     }
   }
 }
