@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "expo": {
     "name": "Lababook",
@@ -31,3 +32,44 @@
     }
   }
 }
+=======
+{
+  "expo": {
+    "name": "Lababook",
+    "slug": "lababook-android",
+    "privacy": "public",
+    "sdkVersion": "35.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/lababook_icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.lkk.lababook",
+      "versionCode": 1,
+      "permissions": [],
+      "icon": "./assets/lababook_icon.png"
+    },
+    "isDetached": true,
+    "detach": {},
+    "scheme": "exp60d3dc3d37db478da9b4776fc6cbeab5"
+  }
+}
+>>>>>>> a6f338fe7d5fb54ac2d28c1386001568b1de6a05
