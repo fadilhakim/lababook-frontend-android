@@ -4,7 +4,7 @@ import {
   Text,
   StyleSheet,
   Button,
-  // WebView
+  WebView
 } from 'react-native'
 
 
@@ -14,10 +14,10 @@ function CaraPakai (props) {
   const { goBack } = props.navigation;
     return (
       <View style={styles.container}>
-        {/* <WebView
+        <WebView
          source = {{ uri:
          'https://www.youtube.com/watch?v=aCe0h50hyCc' }}
-         /> */}
+         />
       </View>
     );
  

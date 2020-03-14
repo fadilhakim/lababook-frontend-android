@@ -27,13 +27,7 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.lkk.lababook",
-      "versionCode": 1,
-      "permissions": [],
-      "icon": "./assets/lababook_icon.png"
-    },
-    "isDetached": true,
-    "detach": {},
-    "scheme": "exp60d3dc3d37db478da9b4776fc6cbeab5"
+      "package": "com.lkk.lababook"
+    }
   }
 }
