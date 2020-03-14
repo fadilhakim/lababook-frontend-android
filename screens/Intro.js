@@ -28,29 +28,21 @@ const width = pureWidth * 90 / 100 // 90 % from width
 const height = 350 //pureHeight * 50 / 100 // 50 % from width
 
 const carouselData = [{
-  desc1: 'Tambahkan Deskripsi singkat di',
-  desc2: 'sepanjang tulisan ini',
+  desc1: 'Jalan jalan ke Jakarta, Berhenti kita di panti jompo',
+  desc2: 'Hari ini jatuh cinta, Besok lusa jatuh tempo',
   uri: CAROUSEL_1
 },{
   uri: CAROUSEL_2,
-  desc1: 'Tambahkan Deskripsi singkat di',
-  desc2: 'sepanjang tulisan ini'
+  desc1: 'Balonku ada lima, Rupa-rupa warnanya',
+  desc2: 'Uang mu sudah ku terima, Hati mu masih tanda tanya'
 },{
   uri: CAROUSEL_3,
-  desc1: 'Tambahkan Deskripsi singkat di',
-  desc2: 'sepanjang tulisan ini'
+  desc1: 'Harimau mati tinggal belangnya, Si tupai panjat pohon kelapa',
+  desc2: 'Tiap hari catat hutangnya, Supaya kita tak pernah lupa'
 },{
-  desc1: 'Tambahkan Deskripsi singkat di',
-  desc2: 'sepanjang tulisan ini',
+  desc1: 'Selamat datang di Lababook.',
+  desc2: 'Selamatkan diri dari harapan kosong mereka yang berhutang padamu',
   uri: CAROUSEL_4
-},{
-  uri: CAROUSEL_5,
-  desc1: 'Tambahkan Deskripsi singkat di',
-  desc2: 'sepanjang tulisan ini'
-},{
-  desc1: 'Tambahkan Deskripsi singkat di',
-  desc2: 'sepanjang tulisan ini',
-  uri: CAROUSEL_6
 }]
 
 export default class Intro2 extends Component {
@@ -131,7 +123,7 @@ export default class Intro2 extends Component {
                     <Text style={[styles.carouselText, {paddingTop: 10}]}>
                       { item.desc1 }
                     </Text>
-                    <Text style={styles.carouselText}>
+                    <Text style={[styles.carouselText, { paddingBottom: 10}]}>
                       { item.desc2 }
                     </Text>
                   </View>
@@ -237,8 +229,9 @@ const styles = StyleSheet.create({
     // backgroundColor: 'gray'
   },
   carouselText: {
-    textAlign: 'justify',
-    color: '#2a2cbb'
+    textAlign: 'center',
+    color: '#2a2cbb',
+    fontSize: 15
   },
   pagination_y: {
     // position: "absolute",

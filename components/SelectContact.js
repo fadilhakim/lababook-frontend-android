@@ -19,12 +19,14 @@ class SelectContact extends Component {
             contacts: [],
             contactBackup:[],
             searchInput: "",
-            userId: 1, // sementara
-            bookId: 1, // sementara
+            userId: 0,
+            bookId:0,
+            token: "",
         }
 
         //this.searchContact = this.searchContact.bind(this)
         this.handleSearchInput = this.handleSearchInput.bind(this)
+        this.addContact = this.addContact.bind(this)
     }
 
     componentDidMount() {
@@ -57,7 +59,10 @@ class SelectContact extends Component {
 
         this.setState({
             contacts: this.state.contacts.concat(newData),
-            contactBackup: this.state.contactBackup.concat( newData )
+            contactBackup: this.state.contactBackup.concat( newData ),
+            bookId:params.bookId,
+            userId:params.userId,
+            token:params.token
         })
         // for(i = 0; i < newData.length; i++) {
         //     console.log("===>", newData[i])
@@ -72,28 +77,38 @@ class SelectContact extends Component {
         const contactApi = new ContactAPI()
         //const confirmation = confirm("Are you sure want to add "+name+" ?")
 
+        console.log("token addContact => ",this.state.token)
+
         // Works on both Android and iOS
         Alert.alert(
-            'Add Contact',
-            `Are you sure want to add ${item.name} ?`,
+            'Tambah Kontak',
+            `Anda yakin ingin menambah kontak ${item.name} ?`,
             [
                
                 {
-                    text: 'Cancel',
+                    text: 'Tidak',
                     onPress: () => console.log('Cancel Pressed'),
                     style: 'cancel',
                 },
-                {text: 'Yes', onPress: () => {
+                {text: 'Ya', onPress: () => {
                     const data = {
                         name:item.name,
                         phoneNumber:item.phoneNumber,
                         userId:this.state.userId,
                         bookId:this.state.bookId,
+                        token:this.state.token
+                        
                     }
             
                     return contactApi.createContact(data)
                     .then( res => {
-                        NavigationService.navigate("Home")
+                        if( res.data.status_message === "OK") {
+                            alert("Tambah Kontak berhasil")
+                            NavigationService.navigate("Home")
+                        } else {
+                            alert( JSON.stringify(res.data.data) )
+                        }
+                        
                     })
                     .catch( err => {
                         console.log( err )

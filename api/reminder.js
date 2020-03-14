@@ -1,9 +1,9 @@
 import axios from "axios"
 
-import { URLReminderList, URLReminderUpdateStatusAlarm } from '../config/url'
+import { URLReminderPDF, URLReminderList, URLReminderUpdateStatusAlarm } from '../config/url'
 
 export const GetReminderList = params => {
-    console.log(params)
+    // console.log(params)
     return axios.get(URLReminderList, {
         params: {
             bookId: params.bookId
@@ -26,6 +26,21 @@ export const UpdateReminderStatusAlarm = params => {
         headers: {
             'Content-Type': 'multipart/form-data',
             Authorization : 'Bearer ' + params.token
+        }
+    })
+}
+
+export const GetPDFFile = params => {
+    console.log(params)
+    return axios.get(URLReminderPDF, {
+        params: {
+            bookId: params.bookId
+        },
+        // responseType: 'base64',
+        headers: {
+            // 'Content-Type': 'application/json',
+            Authorization : 'Bearer ' + params.token,
+            // 'Response-Type': 'blob'
         }
     })
 }

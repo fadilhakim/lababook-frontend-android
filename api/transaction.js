@@ -35,13 +35,35 @@ export default class TransactionAPI {
         })
     }
 
-    getTransactionByContact(contactId) {
+    getPDFLink( param ) {
+
+        const bookId = param.bookId
+        const sort = param.sort
+        const startDate = param.startDate
+        const endDate = param.endDate
+
+        return axios.get(api+"/transaction/pdf-report",{
+            params:{
+                bookId:bookId,
+                sort:sort,
+                startDate:startDate,
+                endDate:endDate
+            },
+            headers:{
+                // 'Content-Type': 'application/json',
+                Authorization : 'Bearer ' + param.token
+            }
+        })
+    }
+
+    getTransactionByContact(param) {
         return axios.get(api+"/transaction/contact",{
             params:{
-                contactId:contactId
+                contactId:param.contactId
             },
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization : 'Bearer ' + param.token
             }
         })
     }
@@ -60,7 +82,11 @@ export default class TransactionAPI {
         //console.log("check => ",api+"/contact/create", dt)
 
         return axios.post(api+"/transaction/create",dt,{
-            'Content-Type': 'application/json'
+            headers:{
+                'Content-Type': 'application/json',
+                Authorization : 'Bearer ' + data.token
+            }
+
         })
     }
 

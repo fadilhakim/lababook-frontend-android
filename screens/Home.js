@@ -16,7 +16,7 @@ import Constanst from 'expo-constants'
 import { textExtraProps as tProps } from '../config/system'
 
 import Kontak from './Kontak'
-import Aktifitas from './AktifitasOld'
+import Aktifitas from './Aktifitas'
 import Pengingat from './Pengingat'
 
 // import DetailTransaction from "./DetailTransaction"
@@ -74,6 +74,10 @@ function Home (props) {
     navigation.navigate('Settings')
   }
 
+  const toSearch = () => {
+    navigation.navigate('Search')
+  }
+
   return (
     <View style={{ flex: 1 }}>
 
@@ -91,7 +95,7 @@ function Home (props) {
         </View>
 
         <View style={styles.topBarRight}>
-          <TouchableNativeFeedback>
+          <TouchableNativeFeedback onPress={() => toSearch()}>
             <View style={styles.logo}>
               <Ionicons
                 name='md-search'
@@ -149,6 +153,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     marginTop: Constanst.statusBarHeight,
+    // marginTop: 0,
+    // top: -40,
     backgroundColor: '#2a2c7b'
   },
   topBarRight: {

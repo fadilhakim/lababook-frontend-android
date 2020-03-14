@@ -30,13 +30,49 @@ export default class ContactAPI {
         //console.log("check => ",api+"/contact/create", dt)
 
         return axios.post(api + "/contact/create", dt, {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + data.token
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + data.token
+            }
+
         })
     }
 
-    deleteContact() {
+    deleteContact(data) {
 
+        const dt = {
+            contactId: data.contactId
+        }
+
+        console.log(" from API => ", data)
+
+        return axios.post(api + "/contact/delete", dt, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + data.token
+            }
+
+        })
     }
+
+    getPDFLink(param) {
+
+        const bookId = param.bookId
+        const sort = param.sort
+
+
+        return axios.get(api + "/contact/pdf-report", {
+            params: {
+                bookId: bookId,
+                sort: sort,
+
+            },
+            headers: {
+                // 'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + param.token
+            }
+        })
+    }
+
 
 }

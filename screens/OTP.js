@@ -117,21 +117,24 @@ class OTP extends Component {
             id: response.user.id,
           }
           await this.loginSuccess(userDetail)
+          this.setState({ loading: false })
           if(this.state.user.isNew)
             this.state.navigation.navigate('Register03')
           else
             this.state.navigation.navigate('App')
         } else {
+          this.setState({ loading: false })
           // alert(`${API_URL} => Invalid token! => token:${this.otp.join('')}`)
           Alert.alert('Perhatian!', data.data.data.message ? data.data.data.message : errorMessage)
         }
       })
       .catch(err => {
         console.log("err: ", err)
+        this.setState({ loading: false })
         // alert(`${API_URL} => ${err} => token:${this.otp.join('')}`)
         Alert.alert('Perhatian!', errorMessage)
       })
-      .finally(() => this.setState({ loading: false }))
+      // .finally(() => this.setState({ loading: false }))
   }
 
   resendOTP = () => {

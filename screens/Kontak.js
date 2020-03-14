@@ -10,6 +10,7 @@ import {
   Dimensions,
   Button,
   TextInput,
+  Alert
 } from 'react-native'
 import {
   Content, Icon, Picker, Form, Label, Item
@@ -35,43 +36,17 @@ import ContactAPI from "../api/contact"
 import { API_URL } from "react-native-dotenv"
 
 import { timeInfo, TimeDiff } from "../helpers/TimeFormat"
+import ExportPDF from '../helpers/ExportPDF'
 
 import BaseStyle from "./../style/BaseStyle"
 
 import ButtonFilter from '../components/ButtonFilter'
 // import { confirmOTP, loginSuccess } from '../store/actions/user'
 import { connect } from 'react-redux'
+import SearchBar from 'react-native-searchbar'
 
 // import {SelectContact} from 'react-native-select-contact'
 
-async function showContact() {
-  try {
-    const { status } = await Permissions.askAsync(Permissions.CONTACTS)
-
-    if (status === 'granted') {
-      const { data } = await Contacts.getContactsAsync({
-        fields: [
-          Contacts.Fields.Name,
-          Contacts.Fields.PhoneNumbers
-        ]
-      })
-
-      if (data.length > 0) {
-
-        //alert("you have "+data.length+" contacts ")
-        NavigationService.navigate("SelectContact", {
-          contacts: data
-        })
-        // screen select contact
-        //console.log(`${API_URL} => `, data)
-      } else {
-        alert("you have no contacts")
-      }
-    }
-  } catch (error) {
-    console.log(error)
-  }
-}
 
 const filterList = [{
   id: 'all',
@@ -105,10 +80,10 @@ class Kontak extends Component {
     this.state = {
       isModalVisible: false,
       contacts: [],
-      userId: this.props.user.id,
-      bookName: this.props.user.bookName,
-      bookId: this.props.user.bookId,
-      token: this.props.user.token,
+      userId: props.user.id,
+      bookName: props.user.bookName,
+      bookId: props.user.bookId,
+      token: props.user.token,
       contactInput: {
         name: "",
         phoneNumber: "",
@@ -126,9 +101,141 @@ class Kontak extends Component {
     this.toggleModal = this.toggleModal.bind(this)
     this.getSWpeopleApi = this.getSWpeopleApi.bind(this)
     this.getPhoneNumber = this.getPhoneNumber.bind(this)
+    this.showContact = this.showContact.bind(this)
 
     this.handleFilterChange = this.handleFilterChange.bind(this)
     this.handleSortChange = this.handleSortChange.bind(this)
+    this.contactDelete = this.contactDelete.bind(this)
+  }
+
+  objContact = new ContactAPI()
+
+  async showContact() {
+
+    console.log("token showContact => ", this.state.token)
+
+    try {
+      const { status } = await Permissions.askAsync(Permissions.CONTACTS)
+
+      if (status === 'granted') {
+        const { data } = await Contacts.getContactsAsync({
+          fields: [
+            Contacts.Fields.Name,
+            Contacts.Fields.PhoneNumbers
+          ]
+        })
+
+        if (data.length > 0) {
+
+          //alert("you have "+data.length+" contacts ")
+          NavigationService.navigate("SelectContact", {
+            userId: this.state.userId,
+
+            bookId: this.state.bookId,
+            token: this.state.token,
+            contacts: data
+          })
+          // screen select contact
+          //console.log(`${API_URL} => `, data)
+        } else {
+          alert("you have no contacts")
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  onExportPDF = () => {
+    this.setState({
+      loading: true,
+      loadingMessage: 'Mengunduh data...'
+    })
+    const params = {
+      bookId: this.state.bookId,
+      sort: this.state.sort,
+      filter:this.state.filter,
+     
+      token: this.state.token,
+    }
+
+    this.objContact.getPDFLink(params)
+      .then(async result => {
+        console.log("PDF: ", result)
+        console.log("PDF data: ", result.data)
+        if(result.data) {
+          ExportPDF(result.data, 'LABABOOK - Kontak.pdf')
+          // Alert.alert('Sukses!', 'Data telah berhasil disimpan difolder Download!')
+        } else {
+          Alert.alert('Perhatian!', 'File PDF tidak dapat diunduh!')
+        }
+      })
+      .catch(err => {
+        console.log("PDF: ", err)
+        Alert.alert('Perhatian!', `Terjadi kesalahan saat mengunduh file!`)
+      })
+      .finally(() => this.setState({ loading: false }))
+  }
+
+
+  contactDelete(contact) {
+
+    const contactApi = new ContactAPI()
+    const _this = this 
+
+    Alert.alert(
+        'Hapus Kontak',
+        `Anda yakin ingin menghapus kontak ${contact.name} ?`,
+        [
+          
+            {
+                text: 'Tidak',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+            },
+            {text: 'Ya', onPress: () => {
+                
+                const __this = _this
+                //const anotherThis = this 
+                //console.log( "__this => ",__this.state.contacts[0])
+                //console.log( "_this => ",_this.state.contacts[0])
+
+                const data = {
+                   contactId:contact.id,
+                   token:this.state.token
+                    
+                }
+        
+                return contactApi.deleteContact(data)
+                .then( res => {
+                    
+                    const ___this = __this
+
+                    if( res.data.status_message === "OK") {
+                        alert("Hapus data sukses")
+                        //console.log( "anotherThis => ", anotherThis.state.contacts[0])
+                        // this.setState({
+                        //   refresh:1
+                        // },() => {
+                        //   //console.log("this state => ", anotherThis.state.contacts[0])
+                        // })
+                        ___this.getContacts()
+                        //this.getContacts()
+                        
+                    } else {
+                        alert( res.data.data )
+                    }
+                    
+                })
+                .catch( err => {
+                  console.log( err )
+                    //alert(" terjadi kesalahan : "+err)
+                })
+                //alert("Yes Pressed")
+            }},
+        ],
+        {cancelable: false},
+    );
   }
 
   getPhoneNumber() {
@@ -175,15 +282,12 @@ class Kontak extends Component {
   }
 
   getContacts() {
+    console.log("getContact run ....")
     const contactApi = new ContactAPI()
 
     const _this = this
 
-    this.setState({
-      contacts: [],
-      totalCredit: 0,
-      totalDebit: 0
-    })
+   
     const bookId = this.state.bookId
     const filter = this.state.filter
     const sort = this.state.sort
@@ -193,7 +297,14 @@ class Kontak extends Component {
 
     contactApi.getContacts(params)
       .then(res => {
-        console.log(res)
+
+        this.setState({
+          contacts: [],
+          totalCredit: 0,
+          totalDebit: 0
+        })
+
+        console.log('res contact: ', res)
 
         const data = res.data.data
         const newData = []
@@ -233,6 +344,7 @@ class Kontak extends Component {
 
       })
       .catch(err => {
+        console.log('error contact', err)
         alert(`${API_URL} => ${err} => bookId:${bookId}`)
       })
   }
@@ -311,7 +423,7 @@ class Kontak extends Component {
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback>
               <View style={styles.topBarRightPdf}>
-                <MaterialIcons name='picture-as-pdf' size={27} color='#2a2c7b' style={styles.pdf} />
+                <MaterialIcons name='picture-as-pdf' size={27} color='#2a2c7b' style={styles.pdf} onPress={this.onExportPDF} />
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -321,19 +433,27 @@ class Kontak extends Component {
           data={this.state.contacts}
           scrollEnabled={true}
           renderItem={({ item, index }) => {
+            //console.log("item ==> ", item, "state ==> ", this.state)
             return (
-              <TouchableNativeFeedback onPress={() => {
-                NavigationService.navigate("DetailTransaction", {
+              <TouchableNativeFeedback 
+                onPress={() => {
+                    NavigationService.navigate("DetailTransaction", {
 
-                  name: item.contactName,
-                  phoneNumber: item.phoneNumber,
-                  contactInitial: item.contactInitial,
-                  contactId: item.id,
-                  userId: this.state.userId,
-                  totalTransaction: item.trxValue
+                      name: item.contactName,
+                      phoneNumber: item.phoneNumber,
+                      contactInitial: item.contactInitial,
+                      contactId: item.id,
+                      userId: this.state.userId,
+                      totalTransaction: item.trxValue,
+                      token:this.state.token
 
-                })
-              }}>
+                    })
+                  }} 
+                 
+                 onLongPress={() =>{ 
+                   this.contactDelete( item)
+                 
+                 }} >
                 <View>
                   <ContactCard {...item} />
                 </View>
@@ -437,7 +557,7 @@ class Kontak extends Component {
               </View>
         </Modal>
 
-        <TouchableWithoutFeedback onPress={() => showContact()}>
+        <TouchableWithoutFeedback onPress={() => this.showContact()}>
           <View style={styles.addContactBtn}>
             <AntDesign name='plus' size={24} style={{ color: '#fff', fontWeight: 'bold' }} />
             <Text style={styles.addContactBtnText}>

@@ -2,6 +2,7 @@ import {
   UPDATE_PHONE_NUMBER,
   UPDATE_USER_NAME,
   UPDATE_USER_LOGIN,
+  UPDATE_USER_PROFILE,
   UPDATE_USER_REGISTER,
   DELETE_USER_DETAIL,
   UPDATE_BOOK_NAME,
@@ -43,6 +44,12 @@ export default function user (state = initialStates, action) {
         ...state,
         bookName: action.bookName
       }
+    case UPDATE_USER_PROFILE:
+      return {
+        ...state,
+        bookName: action.bookName,
+        userName: action.userName
+      }
     case UPDATE_BOOK_TYPE:
       return {
         ...state,
@@ -56,8 +63,9 @@ export default function user (state = initialStates, action) {
       }
 
     case UPDATE_USER_LOGIN:
-      console.log("action: ", action)
+      console.log("action UPDATE_USER_LOGIN: ", action)
       return {
+        ...state,
         userName: action.payload.userName,
         bookName: action.payload.bookName,
         bookType: action.payload.bookType,

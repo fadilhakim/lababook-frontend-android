@@ -8,6 +8,7 @@ import {
   Button,
   SectionList,
   Linking,
+  Alert,
 } from 'react-native'
 import Menu, {
   MenuProvider,
@@ -23,6 +24,11 @@ import { ListItem, ButtonGroup } from 'react-native-elements'
 import { Accordion } from "native-base"
 import TouchableScale from 'react-native-touchable-scale'
 import { API_URL } from "react-native-dotenv"
+import FileDownload from 'js-file-download'
+// import RNFetchBlobFile from 'rn-fetch-blob'
+import * as FileSystem from 'expo-file-system'
+import * as MediaLibrary from 'expo-media-library'
+import * as Permissions from 'expo-permissions'
 
 import {
   MaterialIcons,
@@ -38,14 +44,19 @@ import { numberFormat } from '../helpers/NumberFormat'
 import { TimeDiff } from "../helpers/TimeFormat"
 import CallNumber from "../helpers/CallNumber"
 import OpenApp from "../helpers/OpenApp"
-import { GetReminderList, UpdateReminderStatusAlarm } from '../api/reminder'
+import { GetPDFFile, GetReminderList, UpdateReminderStatusAlarm } from '../api/reminder'
 import { connect } from 'react-redux'
+import { URL } from 'react-native/Libraries/Blob/URL'
+import * as firebase from 'firebase'
+import { firebaseConfig } from '../config/firebaseConfig'
+import ExportPDF from '../helpers/ExportPDF'
+import Base64 from 'base-64'
 
 class Pengingat extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      userId: this.props.user.userName || 1, // sementara
+      userId: this.props.user.id || 1, // sementara
       bookId: this.props.user.bookId || 1, // sementara
       token: this.props.user.token,
       transactions:[],
@@ -146,17 +157,42 @@ class Pengingat extends Component {
             dataReminder: this.parseData(dataReturn.data)
           })
         } else {
-          alert(`Terjadi kesalahan saat mengambil data!`)
+          Alert.alert('Perhatian!',`Terjadi kesalahan saat mengambil data!`)
         }
       })
       .catch(err => {
-        alert(`Terjadi kesalahan saat mengambil data!`)
+        Alert.alert('Perhatian!',`Terjadi kesalahan saat mengambil data!`)
       })
       .finally(() => this.setState({ onReceivingData: false }))
   }
 
   onExportPDF = () => {
     console.log('exporting')
+    this.setState({ onReceivingData: true })
+
+    const bookId = this.state.bookId
+    const token = this.state.token
+    const params = {
+      bookId,
+      token
+    }
+
+    GetPDFFile(params)
+      .then(async result => {
+        console.log("PDF: ", result)
+        console.log("PDF data: ", result.data)
+        if(result.data) {
+          ExportPDF(result.data, 'LABABOOK - Pengingat.pdf')
+          // Alert.alert('Sukses!', 'Data telah berhasil disimpan difolder Download!')
+        } else {
+          Alert.alert('Perhatian!', 'File PDF tidak dapat diunduh!')
+        }
+      })
+      .catch(err => {
+        console.log("PDF: ", err)
+        Alert.alert('Perhatian!', `Terjadi kesalahan saat mengunduh file!`)
+      })
+      .finally(() => this.setState({ onReceivingData: false }))
   }
 
   statusAlarm = (idData) => {
@@ -182,7 +218,7 @@ class Pengingat extends Component {
             </MenuTrigger>
             <MenuOptions>
               <MenuOption value='whatsapp'
-                          onSelect={() => this.selectMore('whatsapp')}
+                          onSelect={() => this.selectMore('whatsapp', item.phoneNumber)}
                           children={
                             <View style={[styles.moreContainer, styles.whatsappContainer]}>
                               <MaterialCommunityIcons name='whatsapp' size={24} style={styles.moreIcon} />
@@ -227,11 +263,11 @@ class Pengingat extends Component {
             statusAlarm: newAllStatus
           })
         } else {
-          alert(`Terjadi kesalahan saat menyimpan data!`)
+          Alert.alert('Perhatian!', `Terjadi kesalahan saat menyimpan data!`)
         }
       })
       .catch(err => {
-        alert(`Terjadi kesalahan saat mengambil data!`)
+        Alert.alert('Perhatian!', `Terjadi kesalahan saat mengambil data!`)
       })
       .finally(() => this.setState({ onReceivingData: false }))
   }
@@ -243,10 +279,10 @@ class Pengingat extends Component {
   selectMore = (type, number = '') => {
     this.setState({ onReceivingData: true })
     if (type === 'whatsapp') {
-      OpenApp({ type })
+      OpenApp({ type, number })
         .catch((e) => {
-          // console.log("e: ", e)
-          alert(`Terjadi kesalahan saat membuka aplikasi!`)
+          console.log("e: ", e)
+          Alert.alert('Perhatian!', `Terjadi kesalahan saat membuka aplikasi! ${e}`)
         })
     } else {
       const params = {
@@ -261,6 +297,9 @@ class Pengingat extends Component {
 
   componentDidMount () {
     this.getData()
+    if(!firebase.apps.length){
+      firebase.initializeApp(firebaseConfig)
+    }
   }
 
   render () {

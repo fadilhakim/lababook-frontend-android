@@ -1,6 +1,7 @@
 import {
   UPDATE_PHONE_NUMBER,
   UPDATE_USER_NAME,
+  UPDATE_USER_PROFILE,
   UPDATE_BOOK_NAME,
   UPDATE_BOOK_TYPE,
   UPDATE_USER_LOGIN,
@@ -83,6 +84,14 @@ export function updateUserStatus() {
   }
 }
 
+export function updateUserProfile(updateDetail) {
+  return {
+    type: UPDATE_USER_PROFILE,
+    bookName: updateDetail.bookName,
+    userName: updateDetail.userName,
+  }
+}
+
 export function updateNewUserStatus() {
   return {
     type: UPDATE_USER_NEW
@@ -138,11 +147,11 @@ export function confirmOTP (phoneNumber, otp, cb) {
     checkOtp(phoneNumber, otp)
       .then(data => {
         syncActions([
-          () => dispatch({
-            type: USER_CONFIRMED,
-            token: data.token,
-            isNew: data.isNew
-          }),
+          // () => dispatch({
+          //   type: USER_CONFIRMED,
+          //   token: data.token,
+          //   isNew: data.isNew
+          // }),
           () => dispatch({
             type: HIDE_LOADING
           }),

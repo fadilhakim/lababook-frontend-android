@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 
 import { FontAwesome } from '@expo/vector-icons'
+import Constants from 'expo-constants'
 
 function Settings(props) {
   const { navigation } = props
@@ -19,26 +20,26 @@ function Settings(props) {
       .then(() => navigation.navigate('AuthLoading'))
   }
 
-  this.onShare = async () => {
-    try {
-      const result = await Share.share({
-        message:
-          'I share lababook for you to record a Transactions between us',
-      });
+  // this.onShare = async () => {
+  //   try {
+  //     const result = await Share.share({
+  //       message:
+  //         'Download Lababook untuk mencatat hutang-piutang kamu di : http://lababook.com/',
+  //     });
 
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      alert(error.message);
-    }
-  };
+  //     if (result.action === Share.sharedAction) {
+  //       if (result.activityType) {
+  //         // shared with activity type of result.activityType
+  //       } else {
+  //         // shared
+  //       }
+  //     } else if (result.action === Share.dismissedAction) {
+  //       // dismissed
+  //     }
+  //   } catch (error) {
+  //     alert(error.message);
+  //   }
+  // };
 
 
   return (
@@ -68,7 +69,7 @@ function Settings(props) {
             </View>
           </View>
         </TouchableNativeFeedback>
-
+        {/*
         <TouchableNativeFeedback onPress={() => navigation.navigate('CaraPakai')}>
           <View style={styles.settingItem}>
             <View style={styles.settingItemLeft}>
@@ -89,8 +90,9 @@ function Settings(props) {
             </View>
           </View>
         </TouchableNativeFeedback>
+        */}
 
-        <TouchableNativeFeedback  onPress={() => Linking.openURL('https://api.whatsapp.com/send?phone=+6281295009910&text=Halo')}>
+        <TouchableNativeFeedback  onPress={() => Linking.openURL('https://api.whatsapp.com/send?phone=+6281295009910')}>
           <View style={styles.settingItem}>
             <View style={styles.settingItemLeft}>
               <FontAwesome
@@ -110,8 +112,8 @@ function Settings(props) {
             </View>
           </View>
         </TouchableNativeFeedback>
-        
-        <TouchableNativeFeedback>
+
+        {/* <TouchableNativeFeedback>
           <View style={styles.settingItem}>
             <View style={styles.settingItemLeft}>
               <FontAwesome
@@ -130,9 +132,9 @@ function Settings(props) {
               />
             </View>
           </View>
-        </TouchableNativeFeedback>
+        </TouchableNativeFeedback> */}
       </View>
-
+      {/*
       <View style={styles.settingBottom}>
         <TouchableNativeFeedback onPress={() => signOut()}>
           <View style={styles.logOutBtn}>
@@ -151,6 +153,7 @@ function Settings(props) {
 
         </View>
       </View>
+      */}
     </View>
   )
 }
@@ -161,7 +164,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'stretch',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   settingTop: {
     alignItems: 'stretch',

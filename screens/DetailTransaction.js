@@ -14,17 +14,18 @@ import { Table, Row, Rows } from 'react-native-table-component'
 import NavigationService from '../helpers/NavigationService';
 import { numberFormat } from "../helpers/NumberFormat";
 import BaseStyle from "./../style/BaseStyle"
+import CallNumber from "../helpers/CallNumber"
 
 import TransactionAPI from "./../api/transaction"
 
 class DetailTransaction extends Component {
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
 
     this.state = {
       contactTransactions: [],
-      userId: "",
+      userId: props.userId,
       totalDebit: 0,
       totalCredit: 0,
       totalTransaction: 0,
@@ -32,7 +33,18 @@ class DetailTransaction extends Component {
       tableData: [
 
       ],
+      lastReminder:"-"
     }
+  }
+
+  checkEmptyObj(obj) {
+    for(var key in obj) {
+      if(obj.hasOwnProperty(key)) {
+        return false
+      }
+    }
+
+    return true
   }
 
   componentDidMount() {
@@ -43,17 +55,32 @@ class DetailTransaction extends Component {
     const params = this.props.navigation.state.params
 
     this.setState({
-      userId: params.userId
+      userId: params.userId,
+      contactId: params.contactId,
+
     })
 
-    transactionApi.getTransactionByContact(params.contactId)
+    console.log("DetailTransaction ==> ", params)
+
+    transactionApi.getTransactionByContact(params)
       .then(res => {
 
 
         const dtHeader = ["Total"]
         const dtTable = []
 
-        res.data.map((item) => {
+
+        //console.log("getTransactionByContact ===> ",res.data.data, res.data.data.length, typeof(res.data))
+
+        const checkEmptyData = this.checkEmptyObj(res.data.data.lastReminder);
+
+        if(!checkEmptyData) {
+          this.setState({
+            lastReminder:res.data.data.lastReminder.dueDate
+          })
+        }
+
+        res.data.data.transactions.forEach((item) => {
           var row = []
 
           if (item.type === "debit") {
@@ -74,6 +101,7 @@ class DetailTransaction extends Component {
 
 
           dtTable.push(row)
+          console.log(item)
         })
 
         dtHeader.push(`Anda Berikan \n ${numberFormat(this.state.totalCredit)}`, `Anda Dapatkan \n ${numberFormat(this.state.totalDebit)}`)
@@ -88,6 +116,10 @@ class DetailTransaction extends Component {
         alert(err)
       })
 
+  }
+
+  callPerson = (phoneNumber) => {
+    CallNumber(phoneNumber)
   }
 
   signOut() {
@@ -143,12 +175,13 @@ class DetailTransaction extends Component {
               size={25}
               color='#fff'
               style={BaseStyle.logoPhone}
+              onPress={ () => this.callPerson(params.phoneNumber)}
             />
           </View>
         </View>
         <View style={BaseStyle.headerBtm}>
           <Text>Total : {numberFormat(this.state.totalTransaction)} </Text>
-          <Text>Pengingat : - </Text>
+          <Text>Pengingat : { this.state.lastReminder } </Text>
         </View>
 
         {dataTransaction}
@@ -164,7 +197,8 @@ class DetailTransaction extends Component {
               contactInitial: params.contactInitial,
               contactId: params.contactId,
               userId: this.state.userId,
-              totalTransaction: params.totalTransaction
+              totalTransaction: params.totalTransaction,
+              token:params.token
             })
           }}>
             <View style={BaseStyle.btnBerikan}><Text style={BaseStyle.btnText}>ANDA BERIKAN</Text></View>
@@ -178,7 +212,8 @@ class DetailTransaction extends Component {
               contactId: params.contactId,
               userId: params.userId,
               totalTransaction: params.totalTransaction,
-              userId: this.state.userId
+              userId: this.state.userId,
+              token:params.token
             })
           }}>
             <View onPress={() => { NavigationService.navigate("Home") }} style={BaseStyle.btnDapatkan}>

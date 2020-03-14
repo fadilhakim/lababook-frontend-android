@@ -6,7 +6,8 @@ import {
   TouchableNativeFeedback,
   AsyncStorage,
   Share,
-  Alert
+  Alert,
+  Platform
 } from 'react-native'
 import {
   Container, Header, Content, Form, Item, Input, Label, Left, Body,
@@ -18,7 +19,10 @@ import BaseStyle from "./../style/BaseStyle"
 
 import TransactionAPI from "./../api/transaction"
 
+import { numberFormat } from "../helpers/NumberFormat"
+
 import * as Font from 'expo-font'
+import { connect } from 'react-redux'
 
 Font.loadAsync({
 
@@ -37,8 +41,8 @@ class DetailTransaction extends Component {
         // date:"",
         dueDate: "",
         transactionType: "",
-        contactId: "",
-        userId: ""
+        contactId: props.contactId,
+        userId: props.userId
       }
     }
 
@@ -109,9 +113,10 @@ class DetailTransaction extends Component {
       type: input.transactionType,
       amount: input.amount,
       description: input.description,
-      userId: input.userId,
+      userId: params.userId,
       contactId: input.contactId,
-      dueDate: input.dueDate
+      dueDate: input.dueDate,
+      token:params.token, 
       //date:input.date
     }
 
@@ -133,7 +138,7 @@ class DetailTransaction extends Component {
         { cancelable: false },
       );
 
-      return false
+      return false;
     }
 
     return transactionApi.createTransactions(data)
@@ -153,7 +158,8 @@ class DetailTransaction extends Component {
                   contactInitial: params.contactInitial,
                   contactId: params.contactId,
                   userId: this.state.input.userId,
-                  totalTransaction: params.totalTransaction
+                  totalTransaction: params.totalTransaction,
+                  token: params.token
 
                 })
               }
@@ -183,13 +189,21 @@ class DetailTransaction extends Component {
 
   onShare = async () => {
 
-    const params = this.props.navigation.state.params
-    var trxType = params.transactionType === "debit" ? "hutang" : "piutang"
+    const params = this.props.navigation.state.params;
+    var trxType = params.transactionType === "debit" ? "hutang" : "piutang";
+    var message = "";
+    var nameUser = this.props.user ? this.props.user.userName : "";
+    var thisAmount = numberFormat(this.state.input.amount);
+    // var nf = new Intl.NumberFormat();
+    if(trxType === "piutang") {
+      message = `Halo ${params.name}, tanggal jatuh tempo kamu ${this.state.input.dueDate}, sebesar ${thisAmount}`
+    } else {
+      message = `Halo ${params.name}, saya ${nameUser} berhutang ke kamu sebesar ${thisAmount}`;
+    }
 
     try {
       const result = await Share.share({
-        message:
-          params.name + ' ini ' + trxType + ' kamu',
+        message:message
       });
 
       if (result.action === Share.sharedAction) {
@@ -235,10 +249,6 @@ class DetailTransaction extends Component {
 
     </Item>
 
-    if (params.transactionType === "debit") {
-      dueDateElement = <Text>{""}</Text>
-    }
-
     var headerBackground = styles.headerRed
     var btnSave = styles.btnBerikan
 
@@ -259,8 +269,9 @@ class DetailTransaction extends Component {
                 phoneNumber: params.phoneNumber,
                 contactInitial: params.contactInitial,
                 contactId: params.contactId,
-                userId: this.state.userId,
-                totalTransaction: params.totalTransaction
+                userId: this.state.input.userId,
+                totalTransaction: params.totalTransaction,
+                token:params.token
               })
             }}>
               <View>
@@ -290,7 +301,7 @@ class DetailTransaction extends Component {
           <Form style={BaseStyle.formTransaction}>
             <Item style={BaseStyle.inputItem}>
               <Icon style={BaseStyle.inputIcon} active name='md-pricetag' />
-              <Input type="number" placeholder="Jumlah" onChangeText={(val) => { this.handleAmountChange(val) }} />
+              <Input returnKeyType={(Platform.OS === 'ios') ? 'done' : 'next'} keyboardType="number-pad" type="number" placeholder="Jumlah" onChangeText={(val) => { this.handleAmountChange(val) }} />
             </Item>
             <Item style={BaseStyle.inputItem}>
               <Icon style={BaseStyle.inputIcon} active name='md-text' />
@@ -304,12 +315,10 @@ class DetailTransaction extends Component {
 
             </Item>
             {dueDateElement}
-            <Item style={BaseStyle.inputItem}>
+            {/* <Item style={BaseStyle.inputItem}>
               <Icon style={BaseStyle.inputIcon} active name='ios-camera' />
               <Input placeholder="Lampiran Gambar" />
-            </Item>
-
-            <Text>{this.state.input.dueDate}</Text>
+            </Item> */}
 
           </Form>
 
@@ -330,7 +339,17 @@ class DetailTransaction extends Component {
 
 }
 
-export default DetailTransaction
+// export default Kontak
+function mapStateToProps (state) {
+  return {
+    user: state.user,
+    loading: state.loading
+  }
+}
+
+export default connect(mapStateToProps)(DetailTransaction)
+
+// export default DetailTransaction
 
 const styles = StyleSheet.create({
 

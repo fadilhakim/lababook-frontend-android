@@ -82,6 +82,28 @@ export const TimeDiff = (someDate, returnDetail = false) => {
         return dataReturn.value
 }
 
+export const TimeFull = (someDate) => {
+    const theDate = moment(someDate,'YYYY-MM-DD hh:mm:ss')
+    return theDate.format('DD MMM YYYY, hh:mm A')
+}
+
+export const FormatDateFilter = (someDate) => {
+    const theDate = moment(someDate,'YYYY-MM-DD')
+    return theDate.format('ddd, DD MMM YYYY')
+}
+
+export const LookUpDate = (someDate, mod) => {
+    const theDate = moment(someDate,'YYYY-MM-DD')
+    switch (mod) {
+        case 'lastweek':
+            return theDate.subtract(1, 'weeks').format('YYYY-MM-DD')
+        case 'lastmonth':
+            return theDate.subtract(1, 'months').format('YYYY-MM-DD')
+        default:
+            return someDate
+    }
+}
+
 export const MonthID = ['', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
 export const DayID = {
     'sunday':       'Minggu',

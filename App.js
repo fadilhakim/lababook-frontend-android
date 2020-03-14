@@ -19,6 +19,7 @@ import OTP from './screens/OTP'
 import Home from './screens/Home'
 import AuthLoading from './screens/AuthLoading'
 import Settings from "./screens/Settings"
+import Search from "./screens/Search"
 import AccountSetting from './screens/AccountSetting'
 import CaraPakai from './screens/CaraPakai'
 import DetailTransaction from './screens/DetailTransaction'
@@ -79,6 +80,12 @@ const AppNavigator = createStackNavigator(
           fontWeight: 'bold',
           marginLeft: -5
         }
+      }
+    },
+    Search: {
+      screen: Search,
+      navigationOptions: {
+        headerShown: false,
       }
     },
     Test: {
@@ -159,7 +166,7 @@ const AppNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Home', //Home
     headerMode: 'screen'
   }
 )
@@ -179,7 +186,7 @@ const Root = createAppContainer(
       Test: Test
     },
     {
-      initialRouteName: 'App' //Loading
+      initialRouteName: 'Loading' // default Loading - langsung App
     }
   )
 )
